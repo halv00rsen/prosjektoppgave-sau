@@ -1,0 +1,75 @@
+<template>
+  <div>
+    <div style="height: 20%; overflow: auto;">
+      <h3>Simple map</h3>
+      <p v-if="marker">Marker is placed at {{ marker.lat }}, {{ marker.lng }}</p>
+      <p> Center is at {{ center }} and the zoom is: {{ currentZoom }} </p>
+    </div>
+    <l-map
+      :zoom="zoom"
+      :center="center"
+      style="height: 500px"
+      @update:center="centerUpdate"
+      @update:zoom="zoomUpdate">
+      <l-tile-layer
+        :url="url"
+        :attribution="attribution"/>
+      <l-marker v-if="marker" :lat-lng="marker">
+        <l-tooltip> I am a tooltip </l-tooltip>
+      </l-marker>
+    </l-map>
+  </div>
+</template>
+
+<script>
+import * as L from 'leaflet'
+import 'leaflet-offline'
+import { LMap, LTileLayer, LMarker, LTooltip } from 'vue2-leaflet'
+
+export default {
+  name: 'SheepMap',
+  components: {
+    LMap,
+    LTileLayer,
+    LMarker,
+    LTooltip,
+  },
+  props: {
+
+  },
+  data () {
+    return {
+      zoom: 13,
+      center: L.latLng(47.413220, -1.219482),
+      url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}',
+      attribution: '&copy; <a href="https://www.kartverket.no/">Kartverket</a>',
+      marker: undefined,
+      currentZoom: 13,
+      currentCenter: L.latLng(47.413220, -1.219482),
+      counter: 1,
+    }
+  },
+  mounted () {
+    this.$getLocation({
+      enableHighAccuracy: true,
+    }).then(coordinates => {
+      this.counter++;
+      console.log('Counter: ' + this.counter);
+      this.center = {
+        lat: coordinates.lat,
+        lng: coordinates.lng,
+      };
+      this.marker = coordinates;
+    });
+  },
+  methods: {
+    zoomUpdate (zoom) {
+      this.currentZoom = zoom;
+    },
+    centerUpdate (center) {
+      console.log(center);
+      this.currentCenter = center;
+    },
+  },
+}
+</script>
