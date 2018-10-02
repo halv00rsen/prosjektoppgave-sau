@@ -4,27 +4,36 @@
       <h3>Simple map</h3>
       <p v-if="marker">Marker is placed at {{ marker.lat }}, {{ marker.lng }}</p>
       <p> Center is at {{ center }} and the zoom is: {{ currentZoom }} </p>
+      <font-awesome-icon icon="coffee"/>
     </div>
     <l-map
+      ref="map"
       :zoom="zoom"
       :center="center"
       style="height: 500px"
       @update:center="centerUpdate"
       @update:zoom="zoomUpdate">
-      <l-tile-layer
+      <!-- <l-tile-layer
         :url="url"
-        :attribution="attribution"/>
+        :attribution="attribution"/> -->
       <l-marker v-if="marker" :lat-lng="marker">
         <l-tooltip> I am a tooltip </l-tooltip>
+      </l-marker>
+      <l-marker v-if="center" :lat-lng="center">
       </l-marker>
     </l-map>
   </div>
 </template>
 
 <script>
-import * as L from 'leaflet'
-import 'leaflet-offline'
-import { LMap, LTileLayer, LMarker, LTooltip } from 'vue2-leaflet'
+import L from 'leaflet';
+import 'leaflet-offline';
+import { LMap, LTileLayer, LMarker, LTooltip } from 'vue2-leaflet';
+import TileDatabase from '@/models/database';
+
+function halla(inp) {
+  console.log(inp);
+}
 
 export default {
   name: 'SheepMap',
@@ -49,7 +58,36 @@ export default {
       counter: 1,
     }
   },
-  mounted () {
+  mounted() {
+    this.$nextTick(() => {
+      const database = new TileDatabase(halla);
+      const offlineLayer = L.tileLayer.offline(this.url, database, {
+        attribution: this.attribution,
+        minZoom: 13,
+        maxZoom: 19,
+        crossOrigin: true,
+      });
+
+      const offlineControl = L.control.offline(offlineLayer, database, {
+        saveButtonHtml: '<font-awesome-icon icon="coffee"/>',
+        removeButtonHtml: '<i class="fa fa-trash" aria-hidden="true"></i>',
+        confirmSavingCallback: function (nTilesToSave, continueSaveTiles) {
+          if (window.confirm('Save ' + nTilesToSave + '?')) {
+            continueSaveTiles();
+          }
+        },
+        confirmRemovalCallback: function (continueRemoveTiles) {
+          if (window.confirm('Remove all the tiles?')) {
+            continueRemoveTiles();
+          }
+        },
+        minZoom: 13,
+        maxZoom: 19,
+      });
+      const map = this.$refs.map.mapObject;
+      offlineLayer.addTo(map);
+      offlineControl.addTo(map);
+    });
     this.$getLocation({
       enableHighAccuracy: true,
     }).then(coordinates => {
@@ -64,10 +102,11 @@ export default {
   },
   methods: {
     zoomUpdate (zoom) {
+      console.log('zoom');
       this.currentZoom = zoom;
     },
     centerUpdate (center) {
-      console.log(center);
+      console.log('center');
       this.currentCenter = center;
     },
   },

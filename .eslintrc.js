@@ -18,6 +18,11 @@ module.exports = {
       "functions": "ignore",
     }],
     "semi": 0,
+    "space-before-function-paren": 0,
+    "padded-blocks": ["error", {
+      "classes": "always",
+      "blocks": "never",
+    }],
   },
   parserOptions: {
     parser: 'babel-eslint',

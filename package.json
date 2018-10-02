@@ -8,8 +8,16 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.4",
+    "@fortawesome/free-solid-svg-icons": "^5.3.1",
+    "@fortawesome/vue-fontawesome": "^0.1.1",
     "css-loader": "^1.0.0",
+    "font-awesome": "^4.7.0",
+    "i": "^0.3.6",
     "leaflet-offline": "^1.1.0",
+    "localforage": "^1.7.2",
+    "npm": "^6.4.1",
+    "promise": "^8.0.2",
     "vue": "^2.5.17",
     "vue-browser-geolocation": "^1.5.0",
     "vue-router": "^3.0.1",
