@@ -8,10 +8,13 @@ export default class TileDatabase {
     callback,
   ) {
     this.callback = callback;
+    this.database = localForage.createInstance({
+      name: 'tileDatabase',
+    });
   }
 
   getItem(key) {
-    return localForage.getItem(key);
+    return this.database.getItem(key);
   }
 
   saveTiles(tileUrls) {
@@ -32,17 +35,10 @@ export default class TileDatabase {
           request.onreadystatechange = function () {
             if (request.readyState === XMLHttpRequest.DONE) {
               if (request.status === 200) {
-                resolve(self._saveTile(tileUrl.key, request.response).then(() => {
-                  downloadCounter++;
-                  self.callback(tileUrls.length, downloadCounter);
-                }));
+                self.callback(tileUrls.length, downloadCounter++);
+                resolve(self._saveTile(tileUrl.key, request.response)); // .then((data) => {}));
               } else {
                 reject(new Error(request.status + ' ' + request.statusText));
-                // reject({
-                //   status: request.status,
-                //   statusText: request.statusText,
-                //   reason: new Error('No internet connection'),
-                // });
               }
             }
           };
@@ -55,17 +51,17 @@ export default class TileDatabase {
   }
 
   clear() {
-    return localForage.clear();
+    return this.database.clear();
   }
 
   _saveTile(key, value) {
     return this._removeItem(key).then(function () {
-      return localForage.setItem(key, value);
-    });
+      return this.database.setItem(key, value);
+    }.bind(this));
   }
 
   _removeItem(key) {
-    return localForage.removeItem(key);
+    return this.database.removeItem(key);
   }
 
 }
