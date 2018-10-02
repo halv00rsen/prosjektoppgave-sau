@@ -55,9 +55,9 @@ export default class TileDatabase {
   }
 
   _saveTile(key, value) {
-    return this._removeItem(key).then(function () {
+    return this._removeItem(key).then(() => {
       return this.database.setItem(key, value);
-    }.bind(this));
+    });
   }
 
   _removeItem(key) {

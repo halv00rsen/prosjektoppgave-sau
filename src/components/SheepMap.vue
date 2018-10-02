@@ -11,13 +11,9 @@
       :zoom="zoom"
       :center="center"
       style="height: 500px"
-      @update:center="centerUpdate"
       @update:zoom="zoomUpdate">
-      <!-- <l-tile-layer
-        :url="url"
-        :attribution="attribution"/> -->
       <l-marker v-if="marker" :lat-lng="marker">
-        <l-tooltip> I am a tooltip </l-tooltip>
+        <l-tooltip>Dette er deg</l-tooltip>
       </l-marker>
       <l-marker v-if="center" :lat-lng="center">
       </l-marker>
@@ -28,11 +24,14 @@
 <script>
 import L from 'leaflet';
 import 'leaflet-offline';
-import { LMap, LTileLayer, LMarker, LTooltip } from 'vue2-leaflet';
-import TileDatabase from '@/models/database';
+import {
+  LMap, LTileLayer, LMarker, LTooltip,
+} from 'vue2-leaflet';
 
-function halla(inp) {
-  console.log(inp);
+import TileDatabase from '@/database/tiledatabase';
+
+function halla(inp, to) {
+  console.log(inp + ':' + to);
 }
 
 export default {
@@ -88,11 +87,12 @@ export default {
       offlineLayer.addTo(map);
       offlineControl.addTo(map);
     });
+
     this.$getLocation({
       enableHighAccuracy: true,
     }).then(coordinates => {
       this.counter++;
-      console.log('Counter: ' + this.counter);
+      // console.log('Counter: ' + this.counter);
       this.center = {
         lat: coordinates.lat,
         lng: coordinates.lng,
@@ -102,12 +102,8 @@ export default {
   },
   methods: {
     zoomUpdate (zoom) {
-      console.log('zoom');
+      // console.log('zoom');
       this.currentZoom = zoom;
-    },
-    centerUpdate (center) {
-      console.log('center');
-      this.currentCenter = center;
     },
   },
 }

@@ -13,8 +13,8 @@ module.exports = {
     "comma-dangle": ["error", {
       "arrays": "ignore",
       "objects": "always",
-      "imports": "never",
-      "exports": "never",
+      "imports": "always",
+      "exports": "always",
       "functions": "ignore",
     }],
     "semi": 0,
