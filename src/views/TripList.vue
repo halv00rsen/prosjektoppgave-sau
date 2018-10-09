@@ -1,29 +1,44 @@
 
 <template>
   <div>
-    <md-list
+    <md-dialog :md-active.sync="showDialog" v-bind:md-fullscreen="false">
+      <md-dialog-title>
+        Er du sikker på at du vil slette denne turen?
+      </md-dialog-title>
+      <md-dialog-actions>
+        <md-button class="md-danger" @click="deleteTrip(deleteIndex); showDialog=false;">Ja jeg er sikker</md-button>
+        <md-button class="md-primary" @click="showDialog=false">Avbryt</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+    <md-card
       v-for="(trip, index) in trips"
-      :key="trip.date"
+      :key="trip.id"
       class="md-double-line">
 
-      <md-subheader>
-        {{ Number(trip.date) | moment("YYYY.MM.DD - HH:mm:ss") }}
-      </md-subheader>
+       <md-card-header>
+        <md-card-header-text>
+          <div class="md-title">{{ Number(trip.startTime) | moment("YYYY.MM.DD - HH:mm:ss") }}</div>
+          <div class="md-subhead" v-if="trip.name">{{trip.name}}</div>
+        </md-card-header-text>
+      </md-card-header>
 
-      <md-list-item @click="deleteTrip(index)" class="deleteRow">
-        <md-icon>delete</md-icon>
-        <span class="md-list-item-text">Slett turen</span>
-      </md-list-item>
+      <md-card-content>
+        <p>
+          Start: {{ Number(trip.startTime) | moment("YYYY.MM.DD - HH:mm:ss") }}
+        </p>
+        <p v-if="trip.endTime">
+        Slutt: {{ Number(trip.endTime) | moment("YYYY.MM.DD - HH:mm:ss") }}
+        </p>
+      </md-card-content>
 
-      <md-divider></md-divider>
+      <md-card-actions>
+        <md-button @click="goToTrip(trip.id)">
+          {{ trip.done ? 'Åpne' : 'Gjør ferdig turen'}}
+        </md-button>
+        <md-button @click="openDeleteDialog(index)">Slett</md-button>
+      </md-card-actions>
+    </md-card>
 
-      <md-list-item>
-        <div class="md-list-item-text">
-          <span>Info om turen</span>
-          <span>{{trip.name}}</span>
-        </div>
-      </md-list-item>
-    </md-list>
     <md-field>
       <label>Info om turen</label>
       <md-input v-model="tripName"></md-input>
@@ -42,44 +57,39 @@ export default {
   data() {
     return {
       tripName: '',
+      showDialog: false,
+      deleteIndex: undefined,
     }
-  },
-  created() {
-    console.log('created trip list');
-    this.$store.dispatch('trip/loadTrips');
   },
   computed: {
     ...mapState('trip', {
       trips: state => state.all,
     }),
+    // sortedTrips
   },
   methods: {
     ...mapActions('trip', [
       'deleteTrip',
     ]),
-    // ...mapMutations('trip', [
-
-    // ]),
+    openDeleteDialog(index) {
+      this.deleteIndex = index;
+      this.showDialog = true;
+    },
     addTrip(event) {
       this.$store.dispatch('trip/saveTrip', this.tripName).then(() => {
         this.tripName = '';
       });
     },
-    // deleteTrip(index, id) {
-    //   console.log(id + '  ' + index);
-    // }
+    goToTrip(id) {
+      this.$store.dispatch('trip/setActiveTrip', id).then(() => {
+        this.$router.push({ name: 'trip', params: { tripId: id, }, });
+      });
+    },
   },
 }
 </script>
 
 <style scoped>
-/* li {
-  margin-right: 3em;
-  list-style-type: none;
-  padding: 1em;
-  border: 0.1em solid gray;
-} */
-
 .md-list {
   width: 320px;
   max-width: 100%;
@@ -93,5 +103,16 @@ export default {
 
 .deleteRow {
   cursor: pointer;
+}
+
+.md-card-header {
+  min-height: 5em;
+}
+
+.md-card {
+  width: 320px;
+  margin: 4px;
+  display: inline-block;
+  vertical-align: top;
 }
 </style>

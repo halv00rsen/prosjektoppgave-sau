@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div style="height: 20%; overflow: auto;">
+    <!-- <div style="height: 20%; overflow: auto;">
       <h3>Simple map</h3>
       <p v-if="marker">Marker is placed at {{ marker.lat }}, {{ marker.lng }}</p>
       <p> Center is at {{ center }} and the zoom is: {{ currentZoom }} </p>
       <font-awesome-icon icon="coffee"/>
-    </div>
+    </div> -->
     <l-map
       ref="map"
       :zoom="zoom"
@@ -14,8 +14,6 @@
       @update:zoom="zoomUpdate">
       <l-marker v-if="marker" :lat-lng="marker">
         <l-tooltip>Dette er deg</l-tooltip>
-      </l-marker>
-      <l-marker v-if="center" :lat-lng="center">
       </l-marker>
     </l-map>
   </div>
@@ -43,7 +41,10 @@ export default {
     LTooltip,
   },
   props: {
-
+    useDownload: {
+      type: Boolean,
+      default: true,
+    },
   },
   data () {
     return {
@@ -68,8 +69,8 @@ export default {
       });
 
       const offlineControl = L.control.offline(offlineLayer, database, {
-        saveButtonHtml: '<font-awesome-icon icon="coffee"/>',
-        removeButtonHtml: '<i class="fa fa-trash" aria-hidden="true"></i>',
+        saveButtonHtml: 'Lagre',
+        removeButtonHtml: 'Slett',
         confirmSavingCallback: function (nTilesToSave, continueSaveTiles) {
           if (window.confirm('Save ' + nTilesToSave + '?')) {
             continueSaveTiles();
@@ -85,7 +86,9 @@ export default {
       });
       const map = this.$refs.map.mapObject;
       offlineLayer.addTo(map);
-      offlineControl.addTo(map);
+      if (this.useDownload) {
+        offlineControl.addTo(map);
+      }
     });
 
     this.$getLocation({

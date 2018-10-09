@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Map from './views/Map.vue';
 import TripList from './views/TripList.vue';
+import Trip from './views/Trip.vue';
 
 Vue.use(Router)
 
@@ -32,6 +33,10 @@ export default new Router({
       path: '/map',
       name: 'map',
       component: Map,
+    }, {
+      path: '/trip/:tripId',
+      name: 'trip',
+      component: Trip,
     }
   ],
 })

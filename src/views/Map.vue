@@ -1,9 +1,6 @@
 <template>
   <div>
-    <p>Kart</p>
     <SheepMap></SheepMap>
-    <br/>
-    <button>Registrer observasjon</button>
   </div>
 </template>
 

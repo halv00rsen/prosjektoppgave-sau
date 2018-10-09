@@ -12,7 +12,7 @@
 
       <!-- <md-app-drawer :md-active.sync="menuVisible"> -->
       <md-app-drawer md-permanent="full" :md-active.sync="menuVisible">
-        <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
+        <md-toolbar class="md-transparent" md-elevation="0">SauSau</md-toolbar>
 
         <md-list>
           <NavigationLink link="/" icon="home" text="Hjem" :close="close">
@@ -49,6 +49,10 @@ export default {
       menuVisible: false,
     }
   },
+  beforeCreate() {
+    console.log('creating app');
+    this.$store.dispatch('trip/loadTrips');
+  },
   methods: {
     close() {
       this.menuVisible = false;
@@ -80,27 +84,4 @@ body {
 .md-app {
   height: 100%;
 }
-
-/* .md-app-content {
-  margin-left: 2em;
-} */
-/* #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-} */
 </style>

@@ -20,13 +20,13 @@ export default class ApplicationDatabase {
   }
 
   addTrip(trip) {
-    return this.database.removeItem(trip.date).then(() => {
-      return this.database.setItem(trip.date, JSON.stringify(trip));
+    return this.database.removeItem(trip.id).then(() => {
+      return this.database.setItem(trip.id, JSON.stringify(trip));
     });
   }
 
-  deleteTrip(date) {
-    this.database.removeItem(date);
+  deleteTrip(id) {
+    this.database.removeItem(id);
   }
 
 }
