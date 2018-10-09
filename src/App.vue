@@ -1,7 +1,8 @@
 <template>
   <div id="app" class="page-container">
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
-    <md-app md-mode="reveal">
+    <!-- <md-app md-mode="reveal"> -->
+    <md-app md-waterfall md-mode="fixed">
       <md-app-toolbar class="md-primary">
         <md-button class="md-icon-button" @click="menuVisible = !menuVisible">
           <md-icon>menu</md-icon>
@@ -9,37 +10,23 @@
         <span class="md-title">Finn sau</span>
       </md-app-toolbar>
 
-      <md-app-drawer :md-active.sync="menuVisible">
+      <!-- <md-app-drawer :md-active.sync="menuVisible"> -->
+      <md-app-drawer md-permanent="full" :md-active.sync="menuVisible">
         <md-toolbar class="md-transparent" md-elevation="0">Navigation</md-toolbar>
 
         <md-list>
-          <md-list-item>
-            <md-icon>move_to_inbox</md-icon>
-            <span class="md-list-item-text">
-              <router-link to="/">Home</router-link>
-            </span>
-          </md-list-item>
+          <NavigationLink link="/" icon="home" text="Hjem" :close="close">
+          </NavigationLink>
 
-          <md-list-item>
-            <md-icon>send</md-icon>
-            <span class="md-list-item-text">
-              <router-link to="/about">About</router-link>
-            </span>
-          </md-list-item>
+          <NavigationLink :link="{ name: 'trips' }" icon="directions_walk" text="Dine Turer" :close="close">
+          </NavigationLink>
 
-          <md-list-item>
-            <md-icon>delete</md-icon>
-            <span class="md-list-item-text">
-              <router-link :to="{ name: 'trips' }">Dine turer</router-link>
-            </span>
-          </md-list-item>
+          <NavigationLink link="/map" icon="map" text="Kart" :close="close">
+          </NavigationLink>
 
-          <md-list-item>
-            <md-icon>error</md-icon>
-            <span class="md-list-item-text">
-              <router-link to="/map">Kart</router-link>
-            </span>
-          </md-list-item>
+          <NavigationLink link="/about" icon="info" text="Informasjon" :close="close">
+          </NavigationLink>
+
         </md-list>
       </md-app-drawer>
 
@@ -51,19 +38,52 @@
 </template>
 
 <script>
+import NavigationLink from './components/NavigationLink.vue';
+
 export default {
+  components: {
+    NavigationLink,
+  },
   data() {
     return {
       menuVisible: false,
     }
-  }
+  },
+  methods: {
+    close() {
+      this.menuVisible = false;
+    },
+  },
 }
 </script>
 
+<style scoped>
+.md-drawer {
+  width: 20em;
+  /* max-width: calc(100vw - 125px); */
+}
+</style>
+
 <style>
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
 #app {
   height: 100%;
 }
+
+.md-app {
+  height: 100%;
+}
+
+/* .md-app-content {
+  margin-left: 2em;
+} */
 /* #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

@@ -12,7 +12,7 @@
 
       <md-list-item @click="deleteTrip(index)" class="deleteRow">
         <md-icon>delete</md-icon>
-        <span class="md-list-item-text">Trash</span>
+        <span class="md-list-item-text">Slett turen</span>
       </md-list-item>
 
       <md-divider></md-divider>
@@ -31,7 +31,6 @@
     <md-button class="md-raised" @click="addTrip">Lagre</md-button>
   </div>
 </template>
-
 
 <script>
 import {
