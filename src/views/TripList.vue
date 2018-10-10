@@ -10,18 +10,19 @@
         <md-button class="md-primary" @click="showDialog=false">Avbryt</md-button>
       </md-dialog-actions>
     </md-dialog>
+    <div v-if="!trips.length">
+      <p>Du har ikke registrert noen turer enda!</p>
+    </div>
     <md-card
-      v-for="(trip, index) in trips"
-      :key="trip.id"
-      class="md-double-line">
-
-       <md-card-header>
+        v-for="(trip, index) in trips"
+        :key="trip.id"
+        class="md-double-line">
+      <md-card-header>
         <md-card-header-text>
           <div class="md-title">{{ Number(trip.startTime) | moment("YYYY.MM.DD - HH:mm:ss") }}</div>
           <div class="md-subhead" v-if="trip.name">{{trip.name}}</div>
         </md-card-header-text>
       </md-card-header>
-
       <md-card-content>
         <p>
           Start: {{ Number(trip.startTime) | moment("YYYY.MM.DD - HH:mm:ss") }}
@@ -30,7 +31,6 @@
         Slutt: {{ Number(trip.endTime) | moment("YYYY.MM.DD - HH:mm:ss") }}
         </p>
       </md-card-content>
-
       <md-card-actions>
         <md-button @click="goToTrip(trip.id)">
           {{ trip.done ? 'Åpne' : 'Gjør ferdig turen'}}
@@ -38,12 +38,6 @@
         <md-button @click="openDeleteDialog(index)">Slett</md-button>
       </md-card-actions>
     </md-card>
-
-    <md-field>
-      <label>Info om turen</label>
-      <md-input v-model="tripName"></md-input>
-    </md-field>
-    <md-button class="md-raised" @click="addTrip">Lagre</md-button>
   </div>
 </template>
 
@@ -74,11 +68,6 @@ export default {
     openDeleteDialog(index) {
       this.deleteIndex = index;
       this.showDialog = true;
-    },
-    addTrip(event) {
-      this.$store.dispatch('trip/saveTrip', this.tripName).then(() => {
-        this.tripName = '';
-      });
     },
     goToTrip(id) {
       this.$store.dispatch('trip/setActiveTrip', id).then(() => {
