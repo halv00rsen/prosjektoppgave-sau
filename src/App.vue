@@ -47,11 +47,26 @@ export default {
   data() {
     return {
       menuVisible: false,
+      watchId: -1,
     }
   },
   beforeCreate() {
     console.log('creating app');
     this.$store.dispatch('trip/loadTrips');
+    this.watchId = navigator.geolocation.watchPosition((pos) => {
+      this.$store.dispatch('trip/setPosition', {
+        lng: pos.coords.longitude,
+        lat: pos.coords.latitude,
+      });
+      console.log(pos);
+    }, (err) => {
+      console.log('error');
+      console.log(err);
+    }, {
+      enableHighAccuracy: true,
+    })
+  },
+  mounted() {
   },
   methods: {
     close() {

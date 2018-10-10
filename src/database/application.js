@@ -1,5 +1,7 @@
 
 import localForage from 'localforage';
+import Trip from '@/models/trip';
+import Observation from '../models/observation';
 // import Promise from 'promise';
 
 export default class ApplicationDatabase {
@@ -13,7 +15,14 @@ export default class ApplicationDatabase {
   getAllTrips(callback) {
     const datas = [];
     this.database.iterate((value, key, iterationNumber) => {
-      datas.push(JSON.parse(value));
+      const data = JSON.parse(value);
+      const trip = new Trip(data.id, data.name, data.startTime);
+      trip.endTime = data.endTime;
+      trip.done = data.done;
+      for (let observation of data.observations) {
+        trip.addObservation(new Observation(observation.position, observation.observedPosition));
+      }
+      datas.push(trip);
     }).then(() => {
       callback(datas);
     });

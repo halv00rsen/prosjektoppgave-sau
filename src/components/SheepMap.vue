@@ -1,11 +1,5 @@
 <template>
   <div>
-    <!-- <div style="height: 20%; overflow: auto;">
-      <h3>Simple map</h3>
-      <p v-if="marker">Marker is placed at {{ marker.lat }}, {{ marker.lng }}</p>
-      <p> Center is at {{ center }} and the zoom is: {{ currentZoom }} </p>
-      <font-awesome-icon icon="coffee"/>
-    </div> -->
     <l-map
       ref="map"
       :zoom="zoom"
@@ -15,22 +9,43 @@
       <l-marker v-if="marker" :lat-lng="marker">
         <l-tooltip>Dette er deg</l-tooltip>
       </l-marker>
+
+      <div v-if="!useDownload">
+        <map-observation
+          v-for="(observation, index) of currentTrip.observations"
+          :key="index"
+          :latitude="observation.position.lat"
+          :longitude="observation.position.lng"
+          :observerLatitude="observation.observedPosition.lat"
+          :observerLongitude="observation.observedPosition.lng">
+        </map-observation>
+      </div>
+
     </l-map>
+
   </div>
 </template>
 
 <script>
+// import Vue from 'vue';
 import L from 'leaflet';
 import 'leaflet-offline';
 import {
-  LMap, LTileLayer, LMarker, LTooltip,
+  LMap, LTileLayer, LMarker, LTooltip, LGeoJson,
 } from 'vue2-leaflet';
 
 import TileDatabase from '@/database/tiledatabase';
+import MapObservation from '@/components/MapObservation.vue';
 
 function halla(inp, to) {
   console.log(inp + ':' + to);
 }
+
+// function onEachFeature (feature, layer) {
+//   let PopupCont = Vue.extend(PopupContent);
+//   let popup = new PopupCont({ propsData: { type: feature.geometry.type, text: feature.properties.popupContent } });
+//   layer.bindPopup(popup.$mount().$el);
+// }
 
 export default {
   name: 'SheepMap',
@@ -39,6 +54,8 @@ export default {
     LTileLayer,
     LMarker,
     LTooltip,
+    LGeoJson,
+    MapObservation,
   },
   props: {
     useDownload: {
@@ -49,21 +66,23 @@ export default {
   data () {
     return {
       zoom: 13,
-      center: L.latLng(47.413220, -1.219482),
+      center: undefined,
       url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}',
       attribution: '&copy; <a href="https://www.kartverket.no/">Kartverket</a>',
-      marker: undefined,
       currentZoom: 13,
-      currentCenter: L.latLng(47.413220, -1.219482),
-      counter: 1,
     }
   },
   mounted() {
+    this.center = {
+      lat: this.marker.lat,
+      lng: this.marker.lng,
+    };
+
     this.$nextTick(() => {
       const database = new TileDatabase(halla);
       const offlineLayer = L.tileLayer.offline(this.url, database, {
         attribution: this.attribution,
-        minZoom: 13,
+        minZoom: 0,
         maxZoom: 19,
         crossOrigin: true,
       });
@@ -90,23 +109,18 @@ export default {
         offlineControl.addTo(map);
       }
     });
-
-    this.$getLocation({
-      enableHighAccuracy: true,
-    }).then(coordinates => {
-      this.counter++;
-      // console.log('Counter: ' + this.counter);
-      this.center = {
-        lat: coordinates.lat,
-        lng: coordinates.lng,
-      };
-      this.marker = coordinates;
-    });
   },
   methods: {
     zoomUpdate (zoom) {
-      // console.log('zoom');
       this.currentZoom = zoom;
+    },
+  },
+  computed: {
+    currentTrip() {
+      return this.$store.state.trip.activeTrip;
+    },
+    marker() {
+      return this.$store.state.trip.currentPosition;
     },
   },
 }

@@ -1,6 +1,8 @@
 
 // import uuid from 'uuid';
 import ApplicationDatabase from '@/database/application';
+import Trip from '@/models/trip';
+import Observation from '@/models/observation';
 
 const database = new ApplicationDatabase();
 
@@ -8,6 +10,7 @@ const state = {
   all: [],
   activeTrip: undefined,
   openTrip: undefined,
+  currentPosition: undefined,
 }
 
 const getters = {
@@ -45,12 +48,7 @@ const actions = {
   },
   saveTrip({ commit, }, name) {
     const now = Date.now();
-    const trip = {
-      id: now.toString(),
-      name: name,
-      startTime: now,
-      done: false,
-    };
+    const trip = new Trip(now.toString(), name, now);
     database.addTrip(trip).then((data) => {
       commit('addTrip', trip);
       commit('setActiveTrip', trip);
@@ -68,11 +66,25 @@ const actions = {
     commit('setActiveTripDone');
     database.addTrip(state.activeTrip);
   },
+  setPosition({ commit, }, position) {
+    commit('setCurrentPosition', position);
+  },
+  registerObservation({ state, commit, }, position) {
+    if (!state.openTrip) {
+      return;
+    }
+    const observation = new Observation(position, state.currentPosition);
+    commit('addObservation', observation);
+    // Add save to database
+  },
 }
 
 const mutations = {
   setTrips(state, trips) {
     state.all = trips;
+  },
+  addObservation(state, observation) {
+    state.openTrip.addObservation(observation);
   },
   addTrip(state, trip) {
     state.all.push(trip);
@@ -96,6 +108,9 @@ const mutations = {
     state.openTrip.done = true;
     state.openTrip.endTime = Date.now();
     state.openTrip = undefined;
+  },
+  setCurrentPosition(state, position) {
+    state.currentPosition = position;
   },
 }
 

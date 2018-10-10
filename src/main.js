@@ -3,7 +3,6 @@ import L from 'leaflet';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import VueGeolocation from 'vue-browser-geolocation';
 import VueMoment from 'vue-moment';
 
 import {
@@ -21,7 +20,6 @@ library.add(faCoffee);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.config.productionTip = false;
-Vue.use(VueGeolocation);
 Vue.use(VueMoment);
 
 delete L.Icon.Default.prototype._getIconUrl;

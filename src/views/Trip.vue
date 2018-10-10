@@ -3,10 +3,10 @@
     <p>Navn: {{trip.name}}</p>
     <p>Start: {{ Number(trip.startTime) | moment("YYYY.MM.DD - HH:mm:ss") }}</p>
     <p v-if="trip.endTime">Slutt: {{ Number(trip.endTime) | moment("YYYY.MM.DD - HH:mm:ss") }}</p>
-    <SheepMap
+    <SheepMap ref="sheepMap"
       v-bind:useDownload="false">
     </SheepMap>
-    <md-button class="md-raised" :md-ripple="false">
+    <md-button class="md-raised" :md-ripple="false" @click="registerSheep">
       Registrer sau her
     </md-button>
 
@@ -21,7 +21,6 @@
 
 <script>
 import SheepMap from '@/components/SheepMap.vue';
-import { mapState, } from 'vuex';
 
 export default {
   name: 'Trip',
@@ -33,6 +32,9 @@ export default {
   methods: {
     finishTrip() {
       this.$store.dispatch('trip/setActiveTripDone');
+    },
+    registerSheep() {
+      this.$store.dispatch('trip/registerObservation', this.$refs.sheepMap.center);
     },
   },
   created() {

@@ -1,9 +1,12 @@
 
 export default class Trip {
 
-  constructor(participants) {
-    this.participants = participants;
+  constructor(id, name, startTime) {
+    this.id = id;
+    this.name = name;
     this.observations = [];
+    this.done = false;
+    this.startTime = startTime;
   }
 
   addObservation(observation) {
