@@ -41,6 +41,7 @@
 import NavigationLink from './components/NavigationLink.vue';
 
 export default {
+  name: 'App',
   components: {
     NavigationLink,
   },
@@ -50,7 +51,7 @@ export default {
       watchId: -1,
     }
   },
-  beforeCreate() {
+  created() {
     console.log('creating app');
     this.$store.dispatch('trip/loadTrips');
     this.watchId = navigator.geolocation.watchPosition((pos) => {
@@ -64,7 +65,10 @@ export default {
       console.log(err);
     }, {
       enableHighAccuracy: true,
-    })
+    });
+  },
+  beforeDestroy() {
+    navigator.geolocation.clearWatch(this.watchId);
   },
   mounted() {
   },

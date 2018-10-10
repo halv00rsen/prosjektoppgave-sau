@@ -111,6 +111,9 @@ const mutations = {
   },
   setCurrentPosition(state, position) {
     state.currentPosition = position;
+    if (state.openTrip) {
+      state.openTrip.addPosition(position);
+    }
   },
 }
 

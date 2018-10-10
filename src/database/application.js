@@ -22,6 +22,7 @@ export default class ApplicationDatabase {
       for (let observation of data.observations) {
         trip.addObservation(new Observation(observation.position, observation.observedPosition));
       }
+      trip.positions = data.positions;
       datas.push(trip);
     }).then(() => {
       callback(datas);

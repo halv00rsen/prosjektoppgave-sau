@@ -4,7 +4,7 @@
       ref="map"
       :zoom="zoom"
       :center="center"
-      style="height: 500px"
+      style="height: 50vh;"
       @update:zoom="zoomUpdate">
       <l-marker v-if="marker" :lat-lng="marker">
         <l-tooltip>Dette er deg</l-tooltip>
@@ -19,10 +19,15 @@
           :observerLatitude="observation.observedPosition.lat"
           :observerLongitude="observation.observedPosition.lng">
         </map-observation>
+
+        <map-trail
+          v-for="(pos, index) of currentTrip.positions"
+          :key="(index + 1) * 1000"
+          :latitude="pos.lat"
+          :longitude="pos.lng">
+        </map-trail>
       </div>
-
     </l-map>
-
   </div>
 </template>
 
@@ -36,6 +41,7 @@ import {
 
 import TileDatabase from '@/database/tiledatabase';
 import MapObservation from '@/components/MapObservation.vue';
+import MapTrail from '@/components/MapTrail.vue';
 
 function halla(inp, to) {
   console.log(inp + ':' + to);
@@ -56,6 +62,7 @@ export default {
     LTooltip,
     LGeoJson,
     MapObservation,
+    MapTrail,
   },
   props: {
     useDownload: {
