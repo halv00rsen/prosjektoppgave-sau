@@ -5,19 +5,8 @@ import router from './router';
 import store from './store';
 import VueMoment from 'vue-moment';
 
-import {
-  library,
-} from '@fortawesome/fontawesome-svg-core';
-import {
-  faCoffee,
-} from '@fortawesome/free-solid-svg-icons';
-import {
-  FontAwesomeIcon,
-} from '@fortawesome/vue-fontawesome';
-import './material';
-
-library.add(faCoffee);
-Vue.component('font-awesome-icon', FontAwesomeIcon);
+import './utils/material';
+import './utils/fontawesome';
 
 Vue.config.productionTip = false;
 Vue.use(VueMoment);

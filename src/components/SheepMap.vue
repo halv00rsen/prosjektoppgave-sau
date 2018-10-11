@@ -1,15 +1,20 @@
 <template>
   <div>
+    <md-dialog-confirm
+      :md-active.sync="savingActive"
+      md-title="Laste ned markert kart?"
+      :md-content="'Det vil her lastes ned ' + numTiles + ' bilder.'"
+      md-confirm-text="Lagre kartet"
+      md-cancel-text="Avbryt"
+      @md-cancel="savingActive = false"
+      @md-confirm="saveCallback(); savingActive = false; downloading = true;" />
+
     <l-map
       ref="map"
       :zoom="zoom"
       :center="center"
       style="height: 50vh;"
       @update:zoom="zoomUpdate">
-
-      <!-- <l-control-attribution
-        :position="'bottomright'"
-        :prefix="'Vue2Leaflet'" /> -->
 
       <l-marker v-if="marker" :lat-lng="marker">
         <l-tooltip>Dette er deg</l-tooltip>
@@ -33,7 +38,18 @@
         </map-trail>
       </div>
     </l-map>
-    <button @click="changeCenter">Senter</button>
+    <md-progress-bar v-if="downloading" md-mode="determinate" :md-value="amount">
+
+    </md-progress-bar>
+    <div id="centerButton" class="leaflet-bar leaflet-control">
+      <a @click="changeCenter">
+        <font-awesome-icon icon="arrow-alt-circle-up"/>
+      </a>
+    </div>
+    <div style="display: none;">
+      <font-awesome-icon id="downloadIcon" icon="download"/>
+      <font-awesome-icon id="deleteIcon" icon="trash"/>
+    </div>
   </div>
 </template>
 
@@ -48,10 +64,6 @@ import {
 import TileDatabase from '@/database/tiledatabase';
 import MapObservation from '@/components/MapObservation.vue';
 import MapTrail from '@/components/MapTrail.vue';
-
-function halla(inp, to) {
-  console.log(inp + ':' + to);
-}
 
 // function onEachFeature (feature, layer) {
 //   let PopupCont = Vue.extend(PopupContent);
@@ -84,6 +96,11 @@ export default {
       url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}',
       attribution: '&copy; <a href="https://www.kartverket.no/">Kartverket</a>',
       currentZoom: 13,
+      saveCallback: undefined,
+      savingActive: false,
+      numTiles: -1,
+      downloading: false,
+      amount: 0,
     }
   },
   mounted() {
@@ -95,7 +112,7 @@ export default {
     }
 
     this.$nextTick(() => {
-      const database = new TileDatabase(halla);
+      const database = new TileDatabase(this.amountCallback);
       const offlineLayer = L.tileLayer.offline(this.url, database, {
         attribution: this.attribution,
         minZoom: 0,
@@ -103,15 +120,18 @@ export default {
         crossOrigin: true,
       });
 
+      const self = this;
       const offlineControl = L.control.offline(offlineLayer, database, {
-        saveButtonHtml: 'Lagre',
-        removeButtonHtml: 'Slett',
-        confirmSavingCallback: function (nTilesToSave, continueSaveTiles) {
-          if (window.confirm('Save ' + nTilesToSave + '?')) {
-            continueSaveTiles();
-          }
+        saveButtonHtml: L.DomUtil.get('downloadIcon').outerHTML,
+        removeButtonHtml: L.DomUtil.get('deleteIcon').outerHTML,
+        saveButtonTitle: 'Lagre kart',
+        removeButtonTitle: 'Slett kart',
+        confirmSavingCallback(numTiles, saveTiles) {
+          self.saveCallback = saveTiles;
+          self.numTiles = numTiles;
+          self.savingActive = true;
         },
-        confirmRemovalCallback: function (continueRemoveTiles) {
+        confirmRemovalCallback(continueRemoveTiles) {
           if (window.confirm('Remove all the tiles?')) {
             continueRemoveTiles();
           }
@@ -124,6 +144,27 @@ export default {
       if (this.useDownload) {
         offlineControl.addTo(map);
       }
+      offlineLayer.on('offline:save-end', () => {
+        setTimeout(() => {
+          this.downloading = false;
+          this.amount = 0;
+        }, 1000);
+      });
+      offlineLayer.on('offline:save-error', function (err) {
+        console.error('Error when saving tiles: ' + err);
+      });
+      L.Control.PositionButton = L.Control.extend({
+        onAdd(map) {
+          return L.DomUtil.get('centerButton');
+        },
+        onRemove(map) {
+
+        },
+      });
+      L.control.positionButton = (opts) => {
+        return new L.Control.PositionButton(opts);
+      }
+      L.control.positionButton({ position: 'bottomleft', }).addTo(map);
     });
   },
   methods: {
@@ -131,7 +172,10 @@ export default {
       this.currentZoom = zoom;
     },
     changeCenter() {
-      this.$refs.map.mapObject.setView(this.marker, 12);
+      this.$refs.map.mapObject.setView(this.marker, 15, { animation: true, });
+    },
+    amountCallback(amount) {
+      this.amount = amount * 100;
     },
   },
   computed: {

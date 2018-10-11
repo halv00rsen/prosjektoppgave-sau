@@ -22,20 +22,7 @@
             :icon="route.icon"
             :text="route.text"
             :close="close">
-
           </navigation-link>
-          <!-- <NavigationLink link="/" icon="home" text="Hjem" :close="close">
-          </NavigationLink>
-
-          <NavigationLink :link="{ name: 'trips' }" icon="directions_walk" text="Mine turer" :close="close">
-          </NavigationLink>
-
-          <NavigationLink link="/map" icon="map" text="Kart" :close="close">
-          </NavigationLink>
-
-          <NavigationLink link="/about" icon="info" text="Informasjon" :close="close">
-          </NavigationLink> -->
-
         </md-list>
       </md-app-drawer>
 
