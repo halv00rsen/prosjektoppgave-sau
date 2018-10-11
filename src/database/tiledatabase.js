@@ -19,34 +19,23 @@ export default class TileDatabase {
 
   saveTiles(tileUrls) {
     const promises = [];
-
     const self = this;
-
     let downloadCounter = 0;
 
     for (var i = 0; i < tileUrls.length; i++) {
       var tileUrl = tileUrls[i];
 
       (function (i, tileUrl) {
-        promises[i] = new Promise(function (resolve, reject) {
-          var request = new XMLHttpRequest();
-          request.open('GET', tileUrl.url, true);
-          request.responseType = 'blob';
-          request.onreadystatechange = function () {
-            if (request.readyState === XMLHttpRequest.DONE) {
-              if (request.status === 200) {
-                self.callback(tileUrls.length, downloadCounter++);
-                resolve(self._saveTile(tileUrl.key, request.response)); // .then((data) => {}));
-              } else {
-                reject(new Error(request.status + ' ' + request.statusText));
-              }
-            }
-          };
-          request.send();
+        promises[i] = fetch(tileUrl.url).then((response) => {
+          return response.blob();
+        }).then((blob) => {
+          return self._saveTile(tileUrl.key, blob);
+        }).then(() => {
+          downloadCounter++;
+          return self.callback(downloadCounter / tileUrls.length);
         });
       })(i, tileUrl);
     }
-
     return Promise.all(promises);
   }
 
