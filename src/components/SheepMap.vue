@@ -6,6 +6,11 @@
       :center="center"
       style="height: 50vh;"
       @update:zoom="zoomUpdate">
+
+      <!-- <l-control-attribution
+        :position="'bottomright'"
+        :prefix="'Vue2Leaflet'" /> -->
+
       <l-marker v-if="marker" :lat-lng="marker">
         <l-tooltip>Dette er deg</l-tooltip>
       </l-marker>
@@ -28,6 +33,7 @@
         </map-trail>
       </div>
     </l-map>
+    <button @click="changeCenter">Senter</button>
   </div>
 </template>
 
@@ -36,7 +42,7 @@
 import L from 'leaflet';
 import 'leaflet-offline';
 import {
-  LMap, LTileLayer, LMarker, LTooltip, LGeoJson,
+  LMap, LTileLayer, LMarker, LTooltip, LGeoJson, LControlAttribution,
 } from 'vue2-leaflet';
 
 import TileDatabase from '@/database/tiledatabase';
@@ -63,6 +69,7 @@ export default {
     LGeoJson,
     MapObservation,
     MapTrail,
+    LControlAttribution,
   },
   props: {
     useDownload: {
@@ -80,10 +87,12 @@ export default {
     }
   },
   mounted() {
-    this.center = {
-      lat: this.marker.lat,
-      lng: this.marker.lng,
-    };
+    if (this.marker) {
+      this.center = {
+        lat: this.marker.lat,
+        lng: this.marker.lng,
+      };
+    }
 
     this.$nextTick(() => {
       const database = new TileDatabase(halla);
@@ -118,8 +127,11 @@ export default {
     });
   },
   methods: {
-    zoomUpdate (zoom) {
+    zoomUpdate(zoom) {
       this.currentZoom = zoom;
+    },
+    changeCenter() {
+      this.$refs.map.mapObject.setView(this.marker, 12);
     },
   },
   computed: {

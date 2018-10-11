@@ -15,17 +15,26 @@
         <md-toolbar class="md-transparent" md-elevation="0">SauSau</md-toolbar>
 
         <md-list>
-          <NavigationLink link="/" icon="home" text="Hjem" :close="close">
+          <navigation-link
+            v-for="(route, index) of routes"
+            :key="index"
+            :link="route.link"
+            :icon="route.icon"
+            :text="route.text"
+            :close="close">
+
+          </navigation-link>
+          <!-- <NavigationLink link="/" icon="home" text="Hjem" :close="close">
           </NavigationLink>
 
-          <NavigationLink :link="{ name: 'trips' }" icon="directions_walk" text="Dine Turer" :close="close">
+          <NavigationLink :link="{ name: 'trips' }" icon="directions_walk" text="Mine turer" :close="close">
           </NavigationLink>
 
           <NavigationLink link="/map" icon="map" text="Kart" :close="close">
           </NavigationLink>
 
           <NavigationLink link="/about" icon="info" text="Informasjon" :close="close">
-          </NavigationLink>
+          </NavigationLink> -->
 
         </md-list>
       </md-app-drawer>
@@ -49,6 +58,36 @@ export default {
     return {
       menuVisible: false,
       watchId: -1,
+      routes: [
+        {
+          link: {
+            name: 'home',
+          },
+          icon: 'home',
+          text: 'Hjem',
+        },
+        {
+          link: {
+            name: 'trips',
+          },
+          icon: 'directions_walk',
+          text: 'Mine turer',
+        },
+        {
+          link: {
+            name: 'map',
+          },
+          icon: 'map',
+          text: 'Kart',
+        },
+        {
+          link: {
+            name: 'about',
+          },
+          icon: 'info',
+          text: 'Informasjon',
+        },
+      ],
     }
   },
   created() {
