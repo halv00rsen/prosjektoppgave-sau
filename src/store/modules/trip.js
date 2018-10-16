@@ -91,10 +91,10 @@ const mutations = {
   },
   removeTrip(state, index) {
     const deletedTrip = state.all.splice(index, 1)[0];
-    if (deletedTrip.id === state.openTrip.id) {
+    if (state.openTrip && deletedTrip.id === state.openTrip.id) {
       state.openTrip = undefined;
     }
-    if (deletedTrip.id === state.activeTrip.id) {
+    if (state.activeTrip && deletedTrip.id === state.activeTrip.id) {
       state.activeTrip = undefined;
     }
   },

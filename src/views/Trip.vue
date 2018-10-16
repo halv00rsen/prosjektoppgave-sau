@@ -6,7 +6,8 @@
     <SheepMap ref="sheepMap"
       v-bind:useDownload="false">
     </SheepMap>
-    <md-button class="md-raised" :md-ripple="false" @click="registerSheep">
+
+    <md-button v-if="!trip.done" class="md-raised" :md-ripple="false" @click="registerSheep">
       Registrer sau her
     </md-button>
 

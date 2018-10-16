@@ -175,6 +175,7 @@ export default {
       this.$refs.map.mapObject.setView(this.marker, 15, { animation: true, });
     },
     amountCallback(amount) {
+      this.downloading = true;
       this.amount = amount * 100;
     },
   },
