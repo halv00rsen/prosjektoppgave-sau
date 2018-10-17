@@ -1,7 +1,7 @@
 
 import localForage from 'localforage';
 import Trip from '@/models/trip';
-import Observation from '../models/observation';
+// import Observation from '../models/observation';
 // import Promise from 'promise';
 
 export default class ApplicationDatabase {
@@ -20,7 +20,8 @@ export default class ApplicationDatabase {
       trip.endTime = data.endTime;
       trip.done = data.done;
       for (let observation of data.observations) {
-        trip.addObservation(new Observation(observation.position, observation.observedPosition));
+        trip.addObservation(observation);
+        // trip.addObservation(new Observation(observation.position, observation.observedPosition));
       }
       trip.positions = data.positions;
       datas.push(trip);

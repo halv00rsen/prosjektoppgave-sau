@@ -27,12 +27,13 @@
           :latitude="observation.position.lat"
           :longitude="observation.position.lng"
           :observerLatitude="observation.observedPosition.lat"
-          :observerLongitude="observation.observedPosition.lng">
+          :observerLongitude="observation.observedPosition.lng"
+          :observation="observation">
         </map-observation>
 
         <map-trail
           v-for="(pos, index) of currentTrip.positions"
-          :key="(index + 1) * 1000"
+          :key="'trai-' + index"
           :latitude="pos.lat"
           :longitude="pos.lng">
         </map-trail>

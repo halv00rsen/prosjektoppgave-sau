@@ -2,7 +2,7 @@
 // import uuid from 'uuid';
 import ApplicationDatabase from '@/database/application';
 import Trip from '@/models/trip';
-import Observation from '@/models/observation';
+// import Observation from '@/models/observation';
 
 const database = new ApplicationDatabase();
 
@@ -69,12 +69,16 @@ const actions = {
   setPosition({ commit, }, position) {
     commit('setCurrentPosition', position);
   },
-  registerObservation({ state, commit, }, position) {
+  registerObservation({ state, commit, }, data) {
     if (!state.openTrip) {
       return;
     }
-    const observation = new Observation(position, state.currentPosition);
-    commit('addObservation', observation);
+    data.observedPosition = {
+      lng: state.currentPosition.lng,
+      lat: state.currentPosition.lat,
+    };
+    // const observation = new Observation(data);
+    commit('addObservation', data);
     // Add save to database
   },
 }

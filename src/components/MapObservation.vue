@@ -1,8 +1,15 @@
 <template>
+  <div>
   <l-geo-json
+    @click="openObservation"
     :geojson="geojson"
     :options="options">
   </l-geo-json>
+  <registration
+    v-if="open"
+    :close="close"
+    :oldObject="observation"/>
+  </div>
 </template>
 
 <script>
@@ -10,11 +17,13 @@ import L from 'leaflet';
 import {
   LGeoJson,
 } from 'vue2-leaflet';
+import Registration from '@/components/Registration.vue';
 
 export default {
   name: 'MapObservation',
   components: {
     LGeoJson,
+    Registration,
   },
   props: {
     latitude: {
@@ -33,9 +42,22 @@ export default {
       type: Number,
       required: true,
     },
+    observation: {
+      type: Object,
+      required: true,
+    },
+  },
+  methods: {
+    openObservation() {
+      this.open = true;
+    },
+    close() {
+      this.open = false;
+    },
   },
   data() {
     return {
+      open: false,
       options: {
         pointToLayer: function (feature, latlng) {
           const fillColor = feature.properties.color;

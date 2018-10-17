@@ -4,11 +4,11 @@ import {
   library,
 } from '@fortawesome/fontawesome-svg-core';
 import {
-  faTrash, faDownload, faArrowAltCircleUp,
+  faTrash, faDownload, faArrowAltCircleUp, faCamera,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   FontAwesomeIcon,
 } from '@fortawesome/vue-fontawesome';
 
-library.add(faTrash, faDownload, faArrowAltCircleUp);
+library.add(faTrash, faDownload, faArrowAltCircleUp, faCamera);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
