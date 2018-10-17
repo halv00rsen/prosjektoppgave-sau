@@ -4,7 +4,7 @@ import Vue from 'vue';
 import {
   MdButton, MdContent, MdTabs, MdList, MdIcon, MdSubheader, MdDivider,
   MdApp, MdToolbar, MdDrawer, MdField, MdCard, MdDialog, MdDialogConfirm,
-  MdProgress, MdSwitch, MdAutocomplete, MdMenu, MdCheckbox,
+  MdProgress, MdSwitch, MdAutocomplete, MdMenu, MdCheckbox, MdSnackbar,
 } from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.min.css';
 import 'vue-material/dist/theme/default.css';
@@ -28,3 +28,4 @@ Vue.use(MdSwitch);
 Vue.use(MdAutocomplete);
 Vue.use(MdMenu);
 Vue.use(MdCheckbox);
+Vue.use(MdSnackbar);

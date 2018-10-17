@@ -123,7 +123,7 @@ export default {
     oldObject: {
       type: Object,
       default: null,
-    }
+    },
   },
   created() {
     if (this.oldObject) {

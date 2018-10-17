@@ -30,16 +30,19 @@
         <router-view/>
       </md-app-content>
     </md-app>
+    <alert-box/>
   </div>
 </template>
 
 <script>
 import NavigationLink from './components/NavigationLink.vue';
+import AlertBox from './components/AlertBox.vue';
 
 export default {
   name: 'App',
   components: {
     NavigationLink,
+    AlertBox,
   },
   data() {
     return {
