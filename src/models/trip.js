@@ -18,4 +18,15 @@ export default class Trip {
     this.positions.push(position);
   }
 
+  editObservation(data, index) {
+    if (index < 0 || index >= this.observations.length) {
+      return;
+    }
+    this.observations[index] = data;
+  }
+
+  removeObservationAtIndex(index) {
+    this.observations.splice(index, 1);
+  }
+
 }

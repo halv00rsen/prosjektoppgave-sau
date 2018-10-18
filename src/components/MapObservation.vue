@@ -8,6 +8,8 @@
     <registration
       v-if="open"
       :close="close"
+      :edit-callback="editCurrent"
+      :delete-callback="deleteObservation"
       :old-object="observation"/>
   </div>
 </template>
@@ -26,24 +28,12 @@ export default {
     Registration,
   },
   props: {
-    latitude: {
-      type: Number,
-      required: true,
-    },
-    longitude: {
-      type: Number,
-      required: true,
-    },
-    observerLatitude: {
-      type: Number,
-      required: true,
-    },
-    observerLongitude: {
-      type: Number,
-      required: true,
-    },
     observation: {
       type: Object,
+      required: true,
+    },
+    index: {
+      type: Number,
       required: true,
     },
   },
@@ -74,8 +64,8 @@ export default {
             geometry: {
               type: 'LineString',
               coordinates: [
-                [this.longitude, this.latitude],
-                [this.observerLongitude, this.observerLatitude],
+                [this.observation.position.lng, this.observation.position.lat],
+                [this.observation.observedPosition.lng, this.observation.observedPosition.lat],
               ],
             },
           },
@@ -86,7 +76,7 @@ export default {
             },
             geometry: {
               type: 'Point',
-              coordinates: [this.longitude, this.latitude],
+              coordinates: [this.observation.position.lng, this.observation.position.lat],
             },
           },
           {
@@ -96,7 +86,7 @@ export default {
             },
             geometry: {
               type: 'Point',
-              coordinates: [this.observerLongitude, this.observerLatitude],
+              coordinates: [this.observation.observedPosition.lng, this.observation.observedPosition.lat],
             },
           },
         ],
@@ -109,6 +99,18 @@ export default {
     },
     close() {
       this.open = false;
+    },
+    editCurrent(data) {
+      this.$store.dispatch('trip/editObservation', { data, index: this.index, }).then(() => {
+        this.close();
+        this.$store.dispatch('application/setMessage', 'Observasjonen ble endret');
+      });
+    },
+    deleteObservation() {
+      this.$store.dispatch('trip/deleteObservation', this.index).then(() => {
+        this.close();
+        this.$store.dispatch('application/setMessage', 'Observasjonen ble fjernet');
+      });
     },
   },
 };

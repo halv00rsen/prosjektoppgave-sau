@@ -26,11 +26,8 @@
         <map-observation
           v-for="(observation, index) of currentTrip.observations"
           :key="index"
-          :latitude="observation.position.lat"
-          :longitude="observation.position.lng"
-          :observer-latitude="observation.observedPosition.lat"
-          :observer-longitude="observation.observedPosition.lng"
-          :observation="observation"/>
+          :observation="observation"
+          :index="index"/>
 
         <map-trail
           v-for="(pos, index) of currentTrip.positions"

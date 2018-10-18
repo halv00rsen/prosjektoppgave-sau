@@ -123,20 +123,26 @@
         <md-button class="md-primary md-raised right"><font-awesome-icon icon="camera"/></md-button>
         <span class="spacer"/>
         <md-button
+          v-if="!registration"
           class="md-primary md-raised"
           @click="save">Lagre</md-button>
         <md-button
+          v-else
+          class="md-primary md-raised"
+          @click="editObservation">Endre</md-button>
+        <md-button
           class="md-raised"
           @click="close">Avbryt</md-button>
-        <md-button class="md-raised">Flytt</md-button>
+        <!-- <md-button class="md-raised">Flytt</md-button> -->
         <md-button
           v-if="registration"
-          class="md-accent md-raised">Slett</md-button>
+          class="md-accent md-raised"
+          @click="deleteCallback">Slett</md-button>
       </md-dialog-actions>
       <md-dialog-actions v-else>
         <md-button
           class="md-primary md-raised"
-          @click="close">Ok</md-button>
+          @click="close">Lukk</md-button>
       </md-dialog-actions>
     </div>
     <div v-else>
@@ -144,7 +150,9 @@
         <md-button
           class="md-primary md-raised"
           @click="whatRegister = 'sheep'">Sau</md-button>
-        <span class="spacer"/>
+        <md-button
+          class="md-primary md-raised">Søye</md-button>
+        <!-- <span class="spacer"/> -->
         <md-button
           class="md-primary md-raised"
           @click="whatRegister = 'predator'">Annet dyr</md-button>
@@ -180,6 +188,14 @@ export default {
       required: true,
     },
     saveRegistration: {
+      type: Function,
+      default: undefined,
+    },
+    deleteCallback: {
+      type: Function,
+      default: undefined,
+    },
+    editCallback: {
       type: Function,
       default: undefined,
     },
@@ -230,7 +246,13 @@ export default {
   },
   created() {
     if (this.oldObject) {
-      this.form = this.oldObject;
+      this.form.numAdultSheep = this.oldObject.numAdultSheep;
+      this.form.numLambs = this.oldObject.numLambs;
+      this.form.comment = this.oldObject.comment;
+      this.form.color = this.oldObject.color;
+      this.form.numLambsTag = this.oldObject.numLambsTag;
+      this.form.colorSheepEar = this.oldObject.colorSheepEar;
+      // this.form = this.oldObject;
       this.whatRegister = 'sheep';
       this.advanced = true;
       this.registration = true;
@@ -271,6 +293,9 @@ export default {
           'md-invalid': field.$invalid && field.$dirty,
         };
       }
+    },
+    editObservation() {
+      this.editCallback(this.form);
     },
   },
 };

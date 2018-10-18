@@ -81,6 +81,18 @@ const actions = {
     commit('addObservation', data);
     // Add save to database
   },
+  editObservation({ state, commit, }, { data, index, }) {
+    if (!state.openTrip) {
+      return;
+    }
+    commit('editObservation', { data, index, });
+  },
+  deleteObservation({ state, commit, }, index) {
+    if (!state.openTrip) {
+      return;
+    }
+    commit('deleteObservation', index);
+  },
 };
 
 const mutations = {
@@ -118,6 +130,12 @@ const mutations = {
     if (state.openTrip) {
       state.openTrip.addPosition(position);
     }
+  },
+  editObservation(state, { data, index, }) {
+    state.openTrip.editObservation(data, index);
+  },
+  deleteObservation(state, index) {
+    state.openTrip.removeObservationAtIndex(index);
   },
 };
 
