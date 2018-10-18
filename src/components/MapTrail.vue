@@ -1,8 +1,7 @@
 <template>
   <l-geo-json
     :geojson="geojson"
-    :options="options">
-  </l-geo-json>
+    :options="options"/>
 </template>
 
 <script>
@@ -56,7 +55,7 @@ export default {
           },
         ],
       },
-    }
+    };
   },
-}
+};
 </script>

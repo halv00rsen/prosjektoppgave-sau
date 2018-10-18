@@ -1,14 +1,14 @@
 <template>
   <div>
-  <l-geo-json
-    @click="openObservation"
-    :geojson="geojson"
-    :options="options">
-  </l-geo-json>
-  <registration
-    v-if="open"
-    :close="close"
-    :oldObject="observation"/>
+    <l-geo-json
+      :geojson="geojson"
+      :options="options"
+      @click="openObservation"/>
+
+    <registration
+      v-if="open"
+      :close="close"
+      :old-object="observation"/>
   </div>
 </template>
 
@@ -45,14 +45,6 @@ export default {
     observation: {
       type: Object,
       required: true,
-    },
-  },
-  methods: {
-    openObservation() {
-      this.open = true;
-    },
-    close() {
-      this.open = false;
     },
   },
   data() {
@@ -109,9 +101,17 @@ export default {
           },
         ],
       },
-    }
+    };
   },
-}
+  methods: {
+    openObservation() {
+      this.open = true;
+    },
+    close() {
+      this.open = false;
+    },
+  },
+};
 </script>
 
 <style>

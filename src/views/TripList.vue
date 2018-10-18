@@ -1,26 +1,34 @@
 
 <template>
   <div>
-    <md-dialog :md-active.sync="showDialog" v-bind:md-fullscreen="false">
+    <md-dialog
+      :md-active.sync="showDialog"
+      :md-fullscreen="false">
       <md-dialog-title>
         Er du sikker på at du vil slette denne turen?
       </md-dialog-title>
       <md-dialog-actions>
-        <md-button class="md-danger" @click="deleteTrip(deleteIndex); showDialog=false;">Ja jeg er sikker</md-button>
-        <md-button class="md-primary" @click="showDialog=false">Avbryt</md-button>
+        <md-button
+          class="md-danger"
+          @click="deleteTrip(deleteIndex); showDialog=false;">Ja jeg er sikker</md-button>
+        <md-button
+          class="md-primary"
+          @click="showDialog=false">Avbryt</md-button>
       </md-dialog-actions>
     </md-dialog>
     <div v-if="!trips.length">
       <p>Du har ikke registrert noen turer enda!</p>
     </div>
     <md-card
-        v-for="(trip, index) in trips"
-        :key="trip.id"
-        class="md-double-line">
+      v-for="(trip, index) in trips"
+      :key="trip.id"
+      class="md-double-line">
       <md-card-header>
         <md-card-header-text>
           <div class="md-title">{{ Number(trip.startTime) | moment("YYYY.MM.DD - HH:mm:ss") }}</div>
-          <div class="md-subhead" v-if="trip.name">{{trip.name}}</div>
+          <div
+            v-if="trip.name"
+            class="md-subhead">{{ trip.name }}</div>
         </md-card-header-text>
       </md-card-header>
       <md-card-content>
@@ -28,12 +36,12 @@
           Start: {{ Number(trip.startTime) | moment("YYYY.MM.DD - HH:mm:ss") }}
         </p>
         <p v-if="trip.endTime">
-        Slutt: {{ Number(trip.endTime) | moment("YYYY.MM.DD - HH:mm:ss") }}
+          Slutt: {{ Number(trip.endTime) | moment("YYYY.MM.DD - HH:mm:ss") }}
         </p>
       </md-card-content>
       <md-card-actions>
         <md-button @click="goToTrip(trip.id)">
-          {{ trip.done ? 'Åpne' : 'Gjør ferdig turen'}}
+          {{ trip.done ? 'Åpne' : 'Gjør ferdig turen' }}
         </md-button>
         <md-button @click="openDeleteDialog(index)">Slett</md-button>
       </md-card-actions>
@@ -53,7 +61,7 @@ export default {
       tripName: '',
       showDialog: false,
       deleteIndex: undefined,
-    }
+    };
   },
   computed: {
     ...mapState('trip', {
@@ -75,7 +83,7 @@ export default {
       });
     },
   },
-}
+};
 </script>
 
 <style scoped>

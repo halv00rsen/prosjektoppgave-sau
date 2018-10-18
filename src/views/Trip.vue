@@ -1,26 +1,34 @@
 <template>
   <div v-if="trip">
-    <p>Navn: {{trip.name}}</p>
+    <p>Navn: {{ trip.name }}</p>
     <p>Start: {{ Number(trip.startTime) | moment("YYYY.MM.DD - HH:mm:ss") }}</p>
     <p v-if="trip.endTime">Slutt: {{ Number(trip.endTime) | moment("YYYY.MM.DD - HH:mm:ss") }}</p>
-    <SheepMap ref="sheepMap"
-      v-bind:useDownload="false">
-    </SheepMap>
+    <SheepMap
+      ref="sheepMap"
+      :use-download="false"/>
 
-    <md-button v-if="!trip.done" class="md-raised" :md-ripple="false" @click="openRegistration">
+    <md-button
+      v-if="!trip.done"
+      :md-ripple="false"
+      class="md-raised"
+      @click="openRegistration">
       Ny registrering
     </md-button>
 
-    <md-button v-if="!trip.done" class="md-raised" :md-ripple="false" @click="showExitModal = true">
+    <md-button
+      v-if="!trip.done"
+      :md-ripple="false"
+      class="md-raised"
+      @click="showExitModal = true">
       Avslutt tur
     </md-button>
 
     <registration
       v-if="register"
       :detailed="detailedRegistration"
-      v-bind:show="register"
+      :show="register"
       :close="closeRegistration"
-      :saveRegistration="saveRegistration"/>
+      :save-registration="saveRegistration"/>
 
     <md-dialog-confirm
       :md-active.sync="showExitModal"
@@ -28,8 +36,7 @@
       md-content="Det vil ikke være mulig å gjenåpne denne turen"
       md-confirm-text="Ja"
       md-cancel-text="Nei"
-      @md-confirm="finishTrip"
-      />
+      @md-confirm="finishTrip"/>
   </div>
   <div v-else>
     404 - Fant ikke turen du leter etter!
@@ -53,6 +60,16 @@ export default {
       detailedRegistration: false,
       registrationPosition: null,
       showExitModal: false,
+    };
+  },
+  computed: {
+    trip() {
+      return this.$store.state.trip.activeTrip;
+    },
+  },
+  created() {
+    if (!this.$store.state.activeTrip) {
+      this.$store.dispatch('trip/setActiveTrip', this.$route.params.tripId);
     }
   },
   methods: {
@@ -79,16 +96,5 @@ export default {
       this.register = false;
     },
   },
-  created() {
-    if (!this.$store.state.activeTrip) {
-      this.$store.dispatch('trip/setActiveTrip', this.$route.params.tripId).then((data) => {
-      });
-    }
-  },
-  computed: {
-    trip() {
-      return this.$store.state.trip.activeTrip;
-    },
-  },
-}
+};
 </script>

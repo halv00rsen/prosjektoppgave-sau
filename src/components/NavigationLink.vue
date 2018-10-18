@@ -1,9 +1,9 @@
 <template>
   <router-link :to="link">
     <md-list-item @click="close()">
-      <md-icon>{{icon}}</md-icon>
+      <md-icon>{{ icon }}</md-icon>
       <span class="md-list-item-text">
-        {{text}}
+        {{ text }}
       </span>
     </md-list-item>
   </router-link>
@@ -14,12 +14,15 @@ export default {
   name: 'NavigationLink',
   props: {
     link: {
+      type: Object,
       required: true,
     },
     icon: {
+      type: String,
       required: true,
     },
     text: {
+      type: String,
       required: true,
     },
     close: {
@@ -27,10 +30,7 @@ export default {
       type: Function,
     },
   },
-  // props: [
-  //   'link', 'icon', 'text', 'close',
-  // ],
-}
+};
 </script>
 
 <style scoped>

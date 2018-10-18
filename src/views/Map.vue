@@ -1,18 +1,18 @@
 <template>
   <div>
-    <SheepMap></SheepMap>
+    <SheepMap/>
   </div>
 </template>
 
 <script>
-import SheepMap from '@/components/SheepMap.vue'
+import SheepMap from '@/components/SheepMap.vue';
 
 export default {
-  name: 'maps',
+  name: 'Maps',
   components: {
     SheepMap,
   },
-}
+};
 </script>
 
 <style>

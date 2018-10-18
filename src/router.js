@@ -5,7 +5,7 @@ import Map from './views/Map.vue';
 import TripList from './views/TripList.vue';
 import Trip from './views/Trip.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   mode: 'history',
@@ -39,4 +39,4 @@ export default new Router({
       component: Trip,
     }
   ],
-})
+});

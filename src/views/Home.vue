@@ -1,27 +1,35 @@
 <template>
   <div class="home">
     <h3>Velkommen til Sau-appen</h3>
-    <router-link v-if="currentOpenTrip && !currentOpenTrip.done"
-        :to="{name: 'trip', params: {tripId: currentOpenTrip.startTime}}">
-      <md-button class="md-raised" :md-ripple="false">
+    <router-link
+      v-if="currentOpenTrip && !currentOpenTrip.done"
+      :to="{name: 'trip', params: {tripId: currentOpenTrip.startTime}}">
+      <md-button
+        :md-ripple="false"
+        class="md-raised">
         Fortsett med aktiv tur
       </md-button>
     </router-link>
-    <md-button v-else class="md-raised" :md-ripple="false" @click="newTrip()">
+    <md-button
+      v-else
+      :md-ripple="false"
+      class="md-raised"
+      @click="newTrip()">
       Start ny tur
     </md-button>
-
-    <!-- <router-link v-else
-        :to="{name: 'trip', params: {tripId: Date.now()}}">
-    </router-link> -->
   </div>
 </template>
 
 <script>
 export default {
-  name: 'home',
+  name: 'Home',
   components: {
 
+  },
+  computed: {
+    currentOpenTrip() {
+      return this.$store.state.trip.openTrip;
+    },
   },
   methods: {
     newTrip() {
@@ -30,10 +38,5 @@ export default {
       });
     },
   },
-  computed: {
-    currentOpenTrip() {
-      return this.$store.state.trip.openTrip;
-    },
-  },
-}
+};
 </script>

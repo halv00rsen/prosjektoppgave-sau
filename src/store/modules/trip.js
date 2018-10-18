@@ -11,7 +11,7 @@ const state = {
   activeTrip: undefined,
   openTrip: undefined,
   currentPosition: undefined,
-}
+};
 
 const getters = {
   getTrip: (state) => (tripId) => {
@@ -26,7 +26,7 @@ const getters = {
   getActiveTrip: (state) => {
     return state.activeTrip;
   },
-}
+};
 
 const actions = {
   loadTrips({ commit, }) {
@@ -49,7 +49,7 @@ const actions = {
   saveTrip({ commit, }, name) {
     const now = Date.now();
     const trip = new Trip(now.toString(), name, now);
-    database.addTrip(trip).then((data) => {
+    database.addTrip(trip).then(() => {
       commit('addTrip', trip);
       commit('setActiveTrip', trip);
     });
@@ -81,7 +81,7 @@ const actions = {
     commit('addObservation', data);
     // Add save to database
   },
-}
+};
 
 const mutations = {
   setTrips(state, trips) {
@@ -119,7 +119,7 @@ const mutations = {
       state.openTrip.addPosition(position);
     }
   },
-}
+};
 
 export default {
   namespaced: true,
@@ -127,4 +127,4 @@ export default {
   getters,
   mutations,
   actions,
-}
+};

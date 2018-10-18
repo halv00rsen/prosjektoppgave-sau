@@ -5,11 +5,11 @@ export default class Observation {
     this.position = {
       lat: position.lat,
       lng: position.lng,
-    }
+    };
     this.observedPosition = {
       lat: observedPosition.lat,
       lng: observedPosition.lng,
-    }
+    };
   }
 
 }

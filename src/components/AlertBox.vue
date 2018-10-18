@@ -1,7 +1,13 @@
 <template>
-  <md-snackbar :md-position="'left'" :md-duration="duration" :md-active.sync="open" md-persistent>
-    <span>{{message}}</span>
-    <md-button class="md-primary" @click="close">Lukk</md-button>
+  <md-snackbar
+    :md-position="'left'"
+    :md-duration="duration"
+    :md-active.sync="open"
+    md-persistent>
+    <span>{{ message }}</span>
+    <md-button
+      class="md-primary"
+      @click="close">Lukk</md-button>
   </md-snackbar>
 </template>
 
@@ -11,20 +17,13 @@ export default {
   props: {
     closeCallback: {
       type: Function,
+      default: undefined,
     },
   },
   data() {
     return {
       duration: 5000,
-    }
-  },
-  methods: {
-    close() {
-      this.open = false;
-      if (this.closeCallback) {
-        this.closeCallback();
-      }
-    },
+    };
   },
   computed: {
     message() {
@@ -41,5 +40,13 @@ export default {
       },
     },
   },
-}
+  methods: {
+    close() {
+      this.open = false;
+      if (this.closeCallback) {
+        this.closeCallback();
+      }
+    },
+  },
+};
 </script>
