@@ -81,6 +81,13 @@ export default {
         },
         {
           link: {
+            name: 'settings',
+          },
+          icon: 'settings',
+          text: 'Innstillinger',
+        },
+        {
+          link: {
             name: 'about',
           },
           icon: 'info',
@@ -91,6 +98,7 @@ export default {
   },
   created() {
     console.log('creating app');
+    this.$store.dispatch('application/loadSettings');
     this.$store.dispatch('trip/loadTrips');
     this.retrieveCurrentPosition();
     this.watchId = setInterval(this.retrieveCurrentPosition, 10000);

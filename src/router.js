@@ -4,6 +4,7 @@ import Home from './views/Home.vue';
 import Map from './views/Map.vue';
 import TripList from './views/TripList.vue';
 import Trip from './views/Trip.vue';
+import SettingsView from './views/Settings.vue';
 
 Vue.use(Router);
 
@@ -20,6 +21,11 @@ export default new Router({
       path: '/trips',
       name: 'trips',
       component: TripList,
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: SettingsView,
     },
     {
       path: '/about',
