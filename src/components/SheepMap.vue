@@ -14,7 +14,8 @@
       :zoom="zoom"
       :center="center"
       style="height: 50vh;"
-      @update:zoom="zoomUpdate">
+      @update:zoom="zoomUpdate"
+      @update:center="centerUpdated">
 
       <l-marker
         v-if="marker"
@@ -117,6 +118,11 @@ export default {
         lat: this.marker.lat,
         lng: this.marker.lng,
       };
+    } else {
+      this.center = {
+        lat: 0,
+        lng: 0,
+      };
     }
 
     this.$nextTick(() => {
@@ -178,6 +184,9 @@ export default {
   methods: {
     zoomUpdate(zoom) {
       this.currentZoom = zoom;
+    },
+    centerUpdated(center) {
+      this.center = center;
     },
     changeCenter() {
       this.$refs.map.mapObject.setView(this.marker, 15, { animation: true, });

@@ -1,9 +1,20 @@
 <template>
   <div>
     <l-geo-json
-      :geojson="geojson"
-      :options="options"
-      @click="openObservation"/>
+      :geojson="geojson"/>
+
+    <l-circle-marker
+      :lat-lng="observed"
+      :radius="10"
+      color="yellow"
+      @click="openObservation"
+    />
+
+    <l-circle-marker
+      :lat-lng="lookout"
+      :radius="10"
+      color="red"
+    />
 
     <registration
       v-if="open"
@@ -15,9 +26,8 @@
 </template>
 
 <script>
-import L from 'leaflet';
 import {
-  LGeoJson,
+  LGeoJson, LCircleMarker,
 } from 'vue2-leaflet';
 import Registration from '@/components/Registration.vue';
 
@@ -25,6 +35,7 @@ export default {
   name: 'MapObservation',
   components: {
     LGeoJson,
+    LCircleMarker,
     Registration,
   },
   props: {
@@ -40,19 +51,8 @@ export default {
   data() {
     return {
       open: false,
-      options: {
-        pointToLayer: function (feature, latlng) {
-          const fillColor = feature.properties.color;
-          return L.circleMarker(latlng, {
-            radius: 10,
-            fillColor,
-            color: '#000',
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8,
-          });
-        },
-      },
+      observed: [this.observation.position.lat, this.observation.position.lng],
+      lookout: [this.observation.observedPosition.lat, this.observation.observedPosition.lng],
       geojson: {
         type: 'FeatureCollection',
         features: [
@@ -67,26 +67,6 @@ export default {
                 [this.observation.position.lng, this.observation.position.lat],
                 [this.observation.observedPosition.lng, this.observation.observedPosition.lat],
               ],
-            },
-          },
-          {
-            type: 'Feature',
-            properties: {
-              color: '#ffcc00',
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: [this.observation.position.lng, this.observation.position.lat],
-            },
-          },
-          {
-            type: 'Feature',
-            properties: {
-              color: '#ff0000',
-            },
-            geometry: {
-              type: 'Point',
-              coordinates: [this.observation.observedPosition.lng, this.observation.observedPosition.lat],
             },
           },
         ],

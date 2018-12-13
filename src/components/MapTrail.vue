@@ -1,19 +1,24 @@
 <template>
-  <l-geo-json
+  <!-- <l-geo-json
     :geojson="geojson"
-    :options="options"/>
+    :options="options"/> -->
+  <l-circle-marker
+    :lat-lng="[latitude, longitude]"
+    :radius="10"
+    color="#000"
+  />
 </template>
 
 <script>
 import L from 'leaflet';
 import {
-  LGeoJson,
+  LGeoJson, LCircleMarker,
 } from 'vue2-leaflet';
 
 export default {
   name: 'MapTrail',
   components: {
-    LGeoJson,
+    LGeoJson, LCircleMarker,
   },
   props: {
     latitude: {
