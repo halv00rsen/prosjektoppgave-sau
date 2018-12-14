@@ -21,7 +21,8 @@
       :close="close"
       :edit-callback="editCurrent"
       :delete-callback="deleteObservation"
-      :old-object="observation"/>
+      :old-object="observation"
+      :detailed="observation.detailed"/>
   </div>
 </template>
 

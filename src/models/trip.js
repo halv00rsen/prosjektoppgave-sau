@@ -8,6 +8,7 @@ export default class Trip {
     this.positions = [];
     this.done = false;
     this.startTime = startTime;
+    this.lastPosition = undefined;
   }
 
   addObservation(observation) {
@@ -15,7 +16,13 @@ export default class Trip {
   }
 
   addPosition(position) {
-    this.positions.push(position);
+    if (this.lastPosition !== undefined) {
+      console.log('Distance: ' + this.lastPosition.distanceTo(position));
+    }
+    if (this.lastPosition === undefined || this.lastPosition.distanceTo(position) > 10) {
+      this.positions.push(position);
+      this.lastPosition = position;
+    }
   }
 
   editObservation(data, index) {

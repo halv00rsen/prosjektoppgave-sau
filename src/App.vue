@@ -46,6 +46,7 @@
 <script>
 import NavigationLink from './components/NavigationLink.vue';
 import AlertBox from './components/AlertBox.vue';
+import { LatLng, } from 'leaflet';
 
 export default {
   name: 'App',
@@ -115,10 +116,13 @@ export default {
     retrieveCurrentPosition() {
       console.log('retrieving position');
       navigator.geolocation.getCurrentPosition((pos) => {
-        this.$store.dispatch('trip/setPosition', {
-          lng: pos.coords.longitude,
-          lat: pos.coords.latitude,
-        });
+        const position = new LatLng(pos.coords.latitude, pos.coords.longitude);
+        this.$store.dispatch('trip/setPosition', position);
+        console.log(position);
+        // this.$store.dispatch('trip/setPosition', {
+        //   lat: pos.coords.latitude,
+        //   lng: pos.coords.longitude,
+        // });
       }, (err) => {
         console.log(err);
       }, {

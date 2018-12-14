@@ -59,11 +59,11 @@ const actions = {
     database.deleteTrip(state.all[index].id);
     commit('removeTrip', index);
   },
-  setActiveTripDone({ state, commit, }) {
+  setActiveTripDone({ state, commit, }, name) {
     if (!state.activeTrip) {
       return;
     }
-    commit('setActiveTripDone');
+    commit('setActiveTripDone', name);
     database.addTrip(state.activeTrip);
   },
   setPosition({ commit, }, position) {
@@ -120,7 +120,8 @@ const mutations = {
       state.openTrip = trip;
     }
   },
-  setActiveTripDone(state) {
+  setActiveTripDone(state, name) {
+    state.openTrip.name = name;
     state.openTrip.done = true;
     state.openTrip.endTime = Date.now();
     state.openTrip = undefined;

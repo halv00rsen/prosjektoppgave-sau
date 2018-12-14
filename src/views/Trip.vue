@@ -1,6 +1,6 @@
 <template>
   <div v-if="trip">
-    <p>Navn: {{ trip.name }}</p>
+    <p v-if="trip.done">Navn: {{ trip.name }}</p>
     <p>Start: {{ Number(trip.startTime) | moment("YYYY.MM.DD - HH:mm:ss") }}</p>
     <p v-if="trip.endTime">Slutt: {{ Number(trip.endTime) | moment("YYYY.MM.DD - HH:mm:ss") }}</p>
     <SheepMap
@@ -30,12 +30,13 @@
       :close="closeRegistration"
       :save-registration="saveRegistration"/>
 
-    <md-dialog-confirm
+    <md-dialog-prompt
       :md-active.sync="showExitModal"
-      md-title="Er du sikker på at du vil avslutte turen?"
-      md-content="Det vil ikke være mulig å gjenåpne denne turen"
-      md-confirm-text="Ja"
-      md-cancel-text="Nei"
+      v-model="name"
+      md-title="Du er i ferd med å avslutte turen"
+      md-input-placeholder="Skriv inn et navn på turen"
+      md-confirm-text="Avslutt"
+      md-cancel-text="Avbryt"
       @md-confirm="finishTrip"/>
   </div>
   <div v-else>
@@ -60,6 +61,7 @@ export default {
       detailedRegistration: false,
       registrationPosition: null,
       showExitModal: false,
+      name: '',
     };
   },
   computed: {
@@ -74,7 +76,7 @@ export default {
   },
   methods: {
     finishTrip() {
-      this.$store.dispatch('trip/setActiveTripDone');
+      this.$store.dispatch('trip/setActiveTripDone', this.name);
     },
     openRegistration() {
       const observation = L.latLng(this.$refs.sheepMap.center);
