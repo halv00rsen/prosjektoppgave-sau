@@ -5,6 +5,7 @@ import {
   MdButton, MdContent, MdTabs, MdList, MdIcon, MdSubheader, MdDivider,
   MdApp, MdToolbar, MdDrawer, MdField, MdCard, MdDialog, MdDialogConfirm,
   MdProgress, MdSwitch, MdAutocomplete, MdMenu, MdCheckbox, MdSnackbar, MdDialogPrompt,
+  MdBottomBar,
 } from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.min.css';
 import 'vue-material/dist/theme/default.css';
@@ -30,3 +31,4 @@ Vue.use(MdMenu);
 Vue.use(MdCheckbox);
 Vue.use(MdSnackbar);
 Vue.use(MdDialogPrompt);
+Vue.use(MdBottomBar);

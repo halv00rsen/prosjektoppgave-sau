@@ -9,6 +9,7 @@ import './utils/fontawesome';
 
 import { L, } from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
+import VueRouter from 'vue-router';
 
 
 delete L.Icon.Default.prototype._getIconUrl;
@@ -21,6 +22,11 @@ L.Icon.Default.mergeOptions({
 
 Vue.config.productionTip = false;
 Vue.use(VueMoment);
+
+Vue.use(VueRouter);
+
+Vue.component('router-link', Vue.options.components.RouterLink);
+Vue.component('router-view', Vue.options.components.RouterView);
 
 new Vue({
   router,

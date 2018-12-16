@@ -13,6 +13,7 @@
       ref="map"
       :zoom="zoom"
       :center="center"
+      class="l-map"
       style="height: 50vh;"
       @update:zoom="zoomUpdate"
       @update:center="centerUpdated">
@@ -198,3 +199,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.l-map {
+  z-index: 0;
+}
+</style>

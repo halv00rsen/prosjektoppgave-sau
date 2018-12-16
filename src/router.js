@@ -5,6 +5,7 @@ import Map from './views/Map.vue';
 import TripList from './views/TripList.vue';
 import Trip from './views/Trip.vue';
 import SettingsView from './views/Settings.vue';
+import NotFound from './components/NotFound.vue';
 
 Vue.use(Router);
 
@@ -43,6 +44,10 @@ export default new Router({
       path: '/trip/:tripId',
       name: 'trip',
       component: Trip,
+    },
+    {
+      path: '*',
+      component: NotFound,
     }
   ],
 });

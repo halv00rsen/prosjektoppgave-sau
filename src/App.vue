@@ -5,40 +5,26 @@
     <link
       rel="stylesheet"
       href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
-    <md-app
-      md-waterfall
-      md-mode="fixed">
-      <md-app-toolbar class="md-primary">
-        <md-button
-          class="md-icon-button"
-          @click="menuVisible = !menuVisible">
-          <md-icon>menu</md-icon>
-        </md-button>
-        <span class="md-title">Finn sau</span>
+    <md-app md-mode="fixed">
+      <md-app-toolbar>
+        <!-- <h3 class="md-title">Finn sau</h3> -->
+        <span class="md-title">Finn Sau</span>
       </md-app-toolbar>
-
-      <md-app-drawer
-        :md-active.sync="menuVisible"
-        md-permanent="full">
-        <md-toolbar
-          class="md-transparent"
-          md-elevation="0">SauSau</md-toolbar>
-
-        <md-list>
-          <navigation-link
-            v-for="(route, index) of routes"
-            :key="index"
-            :link="route.link"
-            :icon="route.icon"
-            :text="route.text"
-            :close="close"/>
-        </md-list>
-      </md-app-drawer>
-
       <md-app-content>
         <router-view/>
       </md-app-content>
     </md-app>
+    <div class="phone-viewport">
+      <md-bottom-bar
+        md-sync-route>
+        <md-bottom-bar-item
+          v-for="(route, index) of routes"
+          :key="index"
+          :to="route.link"
+          :md-icon="route.icon"
+          :md-label="route.text"/>
+      </md-bottom-bar>
+    </div>
     <alert-box/>
   </div>
 </template>
@@ -64,14 +50,14 @@ export default {
             name: 'home',
           },
           icon: 'home',
-          text: 'Hjem',
+          text: 'Aktiv Tur',
         },
         {
           link: {
             name: 'trips',
           },
           icon: 'directions_walk',
-          text: 'Mine turer',
+          text: 'Mine Turer',
         },
         {
           link: {
@@ -79,20 +65,6 @@ export default {
           },
           icon: 'map',
           text: 'Kart',
-        },
-        {
-          link: {
-            name: 'settings',
-          },
-          icon: 'settings',
-          text: 'Innstillinger',
-        },
-        {
-          link: {
-            name: 'about',
-          },
-          icon: 'info',
-          text: 'Informasjon',
         },
       ],
     };
@@ -119,10 +91,6 @@ export default {
         const position = new LatLng(pos.coords.latitude, pos.coords.longitude);
         this.$store.dispatch('trip/setPosition', position);
         console.log(position);
-        // this.$store.dispatch('trip/setPosition', {
-        //   lat: pos.coords.latitude,
-        //   lng: pos.coords.longitude,
-        // });
       }, (err) => {
         console.log(err);
       }, {
@@ -136,7 +104,20 @@ export default {
 <style scoped>
 .md-drawer {
   width: 20em;
-  /* max-width: calc(100vw - 125px); */
+}
+
+.md-bottom-bar-item {
+  width: 100%;
+}
+
+.phone-viewport {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  /* background-color: #333; */
+  position: fixed;
+  /* flex-shrink: 0; */
 }
 </style>
 
