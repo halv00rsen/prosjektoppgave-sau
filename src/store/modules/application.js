@@ -11,11 +11,17 @@ export default {
     settings: {
       positionFrequency: 60000,
     },
+    positionRetrieved: false,
   },
   getters: {
-
+    positionRetrieved: (state) => {
+      return state.positionRetrieved;
+    },
   },
   actions: {
+    setPositionRetrieved({ commit, }, pos) {
+      commit('setPositionRetrieved', pos);
+    },
     setMessage({ commit, }, msg) {
       commit('setMessage', msg);
     },
@@ -45,6 +51,9 @@ export default {
     },
     setSettings(state, settings) {
       state.settings = settings;
+    },
+    setPositionRetrieved(state, position) {
+      state.positionRetrieved = position;
     },
   },
 };

@@ -70,9 +70,9 @@ export default {
     },
   },
   created() {
-    if (!this.$store.state.activeTrip) {
-      this.$store.dispatch('trip/setActiveTrip', this.$route.params.tripId);
-    }
+    // if (!this.$store.state.activeTrip) {
+    //   this.$store.dispatch('trip/setActiveTrip', this.$route.params.tripId);
+    // }
   },
   methods: {
     finishTrip() {

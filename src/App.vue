@@ -8,15 +8,24 @@
     <md-app md-mode="fixed">
       <md-app-toolbar>
         <!-- <h3 class="md-title">Finn sau</h3> -->
-        <span class="md-title">Finn Sau</span>
+        <span class="md-title">Finn Sau. Pos på {{ positionRetrieved }}  {{ $route.name }}</span>
       </md-app-toolbar>
-      <md-app-content>
-        <router-view/>
+      <md-app-content
+        v-if="!loading">
+        Laster
+      </md-app-content>
+      <md-app-content
+        v-else>
+        <router-view v-if="positionRetrieved"/>
+        <div v-else>
+          Vennligst skru på posisjon, applikasjonen fungerer ikke uten.
+        </div>
       </md-app-content>
     </md-app>
     <div class="phone-viewport">
       <md-bottom-bar
-        md-sync-route>
+        ref="bottom-bar"
+        :disabled="!loading">
         <md-bottom-bar-item
           v-for="(route, index) of routes"
           :key="index"
@@ -44,7 +53,17 @@ export default {
     return {
       menuVisible: false,
       watchId: -1,
-      routes: [
+    };
+  },
+  computed: {
+    positionRetrieved() {
+      return this.$store.getters['application/positionRetrieved'];
+    },
+    loading() {
+      return this.$store.getters['trip/dataLoaded'];
+    },
+    routes() {
+      const routes = [
         {
           link: {
             name: 'home',
@@ -66,13 +85,25 @@ export default {
           icon: 'map',
           text: 'Kart',
         },
-      ],
-    };
+      ];
+      // if (this.$store.state.trip.openTrip) {
+      //   routes[0].link = {
+      //     name: 'trip', 
+      //     params: {
+      //       tripId: this.$store.state.trip.openTrip.startTime,
+      //     },
+      //   };
+      // }
+      return routes;
+    },
+  },
+  beforeCreate() {
+    console.log('before create');
   },
   created() {
     console.log('creating app');
     this.$store.dispatch('application/loadSettings');
-    this.$store.dispatch('trip/loadTrips');
+    // this.$store.dispatch('trip/loadTrips');
     this.retrieveCurrentPosition();
     this.watchId = setInterval(this.retrieveCurrentPosition, 10000);
   },
@@ -90,12 +121,21 @@ export default {
       navigator.geolocation.getCurrentPosition((pos) => {
         const position = new LatLng(pos.coords.latitude, pos.coords.longitude);
         this.$store.dispatch('trip/setPosition', position);
+        this.$store.dispatch('application/setPositionRetrieved', true);
         console.log(position);
       }, (err) => {
         console.log(err);
+        this.$store.dispatch('application/setPositionRetrieved', false);
       }, {
         enableHighAccuracy: true,
       });
+    },
+    hehe() {
+      console.log('ok?');
+    },
+    clickedBar(index) {
+      console.log(index);
+      // this.$refs['bottom-bar'].setActiveItemByIndex(index); 
     },
   },
 };
@@ -136,5 +176,13 @@ body {
 
 .md-app {
   height: 100%;
+}
+
+.md-app-scroller {
+  margin-bottom: 60px;
+}
+
+.md-bottom-bar-item {
+  max-width: 100% !important;
 }
 </style>

@@ -2,6 +2,7 @@
 // import uuid from 'uuid';
 import ApplicationDatabase from '@/database/application';
 import Trip from '@/models/trip';
+import { Promise, } from 'q';
 // import Observation from '@/models/observation';
 
 const database = new ApplicationDatabase();
@@ -11,6 +12,7 @@ const state = {
   activeTrip: undefined,
   openTrip: undefined,
   currentPosition: undefined,
+  dataLoaded: false,
 };
 
 const getters = {
@@ -26,11 +28,17 @@ const getters = {
   getActiveTrip: (state) => {
     return state.activeTrip;
   },
+  getOpenTrip: (state) => {
+    return state.openTrip;
+  },
+  dataLoaded: (state) => {
+    return state.dataLoaded;
+  },
 };
 
 const actions = {
   loadTrips({ commit, }) {
-    database.getAllTrips((data) => {
+    return database.getAllTrips((data) => {
       commit('setTrips', data);
       for (let trip of data) {
         if (!trip.done) {
@@ -38,12 +46,15 @@ const actions = {
           break;
         }
       }
+      commit('setDownloaded');
     });
   },
   setActiveTrip({ commit, getters, }, tripId) {
     const trip = getters.getTrip(tripId);
     if (trip) {
       commit('setActiveTrip', trip);
+    } else {
+      return Promise.reject('dette er fra promise');
     }
   },
   saveTrip({ commit, }, name) {
@@ -96,6 +107,9 @@ const actions = {
 };
 
 const mutations = {
+  setDownloaded(state) {
+    state.dataLoaded = true;
+  },
   setTrips(state, trips) {
     state.all = trips;
   },
