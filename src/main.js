@@ -11,6 +11,9 @@ import { L, } from 'vue2-leaflet';
 import 'leaflet/dist/leaflet.css';
 import VueRouter from 'vue-router';
 
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -27,6 +30,8 @@ Vue.use(VueRouter);
 
 Vue.component('router-link', Vue.options.components.RouterLink);
 Vue.component('router-view', Vue.options.components.RouterView);
+
+Vue.use(VueAxios, axios);
 
 new Vue({
   router,

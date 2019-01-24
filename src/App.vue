@@ -8,7 +8,7 @@
     <md-app md-mode="fixed">
       <md-app-toolbar>
         <!-- <h3 class="md-title">Finn sau</h3> -->
-        <span class="md-title">Finn Sau. Pos på {{ positionRetrieved }}  {{ $route.name }}</span>
+        <span class="md-title">Finn Sau</span>
       </md-app-toolbar>
       <md-app-content
         v-if="!loading">
@@ -88,7 +88,7 @@ export default {
       ];
       // if (this.$store.state.trip.openTrip) {
       //   routes[0].link = {
-      //     name: 'trip', 
+      //     name: 'trip',
       //     params: {
       //       tripId: this.$store.state.trip.openTrip.startTime,
       //     },
@@ -135,7 +135,7 @@ export default {
     },
     clickedBar(index) {
       console.log(index);
-      // this.$refs['bottom-bar'].setActiveItemByIndex(index); 
+      // this.$refs['bottom-bar'].setActiveItemByIndex(index);
     },
   },
 };

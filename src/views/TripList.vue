@@ -40,6 +40,11 @@
         </p>
       </md-card-content>
       <md-card-actions>
+        <md-button
+          v-if="trip.done"
+          @click="upload(trip)">
+          Sync
+        </md-button>
         <md-button @click="goToTrip(trip.id)">
           {{ trip.done ? 'Åpne' : 'Gjør ferdig turen' }}
         </md-button>
@@ -61,6 +66,8 @@ export default {
       tripName: '',
       showDialog: false,
       deleteIndex: undefined,
+      apiUrl: process.env.VUE_APP_API_ENDPOINT,
+      apiAuthToken: undefined,
     };
   },
   computed: {
@@ -80,6 +87,23 @@ export default {
     goToTrip(id) {
       this.$store.dispatch('trip/setActiveTrip', id).then(() => {
         this.$router.push({ name: 'trip', params: { tripId: id, }, });
+      });
+    },
+    upload(trip) {
+      if (!this.apiAuthToken) {
+        this.apiAuthToken = 'Basic ' + btoa('bruker:' + prompt('Passord:'));
+      }
+      this.$http.post(this.apiUrl + 'trip', trip, {
+        headers: {
+          'Authorization': this.apiAuthToken,
+        },
+      }).then((response) => {
+        console.log(response);
+        this.$store.dispatch('application/setMessage', 'Turen ble opplastet');
+      }).catch((error) => {
+        console.log(error);
+        this.apiAuthToken = undefined;
+        this.$store.dispatch('application/setMessage', 'Noe feil skjedde i opplasting');
       });
     },
   },
