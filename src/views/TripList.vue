@@ -19,8 +19,11 @@
     <div v-if="!trips.length">
       <p>Du har ikke registrert noen turer enda!</p>
     </div>
+    <md-switch
+      v-model="serverView"
+      :change="loadServerData()">Serverturer</md-switch>
     <md-card
-      v-for="(trip, index) in trips"
+      v-for="(trip, index) in (serverView ? serverTrips : trips)"
       :key="trip.id"
       class="md-double-line">
       <md-card-header>
@@ -41,14 +44,16 @@
       </md-card-content>
       <md-card-actions>
         <md-button
-          v-if="trip.done"
+          v-if="trip.done && !serverView"
           @click="upload(trip)">
           Sync
         </md-button>
         <md-button @click="goToTrip(trip.id)">
           {{ trip.done ? 'Åpne' : 'Gjør ferdig turen' }}
         </md-button>
-        <md-button @click="openDeleteDialog(index)">Slett</md-button>
+        <md-button
+          v-if="!serverView"
+          @click="openDeleteDialog(index)">Slett</md-button>
       </md-card-actions>
     </md-card>
   </div>
@@ -67,14 +72,20 @@ export default {
       showDialog: false,
       deleteIndex: undefined,
       apiUrl: process.env.VUE_APP_API_ENDPOINT,
-      apiAuthToken: undefined,
+      serverDataLoaded: false,
+      serverView: false,
     };
   },
   computed: {
     ...mapState('trip', {
       trips: state => state.all,
     }),
-    // sortedTrips
+    serverTrips() {
+      return this.$store.getters['trip/serverTrips'];
+    },
+    apiAuthToken() {
+      return this.$store.getters['application/getApiToken'];
+    },
   },
   methods: {
     ...mapActions('trip', [
@@ -85,25 +96,55 @@ export default {
       this.showDialog = true;
     },
     goToTrip(id) {
-      this.$store.dispatch('trip/setActiveTrip', id).then(() => {
+      this.$store.dispatch(this.serverView ? 'trip/setActiveTripServer' : 'trip/setActiveTrip', id).then(() => {
         this.$router.push({ name: 'trip', params: { tripId: id, }, });
       });
     },
     upload(trip) {
-      if (!this.apiAuthToken) {
-        this.apiAuthToken = 'Basic ' + btoa('bruker:' + prompt('Passord:'));
+      let apiAuthToken = this.apiAuthToken();
+      if (!this.apiAuthToken()) {
+        apiAuthToken = 'Basic ' + btoa('bruker:' + prompt('Passord:'));
+        this.$store.dispatch('application/setApiToken', apiAuthToken);
       }
       this.$http.post(this.apiUrl + 'trip', trip, {
         headers: {
-          'Authorization': this.apiAuthToken,
+          'Authorization': apiAuthToken,
         },
       }).then((response) => {
         console.log(response);
         this.$store.dispatch('application/setMessage', 'Turen ble opplastet');
       }).catch((error) => {
         console.log(error);
-        this.apiAuthToken = undefined;
+        this.$store.dispatch('application/setApiToken', undefined);
         this.$store.dispatch('application/setMessage', 'Noe feil skjedde i opplasting');
+      });
+    },
+    loadServerData() {
+      this.$store.dispatch('trip/setServerView', this.serverView);
+      if (!this.serverView || this.serverDataLoaded) {
+        return;
+      }
+      let apiAuthToken = this.apiAuthToken();
+      if (!this.apiAuthToken()) {
+        apiAuthToken = 'Basic ' + btoa('bruker:' + prompt('Passord:'));
+        console.log(apiAuthToken);
+        this.$store.dispatch('application/setApiToken', apiAuthToken);
+      }
+      this.$http.get(this.apiUrl + 'trip', {
+        headers: {
+          'Authorization': apiAuthToken,
+        },
+      }).then((response) => {
+        response.data.forEach((elem) => {
+          elem.done = true;
+        });
+        this.$store.dispatch('trip/setServerTrips', response.data);
+        this.serverDataLoaded = true;
+        this.$store.dispatch('application/setMessage', 'Turer fra server innlastet');
+      }).catch((error) => {
+        console.log(error);
+        this.$store.dispatch('application/setApiToken', undefined);
+        this.$store.dispatch('application/setMessage', 'Noe feil skjedde i nedlasting');
       });
     },
   },

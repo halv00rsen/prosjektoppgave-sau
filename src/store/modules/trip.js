@@ -3,6 +3,7 @@
 import ApplicationDatabase from '@/database/application';
 import Trip from '@/models/trip';
 import { Promise, } from 'q';
+// import { stat } from 'fs';
 // import Observation from '@/models/observation';
 
 const database = new ApplicationDatabase();
@@ -13,12 +14,22 @@ const state = {
   openTrip: undefined,
   currentPosition: undefined,
   dataLoaded: false,
+  serverTrips: [],
+  serverView: false,
 };
 
 const getters = {
   getTrip: (state) => (tripId) => {
     tripId = tripId.toString();
     for (let trip of state.all) {
+      if (trip.id === tripId) {
+        return trip;
+      }
+    }
+    return undefined;
+  },
+  getTripServer: (state) => (tripId) => {
+    for (let trip of state.serverTrips) {
       if (trip.id === tripId) {
         return trip;
       }
@@ -34,9 +45,18 @@ const getters = {
   dataLoaded: (state) => {
     return state.dataLoaded;
   },
+  serverTrips: (state) => {
+    return state.serverTrips;
+  },
+  isServerView: (state) => () => {
+    return state.serverView;
+  },
 };
 
 const actions = {
+  setServerView({ commit, }, view) {
+    commit('setServerView', view);
+  },
   loadTrips({ commit, }) {
     return database.getAllTrips((data) => {
       commit('setTrips', data);
@@ -49,7 +69,19 @@ const actions = {
       commit('setDownloaded');
     });
   },
-  setActiveTrip({ commit, getters, }, tripId) {
+  setActiveTripServer({ commit, getters, }, tripId) {
+    const trip = getters.getTripServer(tripId);
+    if (trip) {
+      commit('setActiveTrip', trip);
+    } else {
+      return Promise.reject('dette er fra promise');
+    }
+  },
+  setActiveTrip({ commit, getters, dispatch, }, tripId) {
+    if (getters.isServerView()) {
+      dispatch('setActiveTripServer', tripId);
+      return;
+    }
     const trip = getters.getTrip(tripId);
     if (trip) {
       commit('setActiveTrip', trip);
@@ -104,6 +136,9 @@ const actions = {
     }
     commit('deleteObservation', index);
   },
+  setServerTrips({ commit, }, trips) {
+    commit('setServerTrips', trips);
+  },
 };
 
 const mutations = {
@@ -151,6 +186,12 @@ const mutations = {
   },
   deleteObservation(state, index) {
     state.openTrip.removeObservationAtIndex(index);
+  },
+  setServerTrips(state, trips) {
+    state.serverTrips = trips;
+  },
+  setServerView(state, view) {
+    state.serverView = view;
   },
 };
 

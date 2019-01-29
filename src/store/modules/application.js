@@ -12,13 +12,20 @@ export default {
       positionFrequency: 60000,
     },
     positionRetrieved: false,
+    apiAuthToken: undefined,
   },
   getters: {
     positionRetrieved: (state) => {
       return state.positionRetrieved;
     },
+    getApiToken: (state) => () => {
+      return state.apiAuthToken;
+    },
   },
   actions: {
+    setApiToken({ commit, }, token) {
+      commit('setApiToken', token);
+    },
     setPositionRetrieved({ commit, }, pos) {
       commit('setPositionRetrieved', pos);
     },
@@ -54,6 +61,9 @@ export default {
     },
     setPositionRetrieved(state, position) {
       state.positionRetrieved = position;
+    },
+    setApiToken(state, token) {
+      state.apiAuthToken = token;
     },
   },
 };
