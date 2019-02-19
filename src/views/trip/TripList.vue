@@ -120,6 +120,7 @@ export default {
       });
     },
     loadServerData() {
+      console.log('load server data');
       this.$store.dispatch('trip/setServerView', this.serverView);
       if (!this.serverView || this.serverDataLoaded) {
         return;
@@ -142,9 +143,11 @@ export default {
         this.serverDataLoaded = true;
         this.$store.dispatch('application/setMessage', 'Turer fra server innlastet');
       }).catch((error) => {
+        console.log('ERRORRRR*');
         console.log(error);
         this.$store.dispatch('application/setApiToken', undefined);
         this.$store.dispatch('application/setMessage', 'Noe feil skjedde i nedlasting');
+        this.serverView = false;
       });
     },
   },

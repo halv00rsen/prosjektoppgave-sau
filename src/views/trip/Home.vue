@@ -10,13 +10,15 @@
         Fortsett med aktiv tur
       </md-button>
     </router-link>
-    <md-button
-      v-else
-      :md-ripple="false"
-      class="md-raised"
-      @click="newTrip()">
-      Start ny tur
-    </md-button>
+    <div
+      v-else>
+      <md-button
+        :md-ripple="false"
+        class="md-raised"
+        @click="newTrip()">
+        Start ny tur
+      </md-button>
+    </div>
   </div>
 </template>
 

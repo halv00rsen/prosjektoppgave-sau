@@ -7,33 +7,37 @@
       href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
     <md-app md-mode="fixed">
       <md-app-toolbar>
-        <!-- <h3 class="md-title">Finn sau</h3> -->
-        <span class="md-title">Finn Sau</span>
+        <div class="md-toolbar-row">
+          <div class="md-toolbar-section-start">
+            <span class="md-title">Sauappen</span>
+          </div>
+          <div
+            class="md-toolbar-section-end">
+            <span>
+              <md-button
+                :disabled="true"
+                class="md-icon-button">
+                <md-icon :style="positionColor">my_location</md-icon>
+              </md-button>
+              <md-tooltip
+                md-direction="bottom"
+                md-delay="500">{{ posText }}</md-tooltip>
+            </span>
+            <md-button
+              class="md-icon-button"
+              @click="$router.push('/');">
+              <md-icon>arrow_back</md-icon>
+            </md-button>
+          </div>
+        </div>
       </md-app-toolbar>
-      <md-app-content
-        v-if="!loading">
+      <md-app-content v-if="!loading">
         Laster
       </md-app-content>
-      <md-app-content
-        v-else>
-        <router-view v-if="positionRetrieved"/>
-        <div v-else>
-          Vennligst skru på posisjon, applikasjonen fungerer ikke uten.
-        </div>
+      <md-app-content v-else>
+        <router-view/>
       </md-app-content>
     </md-app>
-    <div class="phone-viewport">
-      <md-bottom-bar
-        ref="bottom-bar"
-        :disabled="!loading">
-        <md-bottom-bar-item
-          v-for="(route, index) of routes"
-          :key="index"
-          :to="route.link"
-          :md-icon="route.icon"
-          :md-label="route.text"/>
-      </md-bottom-bar>
-    </div>
     <alert-box/>
   </div>
 </template>
@@ -41,7 +45,6 @@
 <script>
 import NavigationLink from './components/NavigationLink.vue';
 import AlertBox from './components/AlertBox.vue';
-import { LatLng, } from 'leaflet';
 
 export default {
   name: 'App',
@@ -52,91 +55,32 @@ export default {
   data() {
     return {
       menuVisible: false,
-      watchId: -1,
     };
   },
   computed: {
-    positionRetrieved() {
-      return this.$store.getters['application/positionRetrieved'];
-    },
     loading() {
       return this.$store.getters['trip/dataLoaded'];
     },
-    routes() {
-      const routes = [
-        {
-          link: {
-            name: 'home',
-          },
-          icon: 'home',
-          text: 'Aktiv Tur',
-        },
-        {
-          link: {
-            name: 'trips',
-          },
-          icon: 'directions_walk',
-          text: 'Mine Turer',
-        },
-        {
-          link: {
-            name: 'map',
-          },
-          icon: 'map',
-          text: 'Kart',
-        },
-      ];
-      // if (this.$store.state.trip.openTrip) {
-      //   routes[0].link = {
-      //     name: 'trip',
-      //     params: {
-      //       tripId: this.$store.state.trip.openTrip.startTime,
-      //     },
-      //   };
-      // }
-      return routes;
+    isTripView() {
+      return this.$store.getters['application/isTripView'];
     },
-  },
-  beforeCreate() {
-    console.log('before create');
+    positionColor() {
+      if (this.$store.getters['application/positionRetrieved']) {
+        return 'color:green;';
+      } else {
+        return 'color:red;';
+      }
+    },
+    posText() {
+      if (this.$store.getters['application/positionRetrieved']) {
+        return 'Posisjon er på';
+      } else {
+        return 'Posisjon er av';
+      }
+    },
   },
   created() {
-    console.log('creating app');
     this.$store.dispatch('application/loadSettings');
-    // this.$store.dispatch('trip/loadTrips');
-    this.retrieveCurrentPosition();
-    this.watchId = setInterval(this.retrieveCurrentPosition, 10000);
-  },
-  beforeDestroy() {
-    clearInterval(this.watchId);
-  },
-  mounted() {
-  },
-  methods: {
-    close() {
-      this.menuVisible = false;
-    },
-    retrieveCurrentPosition() {
-      console.log('retrieving position');
-      navigator.geolocation.getCurrentPosition((pos) => {
-        const position = new LatLng(pos.coords.latitude, pos.coords.longitude);
-        this.$store.dispatch('trip/setPosition', position);
-        this.$store.dispatch('application/setPositionRetrieved', true);
-        console.log(position);
-      }, (err) => {
-        console.log(err);
-        this.$store.dispatch('application/setPositionRetrieved', false);
-      }, {
-        enableHighAccuracy: true,
-      });
-    },
-    hehe() {
-      console.log('ok?');
-    },
-    clickedBar(index) {
-      console.log(index);
-      // this.$refs['bottom-bar'].setActiveItemByIndex(index);
-    },
   },
 };
 </script>
@@ -144,20 +88,6 @@ export default {
 <style scoped>
 .md-drawer {
   width: 20em;
-}
-
-.md-bottom-bar-item {
-  width: 100%;
-}
-
-.phone-viewport {
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  overflow: hidden;
-  /* background-color: #333; */
-  position: fixed;
-  /* flex-shrink: 0; */
 }
 </style>
 

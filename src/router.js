@@ -1,12 +1,18 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
-import Map from './views/Map.vue';
-import TripList from './views/TripList.vue';
-import Trip from './views/Trip.vue';
-import SettingsView from './views/Settings.vue';
 import NotFound from './components/NotFound.vue';
 import store from './store/index';
+import Home from './views/trip/Home.vue';
+import Map from './views/trip/Map.vue';
+import TripList from './views/trip/TripList.vue';
+import Trip from './views/trip/Trip.vue';
+import SettingsView from './views/trip/Settings.vue';
+
+import Cases from './views/analysis/Cases.vue';
+
+import TripView from './views/TripView.vue';
+import Analysis from './views/Analysis.vue';
+import Main from './views/Main.vue';
 
 Vue.use(Router);
 
@@ -16,70 +22,81 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home,
-      beforeEnter(to, from, next) {
-        console.log('haha digg');
-        console.log(store.getters['trip/getOpenTrip']);
-        console.log(store.getters['trip/getActiveTrip']);
-        if (store.getters['trip/getOpenTrip']) {
-          next({name: 'trip', params: {tripId: store.getters['trip/getOpenTrip'].id,},});
-        } else {
-          next();
-        }
-      },
+      name: 'main',
+      component: Main,
     },
     {
-      path: '/trips',
-      name: 'trips',
-      component: TripList,
-    },
-    {
-      path: '/settings',
-      name: 'settings',
-      component: SettingsView,
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
-    },
-    {
-      path: '/map',
-      name: 'map',
-      component: Map,
-    }, 
-    {
-      path: '/active',
-      name: 'activeTrip',
-      component: Trip,
-      beforeEnter(to, from, next) {
-        console.log(store.getters['trip/getActiveTrip']);
-        console.log(store.getters['trip/getOpenTrip']);
+      path: '/app',
+      component: TripView,
+      children: [
+        {
+          path: '',
+          name: 'home',
+          component: Home,
+          beforeEnter(to, from, next) {
+            if (store.getters['trip/getOpenTrip']) {
+              next({name: 'trip', params: {tripId: store.getters['trip/getOpenTrip'].id,},});
+            } else {
+              next();
+            }
+          },
+        },
+        {
+          path: 'trips',
+          name: 'trips',
+          component: TripList,
+        },
+        {
+          path: 'settings',
+          name: 'settings',
+          component: SettingsView,
+        },
+        {
+          path: 'about',
+          name: 'about',
+          // route level code-splitting
+          // this generates a separate chunk (about.[hash].js) for this route
+          // which is lazy-loaded when the route is visited.
+          component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
+        },
+        {
+          path: 'map',
+          name: 'map',
+          component: Map,
+        },
+        {
+          path: 'active',
+          name: 'activeTrip',
+          component: Trip,
+          beforeEnter(to, from, next) {
+            next();
+          },
 
-        next();
-        // store.dispatch('trip/getActiveTrip').then((trip) => {
-        //   console.log(trip);
-        //   next();
-        // });
-      },
-
+        },
+        {
+          path: 'trip/:tripId',
+          name: 'trip',
+          component: Trip,
+          beforeEnter(to, from, next) {
+            store.dispatch('trip/setActiveTrip', to.params.tripId).then(() => {
+              next();
+            }).catch(() => {
+              next('notFound');
+            });
+          },
+        },
+      ],
     },
     {
-      path: '/trip/:tripId',
-      name: 'trip',
-      component: Trip,
-      beforeEnter(to, from, next) {
-        store.dispatch('trip/setActiveTrip', to.params.tripId).then(() => {
-          next();
-        }).catch(() => {
-          next('notFound');
-        });     
-      },
-
+      path: '/analysis',
+      component: Analysis,
+      children: [
+        {
+          path: 'cases',
+          name: 'cases',
+          component: Cases,
+        },
+      ],
     },
     {
       path: '*',
@@ -92,11 +109,9 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (!store.getters['trip/dataLoaded']) {
     store.dispatch('trip/loadTrips').then(() => {
-      console.log('LOADED!');
       next();
     });
   } else {
-    console.log('allesammen');
     next();
   }
 });

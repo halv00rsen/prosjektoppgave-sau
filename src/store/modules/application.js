@@ -13,6 +13,7 @@ export default {
     },
     positionRetrieved: false,
     apiAuthToken: undefined,
+    tripView: false,
   },
   getters: {
     positionRetrieved: (state) => {
@@ -21,8 +22,14 @@ export default {
     getApiToken: (state) => () => {
       return state.apiAuthToken;
     },
+    isTripView: (state) => {
+      return state.tripView;
+    },
   },
   actions: {
+    setTripView({ commit, }, tripView) {
+      commit('setTripView', tripView);
+    },
     setApiToken({ commit, }, token) {
       commit('setApiToken', token);
     },
@@ -64,6 +71,9 @@ export default {
     },
     setApiToken(state, token) {
       state.apiAuthToken = token;
+    },
+    setTripView(state, tripView) {
+      state.tripView = tripView;
     },
   },
 };
