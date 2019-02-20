@@ -70,6 +70,7 @@ export default {
     clearInterval(this.watchId);
     this.$store.dispatch('application/setTripView', false);
     this.$store.dispatch('application/setPositionRetrieved', false);
+    this.$store.dispatch('trip/setPosition', undefined);
   },
   methods: {
     retrieveCurrentPosition() {

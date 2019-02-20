@@ -24,7 +24,7 @@
         <l-tooltip>Dette er deg</l-tooltip>
       </l-marker>
 
-      <div v-if="!useDownload">
+      <div v-if="!useDownload && currentTrip">
         <map-observation
           v-for="(observation, index) of currentTrip.observations"
           :key="index"
@@ -44,6 +44,7 @@
       md-mode="determinate"/>
 
     <div
+      v-if="positionOn"
       id="centerButton"
       class="leaflet-bar leaflet-control">
       <a @click="changeCenter">
@@ -112,6 +113,9 @@ export default {
     marker() {
       return this.$store.state.trip.currentPosition;
     },
+    positionOn() {
+      return this.$store.state.application.positionRetrieved;
+    },
   },
   mounted() {
     if (this.marker) {
@@ -121,9 +125,10 @@ export default {
       };
     } else {
       this.center = {
-        lat: 0,
-        lng: 0,
+        lat: 65,
+        lng: 18,
       };
+      this.zoom = 4;
     }
 
     this.$nextTick(() => {
@@ -168,18 +173,20 @@ export default {
       offlineLayer.on('offline:save-error', function (err) {
         console.error('Error when saving tiles: ' + err);
       });
-      L.Control.PositionButton = L.Control.extend({
-        onAdd() {
-          return L.DomUtil.get('centerButton');
-        },
-        onRemove() {
+      if (this.positionOn) {
+        L.Control.PositionButton = L.Control.extend({
+          onAdd() {
+            return L.DomUtil.get('centerButton');
+          },
+          onRemove() {
 
-        },
-      });
-      L.control.positionButton = (opts) => {
-        return new L.Control.PositionButton(opts);
-      };
-      L.control.positionButton({ position: 'bottomleft', }).addTo(map);
+          },
+        });
+        L.control.positionButton = (opts) => {
+          return new L.Control.PositionButton(opts);
+        };
+        L.control.positionButton({ position: 'bottomleft', }).addTo(map);
+      }
     });
   },
   methods: {
