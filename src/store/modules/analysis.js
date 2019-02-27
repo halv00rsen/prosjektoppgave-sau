@@ -2,47 +2,59 @@
 export default {
   namespaced: true,
   state: {
+    all: [],
     dateFrom: undefined,
     dateTo: undefined,
     minLat: undefined,
     minLng: undefined,
     maxLat: undefined,
     maxLng: undefined,
-    activeTrips: [],
+    selectedTrips:[],
+    filteredTrips: [],
   },
   getters: {
 
   },
   actions: {
-    addTrip({ commit, }, trip) {
-      commit('addTrip', trip);
+    setDefaultTrips({ commit, }, trips) {
+      commit('setDefaultTrips', trips);
+      commit('setFilteredTrips', trips);
     },
-    removeAnalysisTrip({ commit, }, trip) {
-      commit('removeTrip', trip);
+    activateAllTrips({ commit, state, }) {
+      commit('setFilteredTrips', state.filteredTrips.slice());
     },
-    setTrips({ commit, }, trips) {
-      commit('setTrips', trips);
+    selectTrips({ commit, }, trips) {
+      commit('selectTrips', trips);
     },
-    setAllTrips({ commit, state, }) {
-      commit('setTrips', state.all);
+    deselectTrips({ commit, }) {
+      commit('selectTrips', []);
     },
-    removeTrips({ commit, }) {
-      commit('setTrips', []);
+    setDates({ commit, }, start, end) {
+      commit('setDates', start, end);
     },
   },
   mutations: {
-    setTrips(state, trips) {
-      state.activeTrips = trips.slice();
+    setDefaultTrips(state, trips) {
+      state.all = trips.slice();
     },
-    addTrip(state, trip) {
-      state.activeTrips.push(trip);
+    setFilteredTrips(state, trips) {
+      state.filteredTrips = trips.slice();
     },
-    removeTrip(state, trip) {
-      const index = state.activeTrips.indexOf(trip);
-      if (index > -1) {
-        state.activeTrips.splice(index, 1);
+    selectTrips(state, trips) {
+      state.selectedTrips = trips.slice();
+    },
+    setDates(state, start, end) {
+      if (start && end && start > end) {
+        return;
       }
+      state.dateFrom = start;
+      state.dateTo = end;
+      state.filteredTrips = state.all.filter((elem) => {
+        return (!start || elem.startTime >= start) && (!end || elem.endTime <= end);
+      });
+      state.selectedTrips = state.selectedTrips.filter((elem) => {
+        return (!start || elem.startTime >= start) && (!end || elem.endTime <= end);
+      });
     },
-
   },
 };

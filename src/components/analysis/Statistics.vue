@@ -52,7 +52,7 @@ export default {
   }),
   computed: {
     trips() {
-      return this.$store.state.trip.all;
+      return this.$store.state.analysis.filteredTrips;
     },
     setAll: {
       get() {
@@ -60,11 +60,11 @@ export default {
       },
       set(value) {
         if (value) {
-          this.$store.dispatch('analysis/setTrips', this.trips).then(() => {
+          this.$store.dispatch('analysis/activateAllTrips').then(() => {
             this.array = this.trips.slice();
           });
         } else {
-          this.$store.dispatch('analysis/removeTrips').then(() => {
+          this.$store.dispatch('analysis/deselectTrips').then(() => {
             this.array = [];
           });
         }
@@ -77,7 +77,7 @@ export default {
         return;
       }
       this.lastSize = this.array.length;
-      this.$store.dispatch('analysis/setTrips', this.array);
+      this.$store.dispatch('analysis/selectTrips', this.array);
     },
   },
 };

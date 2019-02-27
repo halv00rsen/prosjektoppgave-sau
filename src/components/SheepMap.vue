@@ -143,7 +143,7 @@ export default {
       return this.$store.state.application.positionRetrieved;
     },
     trips() {
-      return this.$store.state.analysis.activeTrips;
+      return this.$store.state.analysis.selectedTrips;
     },
   },
   mounted() {

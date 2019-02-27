@@ -2,7 +2,7 @@
 <template>
   <div class="md-layout md-gutter">
     <div class="md-layout-item md-layout md-gutter md-small-size-50 md-xsmall-size-100">
-      <div class="md-layout-item md-size-50">
+      <div class="md-layout-item md-size-35">
         <md-datepicker
           v-model="startDate"
           :md-disabled-dates="disabledFrom"
@@ -10,13 +10,21 @@
           <label>Dato fra</label>
         </md-datepicker>
       </div>
-      <div class="md-layout-item md-size-50">
+      <div class="md-layout-item md-size-35">
         <md-datepicker
           v-model="endDate"
           :md-disabled-dates="disabledTo"
           md-immediately>
           <label>Dato til</label>
         </md-datepicker>
+      </div>
+      <div class="md-layout-item md-size-20">
+        <md-button
+          class="md-raised"
+          @click="setDates()">Filtrer</md-button>
+        <md-button
+          class="md-raised"
+          @click="clearDates()">Fjern datoer</md-button>
       </div>
       <div class="md-layout-item md-size-100">
         <SheepMap
@@ -50,11 +58,6 @@ export default {
       return (!this.startDate || !this.endDate) || this.startDate <= this.endDate;
     },
   },
-  watch: {
-    startDate(date) {
-      console.log(date);
-    },
-  },
   methods: {
     disabledFrom(date) {
       const now = new Date();
@@ -63,6 +66,14 @@ export default {
     disabledTo(date) {
       const now = new Date();
       return date > now || date < this.startDate;
+    },
+    setDates() {
+      this.$store.dispatch('analysis/setDates', this.startDate, this.endDate);
+    },
+    clearDates() {
+      this.startDate = undefined;
+      this.endDate = undefined;
+      this.setDates();
     },
   },
 };

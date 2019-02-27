@@ -103,6 +103,10 @@ const router = new Router({
           component: Overview,
         }
       ],
+      beforeEnter(to, from, next) {
+        store.dispatch('analysis/setDefaultTrips', store.state.trip.all);
+        next();
+      },
     },
     {
       path: '*',
