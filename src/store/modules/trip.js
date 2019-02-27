@@ -16,6 +16,7 @@ const state = {
   dataLoaded: false,
   serverTrips: [],
   serverView: false,
+  analysisTripList: [],
 };
 
 const getters = {
@@ -69,6 +70,7 @@ const actions = {
       commit('setDownloaded');
     });
   },
+
   setActiveTripServer({ commit, getters, }, tripId) {
     const trip = getters.getTripServer(tripId);
     if (trip) {

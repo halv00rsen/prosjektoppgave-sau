@@ -9,6 +9,7 @@ export default class Trip {
     this.done = false;
     this.startTime = startTime;
     this.lastPosition = undefined;
+    this.endTime = undefined;
   }
 
   addObservation(observation) {

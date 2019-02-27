@@ -48,6 +48,10 @@ export default {
       type: Number,
       required: true,
     },
+    clickable: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -76,7 +80,9 @@ export default {
   },
   methods: {
     openObservation() {
-      this.open = true;
+      if (this.clickable) {
+        this.open = true;
+      }
     },
     close() {
       this.open = false;

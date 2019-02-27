@@ -14,7 +14,7 @@
       :zoom="zoom"
       :center="center"
       class="l-map"
-      style="height: 50vh;"
+      style="height: 70vh;"
       @update:zoom="zoomUpdate"
       @update:center="centerUpdated">
 
@@ -24,7 +24,7 @@
         <l-tooltip>Dette er deg</l-tooltip>
       </l-marker>
 
-      <div v-if="!useDownload && currentTrip">
+      <div v-if="!analysisView && !useDownload && currentTrip">
         <map-observation
           v-for="(observation, index) of currentTrip.observations"
           :key="index"
@@ -36,6 +36,18 @@
           :key="'trai-' + index"
           :latitude="pos.lat"
           :longitude="pos.lng"/>
+      </div>
+      <div v-else-if="analysisView">
+        <div
+          v-for="trip of trips"
+          :key="'trip' + trip.id">
+          <map-observation
+            v-for="(observation, index) of trip.observations"
+            :key="index"
+            :observation="observation"
+            :index="index"
+            :clickable="false"/>
+        </div>
       </div>
     </l-map>
     <md-progress-bar
@@ -91,12 +103,26 @@ export default {
       type: Boolean,
       default: true,
     },
+    analysisView: {
+      type: Boolean,
+      default: false,
+    },
   },
   data () {
     return {
       zoom: 13,
       center: undefined,
-      url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}',
+      urls: [
+        {
+          url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=norges_grunnkart_graatone&zoom={z}&x={x}&y={y}',
+          visual: 'Gråtone',
+        },
+        {
+          url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}',
+          visual: 'Terrengkart',
+        },
+      ],
+      terrain_url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}',
       attribution: '&copy; <a href="https://www.kartverket.no/">Kartverket</a>',
       currentZoom: 13,
       saveCallback: undefined,
@@ -116,6 +142,9 @@ export default {
     positionOn() {
       return this.$store.state.application.positionRetrieved;
     },
+    trips() {
+      return this.$store.state.analysis.activeTrips;
+    },
   },
   mounted() {
     if (this.marker) {
@@ -133,7 +162,7 @@ export default {
 
     this.$nextTick(() => {
       const database = new TileDatabase(this.amountCallback);
-      const offlineLayer = L.tileLayer.offline(this.url, database, {
+      const offlineLayer = L.tileLayer.offline(this.terrain_url, database, {
         attribution: this.attribution,
         minZoom: 0,
         maxZoom: 19,

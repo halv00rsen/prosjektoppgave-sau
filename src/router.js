@@ -9,6 +9,7 @@ import Trip from './views/trip/Trip.vue';
 import SettingsView from './views/trip/Settings.vue';
 
 import Cases from './views/analysis/Cases.vue';
+import Overview from './views/analysis/Overview.vue';
 
 import TripView from './views/TripView.vue';
 import Analysis from './views/Analysis.vue';
@@ -96,6 +97,11 @@ const router = new Router({
           name: 'cases',
           component: Cases,
         },
+        {
+          path: 'overview',
+          name: 'overview',
+          component: Overview,
+        }
       ],
     },
     {
