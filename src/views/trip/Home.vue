@@ -36,6 +36,7 @@ export default {
   methods: {
     newTrip() {
       this.$store.dispatch('trip/saveTrip', 'navn').then((tripId) => {
+        console.log(tripId);
         this.$router.push({ name: 'trip', params: { tripId: tripId, }, });
       });
     },

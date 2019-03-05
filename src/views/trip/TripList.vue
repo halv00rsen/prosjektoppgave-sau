@@ -22,6 +22,7 @@
     <md-switch
       v-model="serverView"
       :change="loadServerData()">Serverturer</md-switch>
+    <br>
     <md-card
       v-for="(trip, index) in (serverView ? serverTrips : trips)"
       :key="trip.id"

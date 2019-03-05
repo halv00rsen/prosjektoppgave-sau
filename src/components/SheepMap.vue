@@ -50,6 +50,12 @@
         </div>
       </div>
     </l-map>
+    <md-button
+      v-if="analysisView"
+      class="md-dense md-icon-button"
+      @click="zoomMap()">
+      <md-icon>zoom_out_map</md-icon>
+    </md-button>
     <md-progress-bar
       v-if="downloading"
       :md-value="amount"
@@ -231,6 +237,17 @@ export default {
     amountCallback(amount) {
       this.downloading = true;
       this.amount = amount * 100;
+    },
+    zoomMap() {
+      this.$refs.map.mapObject.fitBounds([
+        [
+          this.$store.state.analysis.minLat,
+          this.$store.state.analysis.minLng,
+        ], [
+          this.$store.state.analysis.maxLat,
+          this.$store.state.analysis.maxLng,
+        ]
+      ]);
     },
   },
 };

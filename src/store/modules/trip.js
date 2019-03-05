@@ -94,9 +94,9 @@ const actions = {
   saveTrip({ commit, }, name) {
     const now = Date.now();
     const trip = new Trip(now.toString(), name, now);
+    commit('addTrip', trip);
+    commit('setActiveTrip', trip);
     database.addTrip(trip).then(() => {
-      commit('addTrip', trip);
-      commit('setActiveTrip', trip);
     });
     return now;
   },

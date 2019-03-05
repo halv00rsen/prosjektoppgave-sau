@@ -10,10 +10,16 @@ export default class Trip {
     this.startTime = startTime;
     this.lastPosition = undefined;
     this.endTime = undefined;
+    this.minLat = Number.MAX_SAFE_INTEGER;
+    this.maxLat = Number.MIN_SAFE_INTEGER;
+    this.minLng = Number.MAX_SAFE_INTEGER;
+    this.maxLng = Number.MIN_SAFE_INTEGER;
   }
 
   addObservation(observation) {
     this.observations.push(observation);
+    this.setCoordinates(observation.observedPosition);
+    this.setCoordinates(observation.position);
   }
 
   addPosition(position) {
@@ -23,6 +29,7 @@ export default class Trip {
     if (this.lastPosition === undefined || this.lastPosition.distanceTo(position) > 10) {
       this.positions.push(position);
       this.lastPosition = position;
+      this.setCoordinates(position);
     }
   }
 
@@ -35,6 +42,18 @@ export default class Trip {
 
   removeObservationAtIndex(index) {
     this.observations.splice(index, 1);
+  }
+
+  setCoordinates(pos) {
+    this.minLat = Math.min(this.minLat, pos.lat);
+    this.maxLat = Math.max(this.maxLat, pos.lat);
+    this.minLng = Math.min(this.minLng, pos.lng);
+    this.maxLng = Math.max(this.maxLng, pos.lng);
+  }
+
+  positionInTripArea(pos) {
+    return this.minLat <= pos.lat && this.maxLat >= pos.lat &&
+           this.minLng <= pos.lng && this.maxLng >= pos.lng;
   }
 
 }

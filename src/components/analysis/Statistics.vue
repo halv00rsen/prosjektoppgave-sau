@@ -1,7 +1,9 @@
 
 <template>
-  <div class="stats-view">
-    <md-tabs>
+  <div class="stats-view md-scrollbar">
+    <md-tabs
+      style="height: 80vh;"
+      md-alignment="fixed">
       <md-tab
         id="tab-statistics"
         md-label="Statistikk">
@@ -10,29 +12,31 @@
       <md-tab
         id="tab-trips"
         md-label="Turer">
-        <md-list>
-          <md-list-item>
-            <md-checkbox
-              v-model="setAll"/>
-            <span class="md-list-item-text">
-              Velg alle
-            </span>
-          </md-list-item>
-          <md-divider/>
-          <md-list-item
-            v-for="(item, index) of trips"
-            :key="index">
-            <md-checkbox
-              v-model="array"
-              :value="item"
-              :change="updateTrips()"/>
-            <span class="md-list-item-text">
-              {{ Number(item.startTime) | moment("YYYY.MM.DD") }}
-              -
-              {{ item.name }}
-            </span>
-          </md-list-item>
-        </md-list>
+        <md-content style="height: 74vh; overflow-y: auto;">
+          <md-list>
+            <md-list-item>
+              <md-checkbox
+                v-model="setAll"/>
+              <span class="md-list-item-text">
+                Velg alle
+              </span>
+            </md-list-item>
+            <md-divider/>
+            <md-list-item
+              v-for="(item, index) of trips"
+              :key="index">
+              <md-checkbox
+                v-model="array"
+                :value="item"
+                :change="updateTrips()"/>
+              <span class="md-list-item-text">
+                {{ Number(item.startTime) | moment("YYYY.MM.DD") }}
+                -
+                {{ item.name }}
+              </span>
+            </md-list-item>
+          </md-list>
+        </md-content>
       </md-tab>
       <md-tab
         id="tab-filter"
@@ -90,8 +94,5 @@ export default {
 }
 .md-list-item {
   cursor: pointer;
-}
-.md-tabs {
-  height: 100%;
 }
 </style>

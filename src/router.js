@@ -87,6 +87,11 @@ const router = new Router({
           },
         },
       ],
+      beforeRouteLeave (to, from, next) {
+        console.log('exit hehehe');
+        next();
+      },
+
     },
     {
       path: '/analysis',
