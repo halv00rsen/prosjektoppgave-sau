@@ -11,6 +11,15 @@ export default {
     maxLng: Number.MIN_SAFE_INTEGER,
     selectedTrips:[],
     filteredTrips: [],
+    filter: {
+
+    },
+    settings: {
+      automaticZoom: true,
+      showObservations: true,
+      showObservedPoints: true,
+      showDensity: true,
+    },
   },
   getters: {
 
@@ -24,13 +33,27 @@ export default {
       commit('setFilteredTrips', state.filteredTrips.slice());
     },
     selectTrips({ commit, }, trips) {
+      commit('resetCoords');
       commit('selectTrips', trips);
     },
     deselectTrips({ commit, }) {
+      commit('resetCoords');
       commit('selectTrips', []);
     },
     setDates({ commit, }, start, end) {
       commit('setDates', start, end);
+    },
+    setAutomaticZoom({ commit, }, zoom) {
+      commit('setAutomaticZoom', zoom);
+    },
+    setShowObservations({ commit, }, observation) {
+      commit('setShowObservations', observation);
+    },
+    setShowObservedPoints({ commit, }, showObservedPoints) {
+      commit('setShowObservedPoints', showObservedPoints);
+    },
+    setShowDensity({ commit, }, showDensity) {
+      commit('setShowDensity', showDensity);
     },
   },
   mutations: {
@@ -67,6 +90,18 @@ export default {
       state.maxLat = Number.MIN_SAFE_INTEGER;
       state.minLng = Number.MAX_SAFE_INTEGER;
       state.maxLng = Number.MIN_SAFE_INTEGER;
+    },
+    setAutomaticZoom(state, zoom) {
+      state.settings.automaticZoom = zoom;
+    },
+    setShowObservations(state, observation) {
+      state.settings.showObservations = observation;
+    },
+    setShowObservedPoints(state, showObservedPoints) {
+      state.settings.showObservedPoints = showObservedPoints;
+    },
+    setShowDensity(state, showDensity) {
+      state.settings.showDensity = showDensity;
     },
   },
 };

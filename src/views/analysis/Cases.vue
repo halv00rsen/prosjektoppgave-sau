@@ -33,6 +33,12 @@ export default {
 
         ],
       },
+      {
+        text: 'Se alle turer som er gjort den siste måneden',
+        filters: [
+
+        ],
+      }
     ],
   }),
 };

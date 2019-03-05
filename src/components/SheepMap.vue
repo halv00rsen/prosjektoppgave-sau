@@ -52,6 +52,7 @@
     </l-map>
     <md-button
       v-if="analysisView"
+      id="fitZoomButton"
       class="md-dense md-icon-button"
       @click="zoomMap()">
       <md-icon>zoom_out_map</md-icon>
@@ -151,6 +152,27 @@ export default {
     trips() {
       return this.$store.state.analysis.selectedTrips;
     },
+    bounds() {
+      return [
+        [
+          this.$store.state.analysis.minLat,
+          this.$store.state.analysis.minLng,
+        ], [
+          this.$store.state.analysis.maxLat,
+          this.$store.state.analysis.maxLng,
+        ]
+      ];
+    },
+    automaticZoom() {
+      return this.$store.state.analysis.settings.automaticZoom;
+    },
+  },
+  watch: {
+    bounds() {
+      if (this.automaticZoom) {
+        this.zoomMap();
+      }
+    },
   },
   mounted() {
     if (this.marker) {
@@ -222,6 +244,17 @@ export default {
         };
         L.control.positionButton({ position: 'bottomleft', }).addTo(map);
       }
+      if (this.analysisView) {
+        L.Control.PositionButton = L.Control.extend({
+          onAdd() {
+            return L.DomUtil.get('fitZoomButton');
+          },
+        });
+        L.control.positionButton = (opts) => {
+          return new L.Control.PositionButton(opts);
+        };
+        L.control.positionButton({ position: 'bottomright', }).addTo(map);
+      }
     });
   },
   methods: {
@@ -239,15 +272,7 @@ export default {
       this.amount = amount * 100;
     },
     zoomMap() {
-      this.$refs.map.mapObject.fitBounds([
-        [
-          this.$store.state.analysis.minLat,
-          this.$store.state.analysis.minLng,
-        ], [
-          this.$store.state.analysis.maxLat,
-          this.$store.state.analysis.maxLng,
-        ]
-      ]);
+      this.$refs.map.mapObject.fitBounds(this.bounds);
     },
   },
 };

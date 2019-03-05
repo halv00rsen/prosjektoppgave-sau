@@ -20,6 +20,8 @@ export default class ApplicationDatabase {
       trip.endTime = data.endTime;
       trip.done = data.done;
       for (let observation of data.observations) {
+        observation.numSheep = Number(observation.numSheep);
+        observation.numLambs = Number(observation.numLambs);
         trip.addObservation(observation);
         // trip.addObservation(new Observation(observation.position, observation.observedPosition));
       }

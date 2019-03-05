@@ -1,7 +1,7 @@
 
 <template>
   <div class="md-layout md-gutter">
-    <div class="md-layout-item md-layout md-gutter md-small-size-50 md-xsmall-size-100 analysis-column">
+    <div class="md-layout-item md-layout md-large-size-50 md-medium-size-50 md-small-size-50 md-xsmall-size-100 analysis-column">
       <div class="md-layout-item md-large-size-40">
         <md-datepicker
           v-model="startDate"
@@ -37,22 +37,21 @@
           :analysis-view="true"/>
       </div>
     </div>
-    <!-- <div class="md-layout-item md-layout md-gutter md-small-size-50 md-xsmall-size-100"> -->
-    <div class="md-layout-item md-small-size-50 md-xsmall-size-100 analysis-column">
-      <Statistics/>
+    <div class="md-layout-item md-large-size-50 md-medium-size-50 md-small-size-50 md-xsmall-size-100 analysis-column">
+      <SideView/>
     </div>
   </div>
 </template>
 
 <script>
 import SheepMap from '@/components/SheepMap.vue';
-import Statistics from '@/components/analysis/Statistics.vue';
+import SideView from '@/components/analysis/SideView.vue';
 
 export default {
   name: 'Overview',
   components: {
     SheepMap,
-    Statistics,
+    SideView,
   },
   data: () => ({
     startDate: undefined,

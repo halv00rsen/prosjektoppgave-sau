@@ -105,3 +105,10 @@ export default {
   /* flex-shrink: 0; */
 }
 </style>
+
+<style>
+.md-app-scroller {
+  margin-bottom: 60px;
+}
+</style>
+

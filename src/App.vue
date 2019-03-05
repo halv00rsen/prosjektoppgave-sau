@@ -108,10 +108,6 @@ body {
   height: 100%;
 }
 
-.md-app-scroller {
-  margin-bottom: 60px;
-}
-
 .md-bottom-bar-item {
   max-width: 100% !important;
 }

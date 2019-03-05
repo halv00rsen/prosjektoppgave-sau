@@ -1,16 +1,26 @@
 <template>
   <div>
     <l-geo-json
+      v-if="showObservedPoints"
       :geojson="geojson"/>
 
     <l-circle-marker
       :lat-lng="observed"
       :radius="10"
-      color="yellow"
-      @click="openObservation"
-    />
+      color="black"
+      @click="openObservation">
+      <l-popup>
+        <div v-if="observation.numSheep">
+          Antall sau: {{ observation.numSheep }}
+        </div>
+        <div v-if="observation.numLambs != 0">
+          Antall lam: {{ observation.numLambs }}
+        </div>
+      </l-popup>
+    </l-circle-marker>
 
     <l-circle-marker
+      v-if="showObservedPoints"
       :lat-lng="lookout"
       :radius="10"
       color="red"
@@ -28,7 +38,7 @@
 
 <script>
 import {
-  LGeoJson, LCircleMarker,
+  LGeoJson, LCircleMarker, LPopup,
 } from 'vue2-leaflet';
 import Registration from '@/components/Registration.vue';
 
@@ -38,6 +48,7 @@ export default {
     LGeoJson,
     LCircleMarker,
     Registration,
+    LPopup,
   },
   props: {
     observation: {
@@ -77,6 +88,11 @@ export default {
         ],
       },
     };
+  },
+  computed: {
+    showObservedPoints() {
+      return this.$store.state.analysis.settings.showObservedPoints;
+    },
   },
   methods: {
     openObservation() {
