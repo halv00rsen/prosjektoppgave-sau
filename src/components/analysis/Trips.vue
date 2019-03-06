@@ -17,7 +17,9 @@
           v-model="selectedTrips"
           :value="item"
           :change="updateTrips()"/>
-        <span class="md-list-item-text">
+        <span
+          :style="'color: ' + item.color"
+          class="md-list-item-text">
           {{ Number(item.startTime) | moment("YYYY.MM.DD") }}
           -
           {{ item.name }}

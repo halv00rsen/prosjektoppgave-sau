@@ -1,4 +1,7 @@
 
+import colors from '@/utils/colors';
+import shuffle from 'shuffle-array';
+
 export default {
   namespaced: true,
   state: {
@@ -59,6 +62,14 @@ export default {
   mutations: {
     setDefaultTrips(state, trips) {
       state.all = trips.slice();
+      let chooseColors = [];
+      for (let trip of state.all) {
+        if (chooseColors.length === 0) {
+          chooseColors = colors.slice();
+          shuffle(chooseColors);
+        }
+        trip.color = chooseColors.pop();
+      }
     },
     setFilteredTrips(state, trips) {
       state.filteredTrips = trips.slice();
@@ -78,6 +89,7 @@ export default {
       }
       state.dateFrom = start;
       state.dateTo = end;
+
       state.filteredTrips = state.all.filter((elem) => {
         return (!start || elem.startTime >= start) && (!end || elem.endTime <= end);
       });

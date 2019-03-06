@@ -14,6 +14,7 @@ export default class Trip {
     this.maxLat = Number.MIN_SAFE_INTEGER;
     this.minLng = Number.MAX_SAFE_INTEGER;
     this.maxLng = Number.MIN_SAFE_INTEGER;
+    this.color = undefined;
   }
 
   addObservation(observation) {

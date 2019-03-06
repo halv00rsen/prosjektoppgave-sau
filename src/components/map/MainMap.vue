@@ -28,11 +28,13 @@
       <div
         v-for="trip of trips"
         :key="'trip-' + trip.id">
+
         <map-observation
           v-for="(observation, index) of trip.observations"
           :key="index"
           :observation="observation"
           :index="index"
+          :observation-color="trip.color"
           :clickable="false"
         />
       </div>
@@ -45,12 +47,12 @@
         <div
           v-for="trip of trips"
           :key="'trip-' + trip.id">
-          <map-observation
+
+          <cluster-observation
             v-for="(observation, index) of trip.observations"
             :key="index"
+            :color="trip.color"
             :observation="observation"
-            :index="index"
-            :clickable="false"
           />
         </div>
       </v-marker-cluster>
@@ -64,6 +66,7 @@ import {
 } from 'vue2-leaflet';
 
 import MapObservation from '@/components/MapObservation.vue';
+import ClusterObservation from '@/components/map/ClusterObservation.vue';
 import Vue2LeafletMarkercluster from '@/components/map/Vue2LeafletMarkercluster.vue';
 
 export default {
@@ -76,6 +79,7 @@ export default {
     LGeoJson,
     LControlLayers,
     MapObservation,
+    ClusterObservation,
     'v-marker-cluster': Vue2LeafletMarkercluster,
   },
   data: () => ({
@@ -95,7 +99,9 @@ export default {
       lng: 18,
     },
     attribution: '&copy; <a href="https://www.kartverket.no/">Kartverket</a>',
-    clusterOptions: {},
+    clusterOptions: {
+      animateAddingMarkers: false,
+    },
     mapOptions: {},
   }),
   computed: {
@@ -126,6 +132,7 @@ export default {
         this.zoomMap();
       }
     },
+
   },
   methods: {
     zoomMap() {
@@ -142,5 +149,6 @@ export default {
 </script>
 
 <style>
-
+@import "~leaflet.markercluster/dist/MarkerCluster.css";
+@import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
 </style>

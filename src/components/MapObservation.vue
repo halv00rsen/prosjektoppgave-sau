@@ -7,7 +7,7 @@
     <l-circle-marker
       :lat-lng="observed"
       :radius="10"
-      color="black"
+      :color="observationColor"
       @click="openObservation">
       <l-popup>
         <div v-if="observation.numSheep">
@@ -62,6 +62,10 @@ export default {
     clickable: {
       type: Boolean,
       default: true,
+    },
+    observationColor: {
+      type: String,
+      default: 'black',
     },
   },
   data() {
