@@ -1,7 +1,9 @@
 
 <template>
   <md-list-item>
-    <md-switch v-model="model"/>
+    <md-switch
+      v-model="model"
+      :disabled="disabled"/>
     <span class="md-list-item-text">
       {{ text }}
     </span>
@@ -23,6 +25,10 @@ export default {
     text: {
       type: String,
       required: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {

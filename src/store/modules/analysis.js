@@ -5,10 +5,10 @@ export default {
     all: [],
     dateFrom: undefined,
     dateTo: undefined,
-    minLat: Number.MAX_SAFE_INTEGER,
-    maxLat: Number.MIN_SAFE_INTEGER,
-    minLng: Number.MAX_SAFE_INTEGER,
-    maxLng: Number.MIN_SAFE_INTEGER,
+    minLat: undefined,
+    maxLat: undefined,
+    minLng: undefined,
+    maxLng: undefined,
     selectedTrips:[],
     filteredTrips: [],
     filter: {
@@ -18,7 +18,7 @@ export default {
       automaticZoom: true,
       showObservations: true,
       showObservedPoints: true,
-      showDensity: true,
+      showDensity: false,
     },
   },
   getters: {
@@ -86,10 +86,10 @@ export default {
       });
     },
     resetCoords(state) {
-      state.minLat = Number.MAX_SAFE_INTEGER;
-      state.maxLat = Number.MIN_SAFE_INTEGER;
-      state.minLng = Number.MAX_SAFE_INTEGER;
-      state.maxLng = Number.MIN_SAFE_INTEGER;
+      state.minLat = 71;
+      state.maxLat = 60;
+      state.minLng = 32;
+      state.maxLng = 5;
     },
     setAutomaticZoom(state, zoom) {
       state.settings.automaticZoom = zoom;

@@ -31,10 +31,14 @@
         </md-button>
       </div>
       <div class="md-layout-item md-size-100">
-        <SheepMap
+        <main-map/>
+        <!-- <SheepMap
+          v-if="!useDensity"
           ref="sheepMap"
           :use-download="false"
           :analysis-view="true"/>
+        <TestMap
+          v-else/> -->
       </div>
     </div>
     <div class="md-layout-item md-large-size-50 md-medium-size-50 md-small-size-50 md-xsmall-size-100 analysis-column">
@@ -46,12 +50,16 @@
 <script>
 import SheepMap from '@/components/SheepMap.vue';
 import SideView from '@/components/analysis/SideView.vue';
+import TestMap from '@/components/map/TestMap.vue';
+import MainMap from '@/components/map/MainMap.vue';
 
 export default {
   name: 'Overview',
   components: {
     SheepMap,
     SideView,
+    TestMap,
+    MainMap,
   },
   data: () => ({
     startDate: undefined,
@@ -60,6 +68,9 @@ export default {
   computed: {
     validDates() {
       return (!this.startDate || !this.endDate) || this.startDate <= this.endDate;
+    },
+    useDensity() {
+      return this.$store.state.analysis.settings.showDensity;
     },
   },
   methods: {
