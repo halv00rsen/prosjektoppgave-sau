@@ -14,14 +14,15 @@ export default {
     maxLng: undefined,
     selectedTrips:[],
     filteredTrips: [],
-    filter: {
-
-    },
     settings: {
       automaticZoom: true,
       showObservations: true,
       showObservedPoints: true,
       showDensity: false,
+    },
+    selectedCase: {
+      presetTrips: false,
+      text: undefined,
     },
   },
   getters: {
@@ -32,8 +33,11 @@ export default {
       commit('setDefaultTrips', trips);
       commit('setFilteredTrips', trips);
     },
+    setSelectedCase({ commit, }, _case) {
+      commit('setSelectedCase', _case);
+    },
     activateAllTrips({ commit, state, }) {
-      commit('setFilteredTrips', state.filteredTrips.slice());
+      commit('selectTrips', state.filteredTrips.slice());
     },
     selectTrips({ commit, }, trips) {
       commit('resetCoords');
@@ -43,8 +47,8 @@ export default {
       commit('resetCoords');
       commit('selectTrips', []);
     },
-    setDates({ commit, }, start, end) {
-      commit('setDates', start, end);
+    setDates({ commit, }, dates) {
+      commit('setDates', dates);
     },
     setAutomaticZoom({ commit, }, zoom) {
       commit('setAutomaticZoom', zoom);
@@ -58,9 +62,14 @@ export default {
     setShowDensity({ commit, }, showDensity) {
       commit('setShowDensity', showDensity);
     },
+    reset({ commit, }) {
+      commit('resetCoords');
+      commit('reset');
+    },
   },
   mutations: {
     setDefaultTrips(state, trips) {
+      state.selectedTrips = [];
       state.all = trips.slice();
       let chooseColors = [];
       for (let trip of state.all) {
@@ -83,7 +92,9 @@ export default {
         state.maxLng = Math.max(state.maxLng, elem.maxLng);
       });
     },
-    setDates(state, start, end) {
+    setDates(state, dates) {
+      const start = dates.startDate;
+      const end = dates.endDate;
       if (start && end && start > end) {
         return;
       }
@@ -114,6 +125,18 @@ export default {
     },
     setShowDensity(state, showDensity) {
       state.settings.showDensity = showDensity;
+    },
+    reset(state) {
+      state.selectedTrips = [];
+      state.settings = {
+        automaticZoom: true,
+        showObservations: true,
+        showObservedPoints: true,
+        showDensity: false,
+      };
+    },
+    setSelectedCase(state, _case) {
+      state.selectedCase = _case;
     },
   },
 };

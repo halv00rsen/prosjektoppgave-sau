@@ -37,6 +37,9 @@ export default {
     lastSize: 0,
   }),
   computed: {
+    selectedCase() {
+      return this.$store.state.analysis.selectedCase;
+    },
     trips() {
       return this.$store.state.analysis.filteredTrips;
     },
@@ -46,16 +49,17 @@ export default {
       },
       set(value) {
         if (value) {
-          this.$store.dispatch('analysis/activateAllTrips').then(() => {
-            this.selectedTrips = this.trips.slice();
-          });
+          this.selectedTrips = this.trips.slice();
         } else {
-          this.$store.dispatch('analysis/deselectTrips').then(() => {
-            this.selectedTrips = [];
-          });
+          this.selectedTrips = [];
         }
       },
     },
+  },
+  created() {
+    if (this.selectedCase.presetTrips) {
+      this.selectedTrips = this.trips.slice();
+    }
   },
   methods: {
     updateTrips() {

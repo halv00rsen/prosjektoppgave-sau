@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import moment from 'moment';
 import VueMoment from 'vue-moment';
 
 import './utils/material';
@@ -24,6 +25,7 @@ L.Icon.Default.mergeOptions({
 });
 
 Vue.config.productionTip = false;
+moment.locale('nb');
 Vue.use(VueMoment);
 
 Vue.use(VueRouter);
