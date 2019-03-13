@@ -1,10 +1,7 @@
 
-// import uuid from 'uuid';
 import ApplicationDatabase from '@/database/application';
 import Trip from '@/models/trip';
 import { Promise, } from 'q';
-// import { stat } from 'fs';
-// import Observation from '@/models/observation';
 
 const database = new ApplicationDatabase();
 
@@ -55,6 +52,9 @@ const getters = {
 };
 
 const actions = {
+  setReloadTrips({ commit, }) {
+    commit('setDownloaded', false);
+  },
   setServerView({ commit, }, view) {
     commit('setServerView', view);
   },
@@ -67,10 +67,9 @@ const actions = {
           break;
         }
       }
-      commit('setDownloaded');
+      commit('setDownloaded', true);
     });
   },
-
   setActiveTripServer({ commit, getters, }, tripId) {
     const trip = getters.getTripServer(tripId);
     if (trip) {
@@ -141,11 +140,14 @@ const actions = {
   setServerTrips({ commit, }, trips) {
     commit('setServerTrips', trips);
   },
+  saveMockTrip({ commit, }, trip) {
+    commit('addTrip', trip);
+  },
 };
 
 const mutations = {
-  setDownloaded(state) {
-    state.dataLoaded = true;
+  setDownloaded(state, val) {
+    state.dataLoaded = val;
   },
   setTrips(state, trips) {
     state.all = trips;

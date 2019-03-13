@@ -23,7 +23,6 @@ export default class ApplicationDatabase {
         observation.numSheep = Number(observation.numSheep);
         observation.numLambs = Number(observation.numLambs);
         trip.addObservation(observation);
-        // trip.addObservation(new Observation(observation.position, observation.observedPosition));
       }
       trip.positions = data.positions;
       datas.push(trip);

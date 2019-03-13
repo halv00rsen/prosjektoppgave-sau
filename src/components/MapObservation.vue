@@ -55,9 +55,13 @@ export default {
       type: Object,
       required: true,
     },
+    mock: {
+      type: Boolean,
+      default: false,
+    },
     index: {
       type: Number,
-      required: true,
+      default: undefined,
     },
     clickable: {
       type: Boolean,
@@ -65,7 +69,7 @@ export default {
     },
     observationColor: {
       type: String,
-      default: 'black',
+      default: 'yellow',
     },
   },
   data() {
@@ -108,12 +112,18 @@ export default {
       this.open = false;
     },
     editCurrent(data) {
+      if (this.mock) {
+        return;
+      }
       this.$store.dispatch('trip/editObservation', { data, index: this.index, }).then(() => {
         this.close();
         this.$store.dispatch('application/setMessage', 'Observasjonen ble endret');
       });
     },
     deleteObservation() {
+      if (this.mock) {
+        return;
+      }
       this.$store.dispatch('trip/deleteObservation', this.index).then(() => {
         this.close();
         this.$store.dispatch('application/setMessage', 'Observasjonen ble fjernet');

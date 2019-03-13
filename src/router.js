@@ -13,6 +13,7 @@ import Overview from './views/analysis/Overview.vue';
 
 import TripView from './views/TripView.vue';
 import Analysis from './views/Analysis.vue';
+import DataMock from './views/DataMock.vue';
 import Main from './views/Main.vue';
 
 Vue.use(Router);
@@ -112,6 +113,11 @@ const router = new Router({
         store.dispatch('analysis/setDefaultTrips', store.state.trip.all);
         next();
       },
+    },
+    {
+      path: '/mock',
+      component: DataMock,
+      name: 'mock',
     },
     {
       path: '*',

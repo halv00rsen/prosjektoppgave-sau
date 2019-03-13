@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import trip from './modules/trip';
 import application from './modules/application';
 import analysis from './modules/analysis';
+import mock from './modules/mock';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ export default new Vuex.Store({
     trip,
     application,
     analysis,
+    mock,
   },
   strict: debug,
   // plugins: debug ? [createLogger()] : [],

@@ -193,6 +193,10 @@ export default {
       type: Object,
       default: null,
     },
+    mock: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -235,7 +239,10 @@ export default {
       return this.whatRegister !== null;
     },
     currentDone() {
-      return this.$store.state.trip.activeTrip.done;
+      if (!this.mock) {
+        return this.$store.state.trip.activeTrip.done;
+      }
+      return false;
     },
   },
   created() {

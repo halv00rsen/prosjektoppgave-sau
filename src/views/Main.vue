@@ -6,7 +6,8 @@
         :md-ripple="false"
         class="md-raised"
         style="background-color: #eaf1fc;"
-        @click="openTrip()">
+        @click="openTrip()"
+      >
         Innsamling
       </md-button>
       <br>
@@ -14,8 +15,17 @@
         :md-ripple="false"
         class="md-raised big"
         style="background-color: #eaf1fc;"
-        @click="openAnalysis()">
+        @click="openAnalysis()"
+      >
         Analyse
+      </md-button>
+      <md-button
+        :md-ripple="false"
+        class="md-raised"
+        style="background-color: #eaf1fc;"
+        @click="openMock()"
+      >
+        Lag testdata
       </md-button>
     </center>
   </div>
@@ -30,6 +40,9 @@ export default {
     },
     openAnalysis() {
       this.$router.push({ name: 'cases', });
+    },
+    openMock() {
+      this.$router.push({ name: 'mock', });
     },
   },
 };
