@@ -130,10 +130,11 @@
           </md-button>
         </div>
         <div class="md-layout-item md-size-30">
-          <md-tabs>
+          <md-tabs style="height: 70vh;">
             <md-tab
               id="data"
               md-label="Data"
+              class="side-view-content-2"
             >
               <md-list>
                 <md-list-item>
@@ -169,6 +170,7 @@
             <md-tab
               id="locations"
               md-label="Turrute"
+              class="side-view-content-2"
             >
               <md-list>
                 <md-list-item
@@ -176,21 +178,24 @@
                   :key="'list-pos-' + index"
                   @click="removePos(index)">
                   <md-icon>clear</md-icon>
-                  {{ pos }}
+                  <span class="md-list-item-text">{{ pos }}</span>
                 </md-list-item>
               </md-list>
             </md-tab>
             <md-tab
               id="observations"
               md-label="Observasjoner"
+              class="side-view-content-2"
             >
-              <md-list-item
-                v-for="(obs, index) of observations"
-                :key="'list-obs-' + index"
-                @click="removeObservation(index)">
-                <md-icon>clear</md-icon>
-                {{ obs }}
-              </md-list-item>
+              <md-list>
+                <md-list-item
+                  v-for="(obs, index) of observations"
+                  :key="'list-obs-' + index"
+                  @click="removeObservation(index)">
+                  <md-icon>clear</md-icon>
+                  <span class="md-list-item-text">Sauer: {{ obs.numSheep }}</span>
+                </md-list-item>
+              </md-list>
             </md-tab>
           </md-tabs>
         </div>
@@ -312,6 +317,13 @@ export default {
 };
 </script>
 
-<style>
 
+<style>
+.md-tabs {
+  overflow-x: hidden;
+}
+.side-view-content-2 {
+  height: 65vh;
+  overflow-y: auto;
+}
 </style>

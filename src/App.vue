@@ -108,6 +108,11 @@ body {
   height: 100%;
 }
 
+* > .md-content {
+  max-width: 1300px;
+  margin: auto;
+}
+
 .md-bottom-bar-item {
   max-width: 100% !important;
 }

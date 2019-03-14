@@ -1,7 +1,9 @@
 
 <template>
   <div>
-    <router-view v-if="positionRetrieved"/>
+    <router-view
+      v-if="positionRetrieved"
+      class="phone-content"/>
     <div v-else>
       Vennligst skru på posisjon, applikasjonen fungerer ikke uten.
     </div>
@@ -95,7 +97,12 @@ export default {
   width: 100%;
 }
 
+.phone-content {
+  padding-bottom: 60px;
+}
+
 .phone-viewport {
+  z-index: 100;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -105,10 +112,3 @@ export default {
   /* flex-shrink: 0; */
 }
 </style>
-
-<style>
-.md-app-scroller {
-  margin-bottom: 60px;
-}
-</style>
-
