@@ -141,6 +141,7 @@ const actions = {
     commit('setServerTrips', trips);
   },
   saveMockTrip({ commit, }, trip) {
+    trip.calculateBounds();
     commit('addTrip', trip);
   },
 };

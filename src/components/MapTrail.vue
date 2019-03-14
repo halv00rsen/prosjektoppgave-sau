@@ -2,7 +2,7 @@
   <l-circle-marker
     :lat-lng="[latitude, longitude]"
     :radius="10"
-    color="#000"
+    :color="color"
   />
 </template>
 
@@ -24,6 +24,10 @@ export default {
     longitude: {
       type: Number,
       required: true,
+    },
+    color: {
+      type: String,
+      default: '#000',
     },
   },
 };

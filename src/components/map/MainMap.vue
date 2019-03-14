@@ -57,6 +57,20 @@
         </div>
       </v-marker-cluster>
     </div>
+
+    <div v-if="showRoute">
+      <div
+        v-for="trip of trips"
+        :key="'trip-' + trip.id">
+
+        <map-trail
+          v-for="(pos, index) of trip.positions"
+          :key="'trip-pos-' + trip.id + '-' + index"
+          :latitude="pos.lat"
+          :longitude="pos.lng"
+          :color="trip.color"/>
+      </div>
+    </div>
   </l-map>
 </template>
 
@@ -68,6 +82,7 @@ import {
 import MapObservation from '@/components/MapObservation.vue';
 import ClusterObservation from '@/components/map/ClusterObservation.vue';
 import Vue2LeafletMarkercluster from '@/components/map/Vue2LeafletMarkercluster.vue';
+import MapTrail from '@/components/MapTrail.vue';
 
 export default {
   name: 'MainMap',
@@ -81,6 +96,7 @@ export default {
     MapObservation,
     ClusterObservation,
     'v-marker-cluster': Vue2LeafletMarkercluster,
+    MapTrail,
   },
   data: () => ({
     urls: [
@@ -124,6 +140,9 @@ export default {
     },
     showDensity() {
       return this.$store.state.analysis.settings.showDensity;
+    },
+    showRoute() {
+      return this.$store.state.analysis.settings.showRoute;
     },
   },
   watch: {

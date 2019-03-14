@@ -211,7 +211,7 @@ export default {
       numbers: [],
       othersForm: {
         animal: null,
-        predator: false,
+        predator: true,
       },
       advanced: this.detailed,
       colors: [
@@ -247,13 +247,19 @@ export default {
   },
   created() {
     if (this.oldObject) {
-      this.form.numSheep = this.oldObject.numSheep;
-      this.form.numLambs = this.oldObject.numLambs;
-      this.form.comment = this.oldObject.comment;
-      this.form.color = this.oldObject.color;
-      this.form.numLambsTag = this.oldObject.numLambsTag;
-      this.form.colorSheepEar = this.oldObject.colorSheepEar;
-      this.whatRegister = 'sheep';
+      if (this.oldObject.numSheep !== undefined) {
+        this.form.numSheep = this.oldObject.numSheep;
+        this.form.numLambs = this.oldObject.numLambs;
+        this.form.comment = this.oldObject.comment;
+        this.form.color = this.oldObject.color;
+        this.form.numLambsTag = this.oldObject.numLambsTag;
+        this.form.colorSheepEar = this.oldObject.colorSheepEar;
+        this.whatRegister = 'sheep';
+      } else {
+        this.othersForm.animal = this.oldObject.animal;
+        this.othersForm.predator = this.oldObject.predator;
+        this.whatRegister = 'predator';
+      }
       this.registration = true;
     }
     this.numbers = this.range(1, 20);
@@ -277,14 +283,33 @@ export default {
         minValue: minValue(0),
       };
     }
-    return { form, };
+    const othersForm = {
+      predator: {
+        required,
+      },
+      animal: {
+        required,
+      },
+    };
+    if (this.whatRegister === 'sheep') {
+      return { form, };
+    } else {
+      return { othersForm, };
+    }
   },
   methods: {
     save() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
-        this.form.detailed = this.advanced;
-        this.saveRegistration(this.form);
+        if (this.whatRegister === 'sheep') {
+          this.form.detailed = this.advanced;
+          this.form.isSheep = true;
+          this.saveRegistration(this.form);
+        } else {
+          this.othersForm.detailed = false;
+          this.form.isSheep = false;
+          this.saveRegistration(this.othersForm);
+        }
       }
     },
     getValidationClass(fieldName) {

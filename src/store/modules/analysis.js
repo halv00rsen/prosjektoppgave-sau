@@ -19,6 +19,7 @@ export default {
       showObservations: true,
       showObservedPoints: true,
       showDensity: false,
+      showRoute: false,
     },
     selectedCase: {
       presetTrips: false,
@@ -65,6 +66,9 @@ export default {
     reset({ commit, }) {
       commit('resetCoords');
       commit('reset');
+    },
+    setShowRoute({ commit, }, showRoute) {
+      commit('setShowRoute', showRoute);
     },
   },
   mutations: {
@@ -133,10 +137,14 @@ export default {
         showObservations: true,
         showObservedPoints: true,
         showDensity: false,
+        showRoute: false,
       };
     },
     setSelectedCase(state, _case) {
       state.selectedCase = _case;
+    },
+    setShowRoute(state, showRoute) {
+      state.settings.showRoute = showRoute;
     },
   },
 };

@@ -17,6 +17,10 @@
         variable="showDensity"
         text="Vis tetthet"/>
       <list-switch
+        dispatch="setShowRoute"
+        variable="showRoute"
+        text="Vis turrute"/>
+      <list-switch
         :disabled="true"
         dispatch="setShowPredators"
         variable="showPredators"

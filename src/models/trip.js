@@ -57,4 +57,14 @@ export default class Trip {
            this.minLng <= pos.lng && this.maxLng >= pos.lng;
   }
 
+  calculateBounds() {
+    for (let observation of this.observations) {
+      this.setCoordinates(observation.observedPosition);
+      this.setCoordinates(observation.position);
+    }
+    for (let position of this.positions) {
+      this.setCoordinates(position);
+    }
+  }
+
 }

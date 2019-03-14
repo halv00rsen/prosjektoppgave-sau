@@ -128,6 +128,18 @@
             @click="saveTrip()">
             Lagre tur
           </md-button>
+          <md-button
+            :md-ripple="false"
+            class="md-raised"
+            @click="back()">
+            Tilbake
+          </md-button>
+          <md-button
+            :md-ripple="false"
+            class="md-raised"
+            @click="resetData()">
+            Fjern data
+          </md-button>
         </div>
         <div class="md-layout-item md-size-30">
           <md-tabs style="height: 70vh;">
@@ -193,7 +205,14 @@
                   :key="'list-obs-' + index"
                   @click="removeObservation(index)">
                   <md-icon>clear</md-icon>
-                  <span class="md-list-item-text">Sauer: {{ obs.numSheep }}</span>
+                  <span
+                    v-if="obs.isSheep"
+                    class="md-list-item-text">Sauer: {{ obs.numSheep }}</span>
+                  <span
+                    v-else
+                    class="md-list-item-text">
+                    {{ obs.animal }}
+                  </span>
                 </md-list-item>
               </md-list>
             </md-tab>
@@ -248,6 +267,9 @@ export default {
     observations() {
       return this.$store.state.mock.observations;
     },
+  },
+  beforeDestroy() {
+    this.resetData();
   },
   validations() {
     const form = {
@@ -312,6 +334,12 @@ export default {
         this.$store.dispatch('trip/saveMockTrip', trip);
         this.$router.push({ name: 'main', });
       });
+    },
+    back() {
+      this.setMapData = false;
+    },
+    resetData() {
+      this.$store.dispatch('mock/reset');
     },
   },
 };
