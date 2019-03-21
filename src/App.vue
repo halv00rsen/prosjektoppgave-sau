@@ -9,7 +9,9 @@
       <md-app-toolbar>
         <div class="md-toolbar-row">
           <div class="md-toolbar-section-start">
-            <span class="md-title">Sauappen</span>
+            <span
+              class="md-title"
+              @click="$router.push('/')">Sauappen</span>
           </div>
           <div
             class="md-toolbar-section-end">
@@ -89,6 +91,9 @@ export default {
 .md-drawer {
   width: 20em;
 }
+.md-title:hover {
+  cursor: pointer;
+}
 </style>
 
 <style>
@@ -115,5 +120,9 @@ body {
 
 .md-bottom-bar-item {
   max-width: 100% !important;
+}
+.md-app-content {
+  border-left: none !important;
+  border-right: none !important;
 }
 </style>

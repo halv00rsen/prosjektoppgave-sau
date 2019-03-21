@@ -8,9 +8,9 @@
       :lat-lng="observed"
       :radius="10"
       :color="observationColor"
-      :fill="!observation.isSheep"
+      :fill="true"
       :fill-opacity="1"
-      fill-color="gray"
+      :fill-color="observation.isSheep ? 'white' : 'gray'"
       @click="openObservation">
       <l-popup>
         <div v-if="observation.isSheep">
@@ -22,7 +22,8 @@
           </div>
         </div>
         <div v-else>
-          {{ observation.animal }}
+          <div>Hvilket dyr: {{ observation.animal }}</div>
+          <div>Antall dyr: {{ observation.numAnimals }}</div>
         </div>
       </l-popup>
     </l-circle-marker>

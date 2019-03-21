@@ -9,6 +9,9 @@
         Antall lam observert i området: {{ data.numLambs }}
       </md-list-item>
       <md-list-item>
+        Antall rovdyr observert i området: {{ data.numPredators }}
+      </md-list-item>
+      <md-list-item>
         Antall observasjoner i området: {{ data.numObservations }}
       </md-list-item>
     </md-list>
@@ -23,10 +26,15 @@ export default {
       let numSheep = 0;
       let numLambs = 0;
       let numObservations = 0;
+      let numPredators = 0;
       this.$store.state.analysis.selectedTrips.forEach(trip => {
         trip.observations.forEach(observation => {
-          numSheep += Number(observation.numSheep);
-          numLambs += Number(observation.numLambs);
+          if (observation.isSheep) {
+            numSheep += observation.numSheep;
+            numLambs += observation.numLambs;
+          } else if (observation.predator) {
+            numPredators += observation.numAnimals;
+          }
           numObservations += 1;
         });
       });
@@ -34,9 +42,9 @@ export default {
         numSheep,
         numLambs,
         numObservations,
+        numPredators,
       };
     },
   },
 };
 </script>
-

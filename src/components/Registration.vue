@@ -23,43 +23,41 @@
           class="md-layout"
           @submit.prevent="validateForm">
 
-          <md-autocomplete
-            v-model="form.numSheep"
-            :class="getValidationClass('numSheep')"
-            :md-options="numbers"
-            :readonly="currentDone"
-            type="number"
-            required>
-            <label>Totalt antall sau</label>
+          <md-field
+            :class="getValidationClass('numSheep')">
             <span
               v-if="!$v.form.numSheep.required"
               class="md-error">Antall sau er påkrevd</span>
             <span
               v-if="!$v.form.numSheep.minValue"
               class="md-error">Antall sau kan ikke være negativt</span>
-          </md-autocomplete>
+            <label>Totalt antall sau</label>
+            <md-input
+              :readonly="currentDone"
+              v-model.number="form.numSheep"
+              autocomplete="off"
+              type="number"
+              name="numAnimals"
+              required/>
+          </md-field>
 
-          <md-autocomplete
+          <md-field
             v-if="advanced"
-            v-model="form.numLambsTag"
-            :class="getValidationClass('numLambsTag')"
-            :readonly="currentDone"
-            :md-options="numbers"
-            type="number">
-            <label for="number-lambs-tag">Antall lam på tag</label>
+            :class="getValidationClass('numLambsTag')">
+            <label>Antall lam på tag</label>
             <span
               v-if="!$v.form.numLambsTag.minValue"
               class="md-error">Antall lam kan ikke være negativt</span>
-          </md-autocomplete>
+            <md-input
+              :readonly="currentDone"
+              v-model.number="form.numLambsTag"
+              autocomplete="off"
+              type="number"/>
+          </md-field>
 
-          <md-autocomplete
+          <md-field
             v-if="advanced"
-            v-model="form.numLambs"
-            :class="getValidationClass('numLambs')"
-            :md-options="numbers"
-            :readonly="currentDone"
-            type="number"
-            required>
+            :class="getValidationClass('numLambs')">
             <label>Faktisk antall lam</label>
             <span
               v-if="!$v.form.numLambs.minValue"
@@ -67,22 +65,27 @@
             <span
               v-if="!$v.form.numLambs.required"
               class="md-error">Antall lam er påkrevd</span>
-          </md-autocomplete>
+            <md-input
+              :readonly="currentDone"
+              v-model.number="form.numLambs"
+              autocomplete="off"
+              required/>
+          </md-field>
 
-          <md-autocomplete
-            v-model="form.color"
-            :md-options="colors"
-            :readonly="currentDone">
+          <md-field>
             <label>Farge på sauene</label>
-          </md-autocomplete>
+            <md-input
+              :readonly="currentDone"
+              v-model="form.color"/>
+          </md-field>
 
-          <md-autocomplete
-            v-if="advanced"
-            v-model="form.colorSheepEar"
-            :md-options="colors"
-            :readonly="currentDone">
+          <md-field
+            v-if="advanced">
             <label>Farge på øremerke (hvem eier sauen)</label>
-          </md-autocomplete>
+            <md-input
+              v-model="form.colorSheepEar"
+              :readonly="currentDone"/>
+          </md-field>
 
           <md-field v-if="advanced">
             <label for="comment">Kommentar</label>
@@ -98,11 +101,22 @@
         <form
           novalidate
           class="md-layout">
-          <md-field>
+          <md-field
+            :class="getValidationClass('animal')">
             <label for="animal">Hvilket dyr</label>
             <md-input
               v-model="othersForm.animal"
-              name="animal"/>
+              name="animal"
+              required/>
+          </md-field>
+          <md-field
+            :class="getValidationClass('numAnimals')">
+            <label for="numAnimals">Antall dyr</label>
+            <md-input
+              v-model.number="othersForm.numAnimals"
+              type="number"
+              name="numAnimals"
+              required/>
           </md-field>
           <md-checkbox v-model="othersForm.predator">Rovdyr</md-checkbox>
         </form>
@@ -124,8 +138,6 @@
     </md-dialog-content>
 
     <md-dialog-actions v-if="registering && !currentDone">
-      <md-button class="md-primary md-raised right"><font-awesome-icon icon="camera"/></md-button>
-      <span class="spacer"/>
       <md-button
         v-if="!registration"
         class="md-primary md-raised"
@@ -137,7 +149,6 @@
       <md-button
         class="md-raised"
         @click="close">Avbryt</md-button>
-      <!-- <md-button class="md-raised">Flytt</md-button> -->
       <md-button
         v-if="registration"
         class="md-accent md-raised"
@@ -212,6 +223,7 @@ export default {
       othersForm: {
         animal: null,
         predator: true,
+        numAnimals: undefined,
       },
       advanced: this.detailed,
       colors: [
@@ -258,6 +270,7 @@ export default {
       } else {
         this.othersForm.animal = this.oldObject.animal;
         this.othersForm.predator = this.oldObject.predator;
+        this.othersForm.numAnimals = this.oldObject.numAnimals;
         this.whatRegister = 'predator';
       }
       this.registration = true;
@@ -290,6 +303,10 @@ export default {
       animal: {
         required,
       },
+      numAnimals: {
+        required,
+        integer,
+      },
     };
     if (this.whatRegister === 'sheep') {
       return { form, };
@@ -307,13 +324,18 @@ export default {
           this.saveRegistration(this.form);
         } else {
           this.othersForm.detailed = false;
-          this.form.isSheep = false;
+          this.othersForm.isSheep = false;
           this.saveRegistration(this.othersForm);
         }
       }
     },
     getValidationClass(fieldName) {
-      const field = this.$v.form[fieldName];
+      let field;
+      if (this.whatRegister === 'sheep') {
+        field = this.$v.form[fieldName];
+      } else {
+        field = this.$v.othersForm[fieldName];
+      }
       if (field) {
         return {
           'md-invalid': field.$invalid && field.$dirty,
