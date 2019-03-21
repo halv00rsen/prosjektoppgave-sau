@@ -2,63 +2,67 @@
 <template>
   <div class="md-layout md-gutter">
     <div class="md-layout-item md-layout md-size-70">
-      <h3>{{ selectedCase.text }}</h3>
+      <h3>{{ selectedCase.header }}</h3>
     </div>
     <div class="md-layout-item md-layout md-size-30">
       <router-link :to="{ name: 'cases', }">Tilbake</router-link>
     </div>
-    <div class="md-layout-item md-layout md-large-size-50 md-medium-size-50 md-small-size-50 md-xsmall-size-100 analysis-column">
-      <div class="md-layout-item md-large-size-40">
-        <md-datepicker
-          v-if="!storeStartDate"
-          v-model="startDate"
-          :md-disabled-dates="disabledFrom"
-          md-immediately>
-          <label>Dato fra</label>
-        </md-datepicker>
-        <md-field v-else>
-          <label>Dato fra</label>
-          <md-input
-            v-model="storeStartDate"
-            disabled
-          />
-        </md-field>
-      </div>
-      <div class="md-layout-item md-large-size-40">
-        <md-datepicker
-          v-if="!storeEndDate"
-          v-model="endDate"
-          :md-disabled-dates="disabledTo"
-          md-immediately>
-          <label>Dato til</label>
-        </md-datepicker>
-        <md-field v-else>
-          <label>Dato til</label>
-          <md-input
-            v-model="storeEndDate"
-            disabled
-          />
-        </md-field>
-      </div>
+    <div class="md-layout-item md-layout md-large-size-70 md-medium-size-60 md-small-size-50 md-xsmall-size-100 analysis-column">
       <div
-        v-if="!storeEndDate && !storeStartDate"
-        class="md-layout-item">
-        <md-button
-          class="md-dense md-icon-button"
-          @click="setDates()">
-          <md-icon>date_range</md-icon>
-        </md-button>
-        <md-button
-          class="md-dense md-icon-button"
-          @click="clearDates()">
-          <md-icon>delete</md-icon>
-        </md-button>
+        v-if="!selectedCase.fixedTrips"
+        class="md-layout-item md-layout md-large-size-100">
+        <div class="md-layout-item md-large-size-40">
+          <md-datepicker
+            v-if="!storeStartDate"
+            v-model="startDate"
+            :md-disabled-dates="disabledFrom"
+            md-immediately>
+            <label>Dato fra</label>
+          </md-datepicker>
+          <md-field v-else>
+            <label>Dato fra</label>
+            <md-input
+              v-model="storeStartDate"
+              disabled
+            />
+          </md-field>
+        </div>
+        <div class="md-layout-item md-large-size-40">
+          <md-datepicker
+            v-if="!storeEndDate"
+            v-model="endDate"
+            :md-disabled-dates="disabledTo"
+            md-immediately>
+            <label>Dato til</label>
+          </md-datepicker>
+          <md-field v-else>
+            <label>Dato til</label>
+            <md-input
+              v-model="storeEndDate"
+              disabled
+            />
+          </md-field>
+        </div>
+        <div
+          v-if="!storeEndDate && !storeStartDate"
+          class="md-layout-item">
+          <md-button
+            class="md-dense md-icon-button"
+            @click="setDates()">
+            <md-icon>date_range</md-icon>
+          </md-button>
+          <md-button
+            class="md-dense md-icon-button"
+            @click="clearDates()">
+            <md-icon>delete</md-icon>
+          </md-button>
+        </div>
       </div>
       <div class="md-layout-item md-size-100">
         <main-map/>
       </div>
     </div>
-    <div class="md-layout-item md-large-size-50 md-medium-size-50 md-small-size-50 md-xsmall-size-100 analysis-column">
+    <div class="md-layout-item md-large-size-30 md-medium-size-40 md-small-size-50 md-xsmall-size-100 analysis-column">
       <SideView/>
     </div>
   </div>

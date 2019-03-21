@@ -89,10 +89,8 @@ const router = new Router({
         },
       ],
       beforeRouteLeave (to, from, next) {
-        console.log('exit hehehe');
         next();
       },
-
     },
     {
       path: '/analysis',
@@ -107,11 +105,22 @@ const router = new Router({
           path: 'overview',
           name: 'overview',
           component: Overview,
+          beforeEnter(to, from, next) {
+            if (store.state.analysis.caseSet) {
+              next();
+            } else {
+              next({ name: 'cases', });
+            }
+          },
         }
       ],
       beforeEnter(to, from, next) {
-        store.dispatch('analysis/setDefaultTrips', store.state.trip.all);
-        next();
+        if (store.state.trip.all.length != 0) {
+          store.dispatch('analysis/setDefaultTrips', store.state.trip.all);
+          next();
+        } else {
+          next({ name: 'main', });
+        }
       },
     },
     {

@@ -7,8 +7,13 @@
     :options="mapOptions"
     :max-zoom="18"
     :min-zoom="4"
-    style="height: 70vh;"
+    :style="useMaxSize ? 'height: 79vh' : 'height: 70vh;'"
     @update:center="centerUpdated">
+
+    <l-control-scale
+      :imperial="false"
+      position="bottomleft"
+    />
     <l-control-layers
       :collapsed="false"
       :sort-layers="true"
@@ -18,7 +23,7 @@
       v-for="url in urls"
       :key="url.visual"
       :name="url.visual"
-      :visible="true"
+      :visible="url.visible"
       :url="url.url"
       :attribution="attribution"
       layer-type="base"
@@ -63,13 +68,28 @@
         v-for="trip of trips"
         :key="'trip-' + trip.id">
 
-        <map-trail
-          v-for="(pos, index) of trip.positions"
-          :key="'trip-pos-' + trip.id + '-' + index"
-          :latitude="pos.lat"
-          :longitude="pos.lng"
-          :color="trip.color"/>
+        <trail-route
+          v-if="trip.positions.length > 1"
+          :positions="trip.positions"
+          :color="trip.color"
+        />
+        <div v-else>
+          <map-trail
+            v-for="(pos, index) of trip.positions"
+            :key="'trip-pos-' + trip.id + '-' + index"
+            :latitude="pos.lat"
+            :longitude="pos.lng"
+            :color="trip.color"/>
+        </div>
       </div>
+    </div>
+
+    <div
+      id="fitZoomButton"
+      class="leaflet-bar leaflet-control">
+      <a @click="zoomMap()">
+        <md-icon>zoom_out_map</md-icon>
+      </a>
     </div>
   </l-map>
 </template>
@@ -77,12 +97,15 @@
 <script>
 import {
   LMap, LTileLayer, LMarker, LTooltip, LGeoJson, LControlLayers,
+  LControlScale,
 } from 'vue2-leaflet';
+import L from 'leaflet';
 
 import MapObservation from '@/components/MapObservation.vue';
 import ClusterObservation from '@/components/map/ClusterObservation.vue';
 import Vue2LeafletMarkercluster from '@/components/map/Vue2LeafletMarkercluster.vue';
 import MapTrail from '@/components/MapTrail.vue';
+import TrailRoute from '@/components/TrailRoute.vue';
 
 export default {
   name: 'MainMap',
@@ -97,16 +120,20 @@ export default {
     ClusterObservation,
     'v-marker-cluster': Vue2LeafletMarkercluster,
     MapTrail,
+    TrailRoute,
+    LControlScale,
   },
   data: () => ({
     urls: [
       {
         url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=norges_grunnkart_graatone&zoom={z}&x={x}&y={y}',
         visual: 'Gråtone',
+        visible: true,
       },
       {
         url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}',
         visual: 'Terrengkart',
+        visible: false,
       },
     ],
     zoom: 4,
@@ -125,6 +152,9 @@ export default {
       return this.$store.state.analysis.selectedTrips;
     },
     bounds() {
+      if (!this.$store.state.analysis.minLat) {
+        return undefined;
+      }
       return [
         [
           this.$store.state.analysis.minLat,
@@ -144,6 +174,9 @@ export default {
     showRoute() {
       return this.$store.state.analysis.settings.showRoute;
     },
+    useMaxSize() {
+      return this.$store.state.analysis.selectedCase.fixedTrips;
+    },
   },
   watch: {
     bounds() {
@@ -153,9 +186,25 @@ export default {
     },
 
   },
+  mounted() {
+    this.$nextTick(() => {
+      const map = this.$refs.map.mapObject;
+      L.Control.ZoomButton = L.Control.extend({
+        onAdd() {
+          return L.DomUtil.get('fitZoomButton');
+        },
+      });
+      L.control.zoomButton = (opts) => {
+        return new L.Control.ZoomButton(opts);
+      };
+      L.control.zoomButton({ position: 'bottomright', }).addTo(map);
+    });
+  },
   methods: {
     zoomMap() {
-      this.$refs.map.mapObject.fitBounds(this.bounds);
+      if (this.bounds) {
+        this.$refs.map.mapObject.fitBounds(this.bounds);
+      }
     },
     centerUpdated(center) {
       this.center = center;

@@ -158,6 +158,9 @@ const mutations = {
   },
   addTrip(state, trip) {
     state.all.push(trip);
+    state.all.sort((a, b) => {
+      return a.startTime - b.startTime;
+    });
   },
   removeTrip(state, index) {
     const deletedTrip = state.all.splice(index, 1)[0];

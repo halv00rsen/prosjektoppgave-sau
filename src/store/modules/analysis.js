@@ -17,14 +17,17 @@ export default {
     settings: {
       automaticZoom: true,
       showObservations: true,
-      showObservedPoints: true,
+      showObservedPoints: false,
       showDensity: false,
-      showRoute: false,
+      showRoute: true,
     },
     selectedCase: {
       presetTrips: false,
+      fixedTrips: false,
       text: undefined,
+      header: undefined,
     },
+    caseSet: false,
   },
   getters: {
 
@@ -40,9 +43,13 @@ export default {
     activateAllTrips({ commit, state, }) {
       commit('selectTrips', state.filteredTrips.slice());
     },
+    setInitialTrips({ commit, }, trips) {
+      commit('setFilteredTrips', trips);
+    },
     selectTrips({ commit, }, trips) {
       commit('resetCoords');
       commit('selectTrips', trips);
+      commit('calculateBounds');
     },
     deselectTrips({ commit, }) {
       commit('resetCoords');
@@ -68,7 +75,9 @@ export default {
       commit('reset');
     },
     setShowRoute({ commit, }, showRoute) {
+      commit('resetCoords');
       commit('setShowRoute', showRoute);
+      commit('calculateBounds');
     },
   },
   mutations: {
@@ -89,12 +98,6 @@ export default {
     },
     selectTrips(state, trips) {
       state.selectedTrips = trips.slice();
-      trips.forEach(elem => {
-        state.minLat = Math.min(state.minLat, elem.minLat);
-        state.maxLat = Math.max(state.maxLat, elem.maxLat);
-        state.minLng = Math.min(state.minLng, elem.minLng);
-        state.maxLng = Math.max(state.maxLng, elem.maxLng);
-      });
     },
     setDates(state, dates) {
       const start = dates.startDate;
@@ -137,14 +140,31 @@ export default {
         showObservations: true,
         showObservedPoints: true,
         showDensity: false,
-        showRoute: false,
+        showRoute: true,
       };
     },
     setSelectedCase(state, _case) {
       state.selectedCase = _case;
+      state.caseSet = true;
     },
     setShowRoute(state, showRoute) {
       state.settings.showRoute = showRoute;
+    },
+    calculateBounds(state) {
+      state.selectedTrips.forEach(elem => {
+        let bounds = elem.boundsTotal;
+        if (!state.settings.showRoute || !state.settings.showObservations) {
+          if (state.settings.showRoute) {
+            bounds = elem.boundsPositions;
+          } else {
+            bounds = elem.boundsObservations;
+          }
+        }
+        state.minLat = Math.min(state.minLat, bounds.minLat);
+        state.maxLat = Math.max(state.maxLat, bounds.maxLat);
+        state.minLng = Math.min(state.minLng, bounds.minLng);
+        state.maxLng = Math.max(state.maxLng, bounds.maxLng);
+      });
     },
   },
 };

@@ -25,8 +25,12 @@ export default class ApplicationDatabase {
         trip.addObservation(observation);
       }
       trip.positions = data.positions;
+      trip.calculateBounds();
       datas.push(trip);
     }).then(() => {
+      datas.sort((a, b) => {
+        return a.startTime - b.startTime;
+      });
       callback(datas);
     });
   }

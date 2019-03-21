@@ -12,10 +12,19 @@
       </md-button>
       <br>
       <md-button
+        v-if="canAnalyse"
         :md-ripple="false"
         class="md-raised big"
         style="background-color: #eaf1fc;"
         @click="openAnalysis()"
+      >
+        Analyse
+      </md-button>
+      <md-button
+        v-else
+        class="md-raised big"
+        style="background-color: #eaf1fc;"
+        disabled
       >
         Analyse
       </md-button>
@@ -34,6 +43,11 @@
 <script>
 export default {
   name: 'Main',
+  computed: {
+    canAnalyse() {
+      return this.$store.state.trip.all.length != 0;
+    },
+  },
   methods: {
     openTrip() {
       this.$router.push({ name: 'home', });
@@ -55,4 +69,3 @@ export default {
   height: 10em;
 }
 </style>
-

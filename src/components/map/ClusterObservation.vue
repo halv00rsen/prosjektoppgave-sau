@@ -3,13 +3,22 @@
   <l-circle-marker
     :lat-lng="observed"
     :radius="10"
+    :fill="true"
+    :fill-opacity="1"
+    :fill-color="observation.isSheep ? 'white' : 'black'"
     :color="color">
     <l-popup>
-      <div v-if="observation.numSheep">
-        Antall sau: {{ observation.numSheep }}
+      <div v-if="observation.isSheep">
+        <div v-if="observation.numSheep">
+          Antall sau: {{ observation.numSheep }}
+        </div>
+        <div v-if="observation.numLambs != 0">
+          Antall lam: {{ observation.numLambs }}
+        </div>
       </div>
-      <div v-if="observation.numLambs != 0">
-        Antall lam: {{ observation.numLambs }}
+      <div v-else>
+        <div>Dyr: {{ observation.animal }}</div>
+        <div>Antall: {{ observation.numAnimals }}</div>
       </div>
     </l-popup>
   </l-circle-marker>

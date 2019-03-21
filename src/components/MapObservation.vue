@@ -22,8 +22,8 @@
           </div>
         </div>
         <div v-else>
-          <div>Hvilket dyr: {{ observation.animal }}</div>
-          <div>Antall dyr: {{ observation.numAnimals }}</div>
+          <div>Dyr: {{ observation.animal }}</div>
+          <div>Antall: {{ observation.numAnimals }}</div>
         </div>
       </l-popup>
     </l-circle-marker>

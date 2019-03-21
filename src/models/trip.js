@@ -1,4 +1,13 @@
 
+function getInitialPositions()  {
+  return {
+    minLat: Number.MAX_SAFE_INTEGER,
+    maxLat: Number.MIN_SAFE_INTEGER,
+    minLng: Number.MAX_SAFE_INTEGER,
+    maxLng: Number.MIN_SAFE_INTEGER,
+  };
+}
+
 export default class Trip {
 
   constructor(id, name, startTime) {
@@ -10,17 +19,16 @@ export default class Trip {
     this.startTime = startTime;
     this.lastPosition = undefined;
     this.endTime = undefined;
-    this.minLat = Number.MAX_SAFE_INTEGER;
-    this.maxLat = Number.MIN_SAFE_INTEGER;
-    this.minLng = Number.MAX_SAFE_INTEGER;
-    this.maxLng = Number.MIN_SAFE_INTEGER;
+    this.boundsObservations = getInitialPositions();
+    this.boundsPositions = getInitialPositions();
+    this.boundsTotal = getInitialPositions();
     this.color = undefined;
   }
 
   addObservation(observation) {
     this.observations.push(observation);
-    this.setCoordinates(observation.observedPosition);
-    this.setCoordinates(observation.position);
+    this.setCoordinates(observation.observedPosition, this.boundsObservations);
+    this.setCoordinates(observation.position, this.boundsObservations);
   }
 
   addPosition(position) {
@@ -30,7 +38,7 @@ export default class Trip {
     if (this.lastPosition === undefined || this.lastPosition.distanceTo(position) > 10) {
       this.positions.push(position);
       this.lastPosition = position;
-      this.setCoordinates(position);
+      this.setCoordinates(position, this.boundsPositions);
     }
   }
 
@@ -45,11 +53,13 @@ export default class Trip {
     this.observations.splice(index, 1);
   }
 
-  setCoordinates(pos) {
-    this.minLat = Math.min(this.minLat, pos.lat);
-    this.maxLat = Math.max(this.maxLat, pos.lat);
-    this.minLng = Math.min(this.minLng, pos.lng);
-    this.maxLng = Math.max(this.maxLng, pos.lng);
+  setCoordinates(pos, bounds) {
+    for (let bound of [bounds, this.boundsTotal]) {
+      bound.minLat = Math.min(bound.minLat, pos.lat);
+      bound.maxLat = Math.max(bound.maxLat, pos.lat);
+      bound.minLng = Math.min(bound.minLng, pos.lng);
+      bound.maxLng = Math.max(bound.maxLng, pos.lng);
+    }
   }
 
   positionInTripArea(pos) {
@@ -59,11 +69,11 @@ export default class Trip {
 
   calculateBounds() {
     for (let observation of this.observations) {
-      this.setCoordinates(observation.observedPosition);
-      this.setCoordinates(observation.position);
+      this.setCoordinates(observation.observedPosition, this.boundsObservations);
+      this.setCoordinates(observation.position, this.boundsObservations);
     }
     for (let position of this.positions) {
-      this.setCoordinates(position);
+      this.setCoordinates(position, this.boundsPositions);
     }
   }
 

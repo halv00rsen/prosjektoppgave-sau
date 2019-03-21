@@ -13,6 +13,10 @@ export default {
       type: String,
       required: true,
     },
+    header: {
+      type: String,
+      default: undefined,
+    },
     startDate: {
       type: Object|Date,
       default: undefined,
@@ -29,6 +33,18 @@ export default {
       type: Boolean,
       default: false,
     },
+    showRoute: {
+      type: Boolean,
+      default: true,
+    },
+    initialTrips: {
+      type: Array,
+      default: undefined,
+    },
+    showObservedPoints: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     openCase() {
@@ -39,10 +55,18 @@ export default {
       this.$store.dispatch('analysis/setSelectedCase', {
         text: this.text,
         presetTrips: this.presetTrips,
+        fixedTrips: this.initialTrips !== undefined,
+        header: this.header !== undefined ? this.header : this.text,
       });
       if (this.showDensity) {
         this.$store.dispatch('analysis/setShowDensity', this.showDensity);
         this.$store.dispatch('analysis/setShowObservedPoints', false);
+      } else {
+        this.$store.dispatch('analysis/setShowObservedPoints', this.showObservedPoints);
+      }
+      this.$store.dispatch('analysis/setShowRoute', this.showRoute);
+      if (this.initialTrips) {
+        this.$store.dispatch('analysis/setInitialTrips', this.initialTrips);
       }
       this.$router.push('overview');
     },
@@ -56,4 +80,3 @@ export default {
   margin: 1em;
 }
 </style>
-
