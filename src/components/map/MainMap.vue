@@ -36,11 +36,11 @@
 
         <map-observation
           v-for="(observation, index) of trip.observations"
-          :key="index"
+          :key="'observation-' + trip.id + index"
           :observation="observation"
-          :index="index"
           :observation-color="trip.color"
           :clickable="false"
+          :analysis-view="true"
         />
       </div>
     </div>
@@ -69,18 +69,9 @@
         :key="'trip-' + trip.id">
 
         <trail-route
-          v-if="trip.positions.length > 1"
           :positions="trip.positions"
           :color="trip.color"
         />
-        <div v-else>
-          <map-trail
-            v-for="(pos, index) of trip.positions"
-            :key="'trip-pos-' + trip.id + '-' + index"
-            :latitude="pos.lat"
-            :longitude="pos.lng"
-            :color="trip.color"/>
-        </div>
       </div>
     </div>
 
@@ -164,6 +155,12 @@ export default {
           this.$store.state.analysis.maxLng,
         ]
       ];
+    },
+    settings() {
+      return this.$store.state.analysis.settings;
+    },
+    showPredators() {
+      return this.$store.state.analysis.settings.showPredators;
     },
     automaticZoom() {
       return this.$store.state.analysis.settings.automaticZoom;

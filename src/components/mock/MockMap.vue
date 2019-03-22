@@ -30,16 +30,8 @@
     />
 
     <trail-route
-      v-if="positions.length > 1"
       :positions="positions"
     />
-    <div v-else>
-      <map-trail
-        v-for="(pos, index) of positions"
-        :key="'trail-' + index"
-        :latitude="pos.lat"
-        :longitude="pos.lng"/>
-    </div>
 
     <l-circle-marker
       v-if="observation.observedPosition"
@@ -72,7 +64,6 @@ import {
   LMap, LTileLayer, LControlLayers, LCircleMarker, LControlScale,
 } from 'vue2-leaflet';
 
-import MapTrail from '@/components/MapTrail.vue';
 import Registration from '@/components/Registration.vue';
 import MapObservation from '@/components/MapObservation.vue';
 import TrailRoute from '@/components/TrailRoute.vue';
@@ -84,7 +75,6 @@ export default {
     LTileLayer,
     LControlLayers,
     LCircleMarker,
-    MapTrail,
     Registration,
     MapObservation,
     TrailRoute,

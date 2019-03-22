@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="showObservation">
     <l-geo-json
       v-if="showObservedPoints"
       :geojson="geojson"/>
@@ -28,12 +28,12 @@
       </l-popup>
     </l-circle-marker>
 
-    <l-circle-marker
+    <!-- <l-circle-marker
       v-if="showObservedPoints"
       :lat-lng="lookout"
       :radius="10"
       color="red"
-    />
+    /> -->
 
     <registration
       v-if="open"
@@ -80,6 +80,10 @@ export default {
       type: String,
       default: 'yellow',
     },
+    analysisView: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -108,7 +112,17 @@ export default {
   },
   computed: {
     showObservedPoints() {
-      return this.$store.state.analysis.settings.showObservedPoints;
+      return !this.analysisView || this.$store.state.analysis.settings.showObservedPoints;
+    },
+    showObservation() {
+      if (!this.analysisView) {
+        return true;
+      }
+      const settings = this.$store.state.analysis.settings;
+      if (this.observation.isSheep) {
+        return settings.showObservations;
+      }
+      return settings.showPredators;
     },
   },
   methods: {

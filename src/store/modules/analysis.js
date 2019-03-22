@@ -20,6 +20,7 @@ export default {
       showObservedPoints: false,
       showDensity: false,
       showRoute: true,
+      showPredators: false,
     },
     selectedCase: {
       presetTrips: false,
@@ -78,6 +79,9 @@ export default {
       commit('resetCoords');
       commit('setShowRoute', showRoute);
       commit('calculateBounds');
+    },
+    setShowPredators({ commit, }, showPredators) {
+      commit('setShowPredators', showPredators);
     },
   },
   mutations: {
@@ -141,6 +145,7 @@ export default {
         showObservedPoints: true,
         showDensity: false,
         showRoute: true,
+        showPredators: false,
       };
     },
     setSelectedCase(state, _case) {
@@ -165,6 +170,9 @@ export default {
         state.minLng = Math.min(state.minLng, bounds.minLng);
         state.maxLng = Math.max(state.maxLng, bounds.maxLng);
       });
+    },
+    setShowPredators(state, showPredators) {
+      state.settings.showPredators = showPredators;
     },
   },
 };

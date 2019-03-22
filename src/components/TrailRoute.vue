@@ -1,31 +1,39 @@
 
 <template>
   <div>
-    <l-circle-marker
-      :lat-lng="startPosition"
-      :radius="10"
-      :color="color"
-      :fill-opacity="0.4"
-      :fill-color="color"
-    >
-      <l-popup>
-        Startposisjon
-      </l-popup>
-    </l-circle-marker>
-    <l-circle-marker
-      :lat-lng="endPosition"
-      :radius="10"
-      :color="color"
-      :fill-color="color"
-      :fill-opacity="1"
-    >
-      <l-popup>
-        Sluttposisjon
-      </l-popup>
-    </l-circle-marker>
-    <l-geo-json
-      :geojson="geoJsonRoute"
-      :options-style="styles"/>
+    <div v-if="positions.length > 1">
+      <l-circle-marker
+        :lat-lng="startPosition"
+        :radius="10"
+        :color="color"
+        :fill-opacity="0.4"
+        :fill-color="color"
+      >
+        <l-popup>
+          Startposisjon
+        </l-popup>
+      </l-circle-marker>
+      <l-circle-marker
+        :lat-lng="endPosition"
+        :radius="10"
+        :color="color"
+        :fill-color="color"
+        :fill-opacity="1"
+      >
+        <l-popup>
+          Sluttposisjon
+        </l-popup>
+      </l-circle-marker>
+      <l-geo-json
+        :geojson="geoJsonRoute"
+        :options-style="styles"/>
+    </div>
+    <div v-else-if="positions.length === 1">
+      <map-trail
+        :latitude="positions[0].lat"
+        :longitude="positions[0].lng"
+        :color="color"/>
+    </div>
   </div>
 </template>
 
@@ -33,6 +41,7 @@
 import {
   LGeoJson, LCircleMarker, LPopup,
 } from 'vue2-leaflet';
+import MapTrail from '@/components/MapTrail.vue';
 
 export default {
   name: 'TrailRoute',
@@ -40,6 +49,7 @@ export default {
     LCircleMarker,
     LGeoJson,
     LPopup,
+    MapTrail,
   },
   props: {
     positions: {

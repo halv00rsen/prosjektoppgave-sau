@@ -45,6 +45,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showPredators: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     openCase() {
@@ -68,6 +72,7 @@ export default {
       if (this.initialTrips) {
         this.$store.dispatch('analysis/setInitialTrips', this.initialTrips);
       }
+      this.$store.dispatch('analysis/setShowPredators', this.showPredators);
       this.$router.push('overview');
     },
   },

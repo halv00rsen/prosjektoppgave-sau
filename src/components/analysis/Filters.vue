@@ -21,7 +21,6 @@
         variable="showRoute"
         text="Vis turrute"/>
       <list-switch
-        :disabled="true"
         dispatch="setShowPredators"
         variable="showPredators"
         text="Vi rovdyrobservasjoner"/>

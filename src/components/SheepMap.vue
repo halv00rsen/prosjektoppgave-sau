@@ -31,11 +31,9 @@
           :observation="observation"
           :index="index"/>
 
-        <map-trail
-          v-for="(pos, index) of currentTrip.positions"
-          :key="'trai-' + index"
-          :latitude="pos.lat"
-          :longitude="pos.lng"/>
+        <trail-route
+          :positions="currentTrip.positions"
+        />
       </div>
       <div v-else-if="analysisView">
         <div
@@ -91,7 +89,7 @@ import {
 
 import TileDatabase from '@/database/tiledatabase';
 import MapObservation from '@/components/MapObservation.vue';
-import MapTrail from '@/components/MapTrail.vue';
+import TrailRoute from '@/components/TrailRoute.vue';
 
 export default {
   name: 'SheepMap',
@@ -102,8 +100,8 @@ export default {
     LTooltip,
     LGeoJson,
     MapObservation,
-    MapTrail,
     LControlAttribution,
+    TrailRoute,
   },
   props: {
     useDownload: {

@@ -14,6 +14,7 @@
         :initial-trips="item.initialTrips"
         :header="item.header"
         :show-observed-points="item.showObservedPoints"
+        :show-predators="item.showPredators"
       />
     </md-list>
   </div>
@@ -62,6 +63,7 @@ export default {
           initialTrips: [this.trips[this.trips.length - 1]],
           header: 'Siste tur gjennomført',
           showObservedPoints: true,
+          showPredators: true,
         },
         {
           text: 'Egendefinert oppsett',
