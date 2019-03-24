@@ -1,11 +1,12 @@
 
 <template>
   <l-circle-marker
+    v-if="showObservation"
     :lat-lng="observed"
     :radius="10"
     :fill="true"
     :fill-opacity="1"
-    :fill-color="observation.isSheep ? 'white' : 'black'"
+    :fill-color="observation.isSheep ? 'white' : 'gray'"
     :color="color">
     <l-popup>
       <div v-if="observation.isSheep">
@@ -49,6 +50,15 @@ export default {
     return {
       observed: [this.observation.position.lat, this.observation.position.lng],
     };
+  },
+  computed: {
+    showObservation() {
+      const settings = this.$store.state.analysis.settings;
+      if (this.observation.isSheep) {
+        return settings.showObservations;
+      }
+      return settings.showPredators;
+    },
   },
 };
 </script>

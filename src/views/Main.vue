@@ -34,7 +34,7 @@
         style="background-color: #eaf1fc;"
         @click="openMock()"
       >
-        Lag testdata
+        Generer tur manuelt
       </md-button>
     </center>
   </div>

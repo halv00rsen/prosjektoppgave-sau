@@ -13,25 +13,20 @@ export default class ApplicationDatabase {
   }
 
   getAllTrips(callback) {
-    const datas = [];
+    const data = [];
     return this.database.iterate((value) => {
-      const data = JSON.parse(value);
-      const trip = new Trip(data.id, data.name, data.startTime);
-      trip.endTime = data.endTime;
-      trip.done = data.done;
-      for (let observation of data.observations) {
-        observation.numSheep = Number(observation.numSheep);
-        observation.numLambs = Number(observation.numLambs);
-        trip.addObservation(observation);
+      const tripJson = JSON.parse(value);
+      try {
+        const trip = this._loadTrip(tripJson);
+        data.push(trip);
+      } catch {
+        this.deleteTrip(tripJson.id);
       }
-      trip.positions = data.positions;
-      trip.calculateBounds();
-      datas.push(trip);
     }).then(() => {
-      datas.sort((a, b) => {
+      data.sort((a, b) => {
         return a.startTime - b.startTime;
       });
-      callback(datas);
+      callback(data);
     });
   }
 
@@ -43,6 +38,20 @@ export default class ApplicationDatabase {
 
   deleteTrip(id) {
     this.database.removeItem(id);
+  }
+
+  _loadTrip(data) {
+    const trip = new Trip(data.id, data.name, data.startTime);
+    trip.endTime = data.endTime;
+    trip.done = data.done;
+    for (let observation of data.observations) {
+      observation.numSheep = observation.numSheep;
+      observation.numLambs = observation.numLambs;
+      trip.addObservation(observation);
+    }
+    trip.positions = data.positions;
+    trip.calculateBounds();
+    return trip;
   }
 
 }
