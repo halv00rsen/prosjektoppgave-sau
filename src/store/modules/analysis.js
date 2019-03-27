@@ -21,6 +21,8 @@ export default {
       showDensity: false,
       showRoute: true,
       showPredators: false,
+      showNumInPoint: true,
+      groupTrips: true,
     },
     selectedCase: {
       presetTrips: false,
@@ -71,6 +73,9 @@ export default {
     setShowDensity({ commit, }, showDensity) {
       commit('setShowDensity', showDensity);
     },
+    setShowNumInPoint({ commit, }, showNumInPoint){
+      commit('setShowNumInPoint', showNumInPoint);
+    },
     reset({ commit, }) {
       commit('resetCoords');
       commit('reset');
@@ -82,6 +87,9 @@ export default {
     },
     setShowPredators({ commit, }, showPredators) {
       commit('setShowPredators', showPredators);
+    },
+    setGroupTrips({ commit, }, groupTrips) {
+      commit('setGroupTrips', groupTrips);
     },
   },
   mutations: {
@@ -146,6 +154,8 @@ export default {
         showDensity: false,
         showRoute: true,
         showPredators: false,
+        showNumInPoint: true,
+        groupTrips: true,
       };
     },
     setSelectedCase(state, _case) {
@@ -173,6 +183,12 @@ export default {
     },
     setShowPredators(state, showPredators) {
       state.settings.showPredators = showPredators;
+    },
+    setShowNumInPoint(state, showNumInPoint) {
+      state.settings.showNumInPoint = showNumInPoint;
+    },
+    setGroupTrips(state, groupTrips) {
+      state.settings.groupTrips = groupTrips;
     },
   },
 };

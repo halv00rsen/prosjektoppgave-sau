@@ -1,0 +1,35 @@
+<template>
+  <div>
+    <h3>Endre data på en tur</h3>
+    <md-list>
+      <md-list-item
+        v-for="trip of trips"
+        :key="'trip-' + trip.id"
+        @click="openTrip(trip)">
+
+        {{ trip.name }}
+      </md-list-item>
+    </md-list>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'EditTrip',
+  computed: {
+    trips() {
+      return this.$store.state.trip.all;
+    },
+  },
+  methods: {
+    openTrip(trip) {
+      this.$store.dispatch('mock/setInitialTrip', trip);
+      this.$router.push({ name: 'mock', });
+    },
+  },
+};
+</script>
+
+<style>
+
+</style>

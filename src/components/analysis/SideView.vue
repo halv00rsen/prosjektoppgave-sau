@@ -26,7 +26,7 @@
       </md-tab>
       <md-tab
         id="tab-settings-view"
-        md-label="Instillinger">
+        md-label="Innstillinger">
         <div class="side-view-content md-scrollbar">
           <Settings/>
         </div>

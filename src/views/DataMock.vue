@@ -267,6 +267,21 @@ export default {
     observations() {
       return this.$store.state.mock.observations;
     },
+    trip() {
+      return this.$store.state.mock.initialTrip;
+    },
+  },
+  created() {
+    if (this.trip !== undefined) {
+      this.form.tripName = this.trip.name;
+      const startTime = new Date(this.trip.startTime);
+      this.form.date = startTime;
+      this.form.startHour = startTime.getHours();
+      this.form.startMinute = startTime.getMinutes();
+      const endTime = new Date(this.trip.endTime);
+      this.form.endHour = endTime.getHours();
+      this.form.endMinute = endTime.getMinutes();
+    }
   },
   beforeDestroy() {
     this.resetData();

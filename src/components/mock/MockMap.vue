@@ -125,8 +125,6 @@ export default {
       this.resetObservation();
     },
   },
-  mounted() {
-  },
   methods: {
     centerUpdated(center) {
       this.center = center;

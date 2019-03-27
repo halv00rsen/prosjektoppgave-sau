@@ -10,7 +10,6 @@
       >
         Innsamling
       </md-button>
-      <br>
       <md-button
         v-if="canAnalyse"
         :md-ripple="false"
@@ -28,6 +27,7 @@
       >
         Analyse
       </md-button>
+      <br>
       <md-button
         :md-ripple="false"
         class="md-raised"
@@ -35,6 +35,14 @@
         @click="openMock()"
       >
         Generer tur manuelt
+      </md-button>
+      <md-button
+        :md-ripple="false"
+        class="md-raised"
+        style="background-color: #eaf1fc;"
+        @click="editTrip()"
+      >
+        Gjør endringer på tur
       </md-button>
     </center>
   </div>
@@ -57,6 +65,9 @@ export default {
     },
     openMock() {
       this.$router.push({ name: 'mock', });
+    },
+    editTrip() {
+      this.$router.push({ name: 'editTrip', });
     },
   },
 };

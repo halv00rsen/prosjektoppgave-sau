@@ -3,6 +3,7 @@
   <l-map
     ref="map"
     :zoom.sync="zoom"
+    :bounds.sync="localBounds"
     :center="center"
     :options="mapOptions"
     :max-zoom="18"
@@ -34,13 +35,27 @@
         v-for="trip of trips"
         :key="'trip-' + trip.id">
 
-        <map-observation
-          v-for="(observation, index) of trip.observations"
-          :key="'observation-' + trip.id + index"
-          :observation="observation"
-          :observation-color="trip.color"
-          :clickable="false"
-          :analysis-view="true"
+        <div
+          v-if="!settings.groupTrips || showObservationOfTrip(trip.boundsTotal)">
+          <map-observation
+            v-for="(observation, index) of trip.observations"
+            :key="'observation-' + trip.id + index"
+            :observation="observation"
+            :observation-color="trip.color"
+            :clickable="false"
+            :analysis-view="true"
+          />
+          <div v-if="showRoute">
+            <trail-route
+              :positions="trip.positions"
+              :color="trip.color"
+            />
+          </div>
+        </div>
+        <trip-point
+          v-else
+          :trip="trip"
+          :zoom-map="zoomMap"
         />
       </div>
     </div>
@@ -61,17 +76,15 @@
           />
         </div>
       </v-marker-cluster>
-    </div>
-
-    <div v-if="showRoute">
-      <div
-        v-for="trip of trips"
-        :key="'trip-' + trip.id">
-
-        <trail-route
-          :positions="trip.positions"
-          :color="trip.color"
-        />
+      <div v-if="showRoute">
+        <div
+          v-for="trip of trips"
+          :key="'trip-trail-' + trip.id">
+          <trail-route
+            :positions="trip.positions"
+            :color="trip.color"
+          />
+        </div>
       </div>
     </div>
 
@@ -97,6 +110,7 @@ import ClusterObservation from '@/components/map/ClusterObservation.vue';
 import Vue2LeafletMarkercluster from '@/components/map/Vue2LeafletMarkercluster.vue';
 import MapTrail from '@/components/MapTrail.vue';
 import TrailRoute from '@/components/TrailRoute.vue';
+import TripPoint from '@/components/map/TripPoint.vue';
 
 export default {
   name: 'MainMap',
@@ -113,6 +127,7 @@ export default {
     MapTrail,
     TrailRoute,
     LControlScale,
+    TripPoint,
   },
   data: () => ({
     urls: [
@@ -137,6 +152,7 @@ export default {
       animateAddingMarkers: false,
     },
     mapOptions: {},
+    localBounds: undefined,
   }),
   computed: {
     trips() {
@@ -198,8 +214,10 @@ export default {
     });
   },
   methods: {
-    zoomMap() {
-      if (this.bounds) {
+    zoomMap(bounds) {
+      if (bounds) {
+        this.$refs.map.mapObject.fitBounds(bounds);
+      } else if (this.bounds) {
         this.$refs.map.mapObject.fitBounds(this.bounds);
       }
     },
@@ -208,6 +226,19 @@ export default {
     },
     clickCluster() {
       console.log('cluster');
+    },
+    showObservationOfTrip(tripBounds) {
+      if (!this.localBounds) {
+        return true;
+      }
+      const mapLatVal = Math.abs(
+        this.localBounds._northEast.lat - this.localBounds._southWest.lat);
+      const mapLngVal = Math.abs(
+        this.localBounds._northEast.lng - this.localBounds._southWest.lng);
+      const tripLatVal = Math.abs(tripBounds.maxLat - tripBounds.minLat);
+      const tripLngVal = Math.abs(tripBounds.maxLng - tripBounds.minLng);
+      const factor = 7;
+      return tripLatVal * factor > mapLatVal && tripLngVal * factor > mapLngVal;
     },
   },
 };

@@ -12,7 +12,7 @@
         variable="showObservedPoints"
         text="Vis observasjonspunkter"/>
       <list-switch
-        :disabled="showObservedPoints"
+        :disabled="showObservedPoints || settings.groupTrips"
         dispatch="setShowDensity"
         variable="showDensity"
         text="Vis tetthet"/>
@@ -23,7 +23,16 @@
       <list-switch
         dispatch="setShowPredators"
         variable="showPredators"
-        text="Vi rovdyrobservasjoner"/>
+        text="Vis rovdyrobservasjoner"/>
+      <list-switch
+        dispatch="setShowNumInPoint"
+        variable="showNumInPoint"
+        text="Vis antall dyr observert i punkt"/>
+      <list-switch
+        :disabled="showDensity"
+        dispatch="setGroupTrips"
+        variable="groupTrips"
+        text="Vis tur som punkt ved lav zoom"/>
     </md-list>
   </md-content>
 </template>
@@ -37,12 +46,16 @@ export default {
     ListSwitch,
   },
   computed: {
+    settings() {
+      return this.$store.state.analysis.settings;
+    },
     showObservedPoints() {
       return this.$store.state.analysis.settings.showObservedPoints;
     },
     showDensity() {
       return this.$store.state.analysis.settings.showDensity;
     },
+
   },
 };
 </script>

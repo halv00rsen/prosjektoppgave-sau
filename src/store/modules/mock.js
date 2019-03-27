@@ -10,6 +10,7 @@ export default {
     positions: [],
     observations: [],
     currentClick: 1,
+    initialTrip: undefined,
   },
   getters: {
 
@@ -51,6 +52,9 @@ export default {
       });
       return Promise.resolve(trip);
     },
+    setInitialTrip({ commit, }, trip) {
+      commit('setInitialTrip', trip);
+    },
   },
   mutations: {
     addPosition(state, pos) {
@@ -60,6 +64,7 @@ export default {
       state.positions = [];
       state.observations = [];
       state.currentClick = 1;
+      state.initialTrip = undefined;
     },
     setCurrentClick(state, value) {
       state.currentClick = value;
@@ -72,6 +77,11 @@ export default {
     },
     removeObservation(state, index) {
       state.observations.splice(index, 1);
+    },
+    setInitialTrip(state, trip) {
+      state.initialTrip = trip;
+      state.positions = trip.positions.slice();
+      state.observations = trip.observations.slice();
     },
   },
 };

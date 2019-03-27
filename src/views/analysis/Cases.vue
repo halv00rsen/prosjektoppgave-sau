@@ -15,6 +15,7 @@
         :header="item.header"
         :show-observed-points="item.showObservedPoints"
         :show-predators="item.showPredators"
+        :group-trips="item.groupTrips"
       />
     </md-list>
   </div>

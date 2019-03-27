@@ -31,6 +31,25 @@ export default class Trip {
     this.setCoordinates(observation.position, this.boundsObservations);
   }
 
+  getCenter() {
+    return {
+      lat: (this.boundsTotal.maxLat + this.boundsTotal.minLat) / 2,
+      lng: (this.boundsTotal.maxLng + this.boundsTotal.minLng) / 2,
+    };
+  }
+
+  getBounds() {
+    return [
+      [
+        this.boundsTotal.minLat,
+        this.boundsTotal.minLng,
+      ], [
+        this.boundsTotal.maxLat,
+        this.boundsTotal.maxLng,
+      ],
+    ];
+  }
+
   addPosition(position) {
     if (this.lastPosition !== undefined) {
       console.log('Distance: ' + this.lastPosition.distanceTo(position));

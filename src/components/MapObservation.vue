@@ -2,7 +2,8 @@
   <div v-if="showObservation">
     <l-geo-json
       v-if="showObservedPoints"
-      :geojson="geojson"/>
+      :geojson="geojson"
+    />
 
     <l-circle-marker
       :lat-lng="observed"
@@ -11,6 +12,7 @@
       :fill="true"
       :fill-opacity="1"
       :fill-color="observation.isSheep ? 'white' : 'gray'"
+      pane="shadowPane"
       @click="openObservation">
       <l-popup>
         <div v-if="observation.isSheep">
@@ -26,14 +28,17 @@
           <div>Antall: {{ observation.numAnimals }}</div>
         </div>
       </l-popup>
+      <l-tooltip
+        v-if="showNumInPoint"
+        :options="tooltipOptions">
+        <div v-if="observation.isSheep">
+          {{ observation.numSheep }}
+        </div>
+        <div v-else>
+          {{ observation.numAnimals }}
+        </div>
+      </l-tooltip>
     </l-circle-marker>
-
-    <!-- <l-circle-marker
-      v-if="showObservedPoints"
-      :lat-lng="lookout"
-      :radius="10"
-      color="red"
-    /> -->
 
     <registration
       v-if="open"
@@ -47,7 +52,7 @@
 
 <script>
 import {
-  LGeoJson, LCircleMarker, LPopup,
+  LGeoJson, LCircleMarker, LPopup, LTooltip,
 } from 'vue2-leaflet';
 import Registration from '@/components/Registration.vue';
 
@@ -58,6 +63,7 @@ export default {
     LCircleMarker,
     Registration,
     LPopup,
+    LTooltip,
   },
   props: {
     observation: {
@@ -108,6 +114,11 @@ export default {
           },
         ],
       },
+      tooltipOptions: {
+        permanent: true,
+        direction: 'center',
+        className: 'animal-labels',
+      },
     };
   },
   computed: {
@@ -123,6 +134,9 @@ export default {
         return settings.showObservations;
       }
       return settings.showPredators;
+    },
+    showNumInPoint() {
+      return this.$store.state.analysis.settings.showNumInPoint;
     },
   },
   methods: {
@@ -157,5 +171,9 @@ export default {
 </script>
 
 <style>
-
+.leaflet-tooltip.animal-labels {
+  background-color: transparent;
+  border: transparent;
+  box-shadow: none;
+}
 </style>

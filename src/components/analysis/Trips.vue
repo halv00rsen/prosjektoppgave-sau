@@ -2,7 +2,7 @@
 <template>
   <md-content>
     <md-list>
-      <md-list-item>
+      <md-list-item v-if="!fixedTrips">
         <md-checkbox
           v-model="setAll"/>
         <span class="md-list-item-text">
@@ -16,7 +16,9 @@
         <md-checkbox
           v-model="selectedTrips"
           :value="item"
-          :change="updateTrips()"/>
+          :change="updateTrips()"
+          :disabled="fixedTrips"
+        />
         <span
           :style="'color: ' + item.color"
           class="md-list-item-text">
@@ -55,6 +57,9 @@ export default {
         }
       },
     },
+    fixedTrips() {
+      return this.$store.state.analysis.selectedCase.fixedTrips;
+    },
   },
   created() {
     if (this.selectedCase.presetTrips) {
@@ -78,4 +83,3 @@ export default {
   cursor: pointer;
 }
 </style>
-

@@ -49,6 +49,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    groupTrips: {
+      type: Boolean,
+      default: true,
+    },
   },
   methods: {
     openCase() {
@@ -65,8 +69,10 @@ export default {
       if (this.showDensity) {
         this.$store.dispatch('analysis/setShowDensity', this.showDensity);
         this.$store.dispatch('analysis/setShowObservedPoints', false);
+        this.$store.dispatch('analysis/setGroupTrips', false);
       } else {
         this.$store.dispatch('analysis/setShowObservedPoints', this.showObservedPoints);
+        this.$store.dispatch('analysis/setGroupTrips', this.groupTrips);
       }
       this.$store.dispatch('analysis/setShowRoute', this.showRoute);
       if (this.initialTrips) {

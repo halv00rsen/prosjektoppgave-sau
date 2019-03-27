@@ -15,6 +15,7 @@ import TripView from './views/TripView.vue';
 import Analysis from './views/Analysis.vue';
 import DataMock from './views/DataMock.vue';
 import Main from './views/Main.vue';
+import EditTrip from './views/EditTrip.vue';
 
 Vue.use(Router);
 
@@ -127,6 +128,11 @@ const router = new Router({
       path: '/mock',
       component: DataMock,
       name: 'mock',
+    },
+    {
+      path: '/editTrip',
+      component: EditTrip,
+      name: 'editTrip',
     },
     {
       path: '*',

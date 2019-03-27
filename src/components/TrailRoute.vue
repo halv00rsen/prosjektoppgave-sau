@@ -4,10 +4,11 @@
     <div v-if="positions.length > 1">
       <l-circle-marker
         :lat-lng="startPosition"
-        :radius="10"
+        :radius="5"
         :color="color"
         :fill-opacity="0.4"
         :fill-color="color"
+        pane="shadowPane"
       >
         <l-popup>
           Startposisjon
@@ -15,10 +16,11 @@
       </l-circle-marker>
       <l-circle-marker
         :lat-lng="endPosition"
-        :radius="10"
+        :radius="5"
         :color="color"
         :fill-color="color"
         :fill-opacity="1"
+        pane="shadowPane"
       >
         <l-popup>
           Sluttposisjon
@@ -26,7 +28,8 @@
       </l-circle-marker>
       <l-geo-json
         :geojson="geoJsonRoute"
-        :options-style="styles"/>
+        :options-style="styles"
+      />
     </div>
     <div v-else-if="positions.length === 1">
       <map-trail
