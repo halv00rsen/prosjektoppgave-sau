@@ -14,7 +14,7 @@
       <md-list-item>
         Antall observasjoner i området: {{ data.numObservations }}
       </md-list-item>
-      <md-list-item>
+      <md-list-item v-if="data.numPredators !== 0">
         <span class="md-list-item-text">
           Rovdyr observert:
           <span

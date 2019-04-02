@@ -22,12 +22,22 @@
         <div>Antall: {{ observation.numAnimals }}</div>
       </div>
     </l-popup>
+    <l-tooltip
+      v-if="showNumInPoint"
+      :options="tooltipOptions">
+      <div v-if="observation.isSheep">
+        {{ observation.numSheep }}
+      </div>
+      <div v-else>
+        {{ observation.numAnimals }}
+      </div>
+    </l-tooltip>
   </l-circle-marker>
 </template>
 
 <script>
 import {
-  LCircleMarker, LPopup,
+  LCircleMarker, LPopup, LTooltip,
 } from 'vue2-leaflet';
 
 export default {
@@ -35,6 +45,7 @@ export default {
   components: {
     LCircleMarker,
     LPopup,
+    LTooltip,
   },
   props: {
     color: {
@@ -49,6 +60,11 @@ export default {
   data() {
     return {
       observed: [this.observation.position.lat, this.observation.position.lng],
+      tooltipOptions: {
+        permanent: true,
+        direction: 'center',
+        className: 'animal-labels',
+      },
     };
   },
   computed: {
@@ -58,6 +74,9 @@ export default {
         return settings.showObservations;
       }
       return settings.showPredators;
+    },
+    showNumInPoint() {
+      return this.$store.state.analysis.settings.showNumInPoint;
     },
   },
 };

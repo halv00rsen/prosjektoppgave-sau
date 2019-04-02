@@ -2,11 +2,14 @@
 <template>
   <div>
     <l-polygon
-      v-if="showPolygon"
       :lat-lngs="trip.positions"
       :color="trip.color"
+      :fill-opacity="fillOpacityPolygon"
+      @mouseover="enter()"
+      @mouseleave="leave()"
+      @click="zoomMap(trip.getBounds())"
     />
-    <l-circle-marker
+    <!-- <l-circle-marker
       :lat-lng="trip.getCenter()"
       :radius="10"
       :color="trip.color"
@@ -16,7 +19,7 @@
       @click="zoomMap(trip.getBounds())"
       @mouseover="enter()"
       @mouseleave="leave()"
-    />
+    /> -->
   </div>
 </template>
 
@@ -46,14 +49,17 @@ export default {
     return {
       polygon: undefined,
       showPolygon: false,
+      fillOpacityPolygon: 0.2,
     };
   },
   methods: {
     leave() {
       this.showPolygon = false;
+      this.fillOpacityPolygon = 0.2;
     },
     enter() {
       this.showPolygon = true;
+      this.fillOpacityPolygon = 0.7;
     },
   },
 };

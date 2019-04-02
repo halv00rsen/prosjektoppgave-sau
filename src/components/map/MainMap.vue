@@ -237,7 +237,7 @@ export default {
         this.localBounds._northEast.lng - this.localBounds._southWest.lng);
       const tripLatVal = Math.abs(tripBounds.maxLat - tripBounds.minLat);
       const tripLngVal = Math.abs(tripBounds.maxLng - tripBounds.minLng);
-      const factor = 7;
+      const factor = 8.5;
       return tripLatVal * factor > mapLatVal && tripLngVal * factor > mapLngVal;
     },
   },
