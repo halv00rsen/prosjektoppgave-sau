@@ -25,6 +25,7 @@
 import moment from 'moment';
 
 import Case from '@/components/analysis/Case.vue';
+// import MainMap from '@/components/'
 
 export default {
   name: 'Cases',
@@ -65,6 +66,14 @@ export default {
           header: 'Siste tur gjennomført',
           showObservedPoints: true,
           showPredators: true,
+        },
+        {
+          text: 'Se alle turer i ett gitt område fra det siste året',
+          header: 'Turer i et definert område det siste året',
+          presetTrips: true,
+          startDate: moment().startOf('year'),
+          showRoute: true,
+
         },
         {
           text: 'Egendefinert oppsett',

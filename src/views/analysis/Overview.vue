@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="md-layout-item md-size-100">
-        <main-map/>
+        <analysis-map/>
       </div>
     </div>
     <div class="md-layout-item md-large-size-30 md-medium-size-40 md-small-size-50 md-xsmall-size-100 analysis-column">
@@ -72,13 +72,13 @@
 import moment from 'moment';
 
 import SideView from '@/components/analysis/SideView.vue';
-import MainMap from '@/components/map/MainMap.vue';
+import AnalysisMap from '@/components/map/AnalysisMap.vue';
 
 export default {
   name: 'Overview',
   components: {
     SideView,
-    MainMap,
+    AnalysisMap,
   },
   data: () => ({
     startDate: undefined,

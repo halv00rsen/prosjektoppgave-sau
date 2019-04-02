@@ -53,6 +53,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    lockZoom: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     openCase() {
@@ -79,6 +83,7 @@ export default {
         this.$store.dispatch('analysis/setInitialTrips', this.initialTrips);
       }
       this.$store.dispatch('analysis/setShowPredators', this.showPredators);
+      this.$store.dispatch('analysis/setLockZoom', this.lockZoom);
       this.$router.push('overview');
     },
   },

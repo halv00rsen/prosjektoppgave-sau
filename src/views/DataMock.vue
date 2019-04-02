@@ -231,7 +231,7 @@ import {
   required,
 } from 'vuelidate/lib/validators';
 
-import MockMap from '@/components/mock/MockMap.vue';
+import MockMap from '@/components/map/MockMap.vue';
 
 export default {
   name: 'DataMock',

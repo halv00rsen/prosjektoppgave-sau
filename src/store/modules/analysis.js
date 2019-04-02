@@ -23,6 +23,7 @@ export default {
       showPredators: false,
       showNumInPoint: true,
       groupTrips: true,
+      lockZoom: false,
     },
     selectedCase: {
       presetTrips: false,
@@ -91,6 +92,9 @@ export default {
     setGroupTrips({ commit, }, groupTrips) {
       commit('setGroupTrips', groupTrips);
     },
+    setLockZoom({ commit, }, lockZoom) {
+      commit('setLockZoom', lockZoom);
+    },
   },
   mutations: {
     setDefaultTrips(state, trips) {
@@ -156,6 +160,7 @@ export default {
         showPredators: false,
         showNumInPoint: true,
         groupTrips: true,
+        lockZoom: false,
       };
     },
     setSelectedCase(state, _case) {
@@ -189,6 +194,9 @@ export default {
     },
     setGroupTrips(state, groupTrips) {
       state.settings.groupTrips = groupTrips;
+    },
+    setLockZoom(state, lockZoom) {
+      state.settings.lockZoom = lockZoom;
     },
   },
 };

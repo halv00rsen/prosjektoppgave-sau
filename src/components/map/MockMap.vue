@@ -1,34 +1,6 @@
 <template>
-  <l-map
-    ref="map"
-    :zoom.sync="zoom"
-    :center="center"
-    :options="mapOptions"
-    :max-zoom="18"
-    :min-zoom="4"
-    style="height: 70vh;"
-    @update:center="centerUpdated"
-    @click="clickMap($event)"
-  >
-    <l-control-scale
-      :imperial="false"
-      position="bottomleft"
-    />
-    <l-control-layers
-      :collapsed="false"
-      :sort-layers="true"
-      position="topright"
-    />
-    <l-tile-layer
-      v-for="url in urls"
-      :key="url.visual"
-      :name="url.visual"
-      :visible="true"
-      :url="url.url"
-      :attribution="attribution"
-      layer-type="base"
-    />
-
+  <main-map
+    @clickMap="clickMap($event)">
     <trail-route
       :positions="positions"
     />
@@ -56,14 +28,15 @@
       :clickable="false"
       :mock="true"
     />
-  </l-map>
+  </main-map>
 </template>
 
 <script>
 import {
-  LMap, LTileLayer, LControlLayers, LCircleMarker, LControlScale,
+  LCircleMarker,
 } from 'vue2-leaflet';
 
+import MainMap from '@/components/map/MainMap.vue';
 import Registration from '@/components/Registration.vue';
 import MapObservation from '@/components/MapObservation.vue';
 import TrailRoute from '@/components/TrailRoute.vue';
@@ -71,37 +44,14 @@ import TrailRoute from '@/components/TrailRoute.vue';
 export default {
   name: 'MockMap',
   components: {
-    LMap,
-    LTileLayer,
-    LControlLayers,
-    LCircleMarker,
     Registration,
     MapObservation,
     TrailRoute,
-    LControlScale,
-  },
-  props: {
-
+    MainMap,
+    LCircleMarker,
   },
   data () {
     return {
-      zoom: 5,
-      center: {
-        lat: 65,
-        lng: 18,
-      },
-      urls: [
-        {
-          url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=norges_grunnkart_graatone&zoom={z}&x={x}&y={y}',
-          visual: 'Gråtone',
-        },
-        {
-          url: 'https://opencache.statkart.no/gatekeeper/gk/gk.open_gmaps?layers=topo4&zoom={z}&x={x}&y={y}',
-          visual: 'Terrengkart',
-        },
-      ],
-      attribution: '&copy; <a href="https://www.kartverket.no/">Kartverket</a>',
-      mapOptions: {},
       observation: {
         position: undefined,
         observedPosition: undefined,
@@ -126,9 +76,6 @@ export default {
     },
   },
   methods: {
-    centerUpdated(center) {
-      this.center = center;
-    },
     clickMap(event) {
       if (this.currentClick === 4) {
         return;
