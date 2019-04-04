@@ -24,6 +24,7 @@ export default {
       showNumInPoint: true,
       groupTrips: true,
       lockZoom: false,
+      showRectangle: false,
     },
     selectedCase: {
       presetTrips: false,
@@ -95,6 +96,12 @@ export default {
     setLockZoom({ commit, }, lockZoom) {
       commit('setLockZoom', lockZoom);
     },
+    selectTripsInBound({ commit, }, data) {
+      commit('selectTripsInBound', data);
+    },
+    setShowRectangle({ commit, }, showRectangle) {
+      commit('setShowRectangle', showRectangle);
+    },
   },
   mutations: {
     setDefaultTrips(state, trips) {
@@ -161,6 +168,7 @@ export default {
         showNumInPoint: true,
         groupTrips: true,
         lockZoom: false,
+        showRectangle: false,
       };
     },
     setSelectedCase(state, _case) {
@@ -197,6 +205,18 @@ export default {
     },
     setLockZoom(state, lockZoom) {
       state.settings.lockZoom = lockZoom;
+    },
+    selectTripsInBound(state, data) {
+      state.filteredTrips = state.filteredTrips.filter((elem) => {
+        if (data.inclusive) {
+          return elem.partOfTripInBound(data.bounds);
+        } else {
+          return elem.wholeTripInBound(data.bounds);
+        }
+      });
+    },
+    setShowRectangle(state, showRectangle) {
+      state.settings.showRectangle = showRectangle;
     },
   },
 };

@@ -65,6 +65,10 @@ export default {
     if (this.selectedCase.presetTrips) {
       this.selectedTrips = this.trips.slice();
     }
+    if (this.trips.length === 0) {
+      this.$store.dispatch('application/setMessage', 'Fant ingen turer i område eller tidsrom');
+      // this.$router.push({ name: 'cases', });
+    }
   },
   methods: {
     updateTrips() {

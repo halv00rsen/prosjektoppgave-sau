@@ -80,7 +80,10 @@ export default {
       lng: 18,
     },
     attribution: '&copy; <a href="https://www.kartverket.no/">Kartverket</a>',
-    mapOptions: {},
+    mapOptions: {
+      minZoom: undefined,
+      maxBounds: undefined,
+    },
     localBounds: undefined,
   }),
   computed: {
@@ -123,7 +126,9 @@ export default {
         this.zoomMap();
       }
     },
-
+    localBounds() {
+      this.$emit('update:bounds', this.localBounds);
+    },
   },
   mounted() {
     this.$nextTick(() => {
@@ -137,6 +142,13 @@ export default {
         return new L.Control.ZoomButton(opts);
       };
       L.control.zoomButton({ position: 'bottomright', }).addTo(map);
+      if (this.settings.lockZoom) {
+        // this.mapOptions.maxBounds = L.latLngBounds(
+        //   L.latLng(this.bounds[0][0], this.bounds[0][1]),
+        //   L.latLng(this.bounds[1][0], this.bounds[1][1]),
+        // );
+        this.mapOptions.minZoom = map.getBoundsZoom(this.bounds);
+      }
     });
   },
   methods: {

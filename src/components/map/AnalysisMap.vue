@@ -23,6 +23,13 @@
               :color="trip.color"
             />
           </div>
+          <l-rectangle
+            v-if="settings.showRectangle"
+            :fill="false"
+            :color="trip.color"
+            :bounds="getRectangle(trip.boundsTotal)"
+            dash-array="10,7"
+          />
         </div>
         <trip-point
           v-else
@@ -62,6 +69,8 @@
 </template>
 
 <script>
+import { LRectangle, } from 'vue2-leaflet';
+
 import MainMap from '@/components/map/MainMap.vue';
 import MapObservation from '@/components/MapObservation.vue';
 import ClusterObservation from '@/components/map/ClusterObservation.vue';
@@ -80,6 +89,7 @@ export default {
     MapTrail,
     TrailRoute,
     TripPoint,
+    LRectangle,
   },
   data: () => ({
     clusterOptions: {
@@ -113,6 +123,18 @@ export default {
     },
     zoomMap(bounds) {
       return this.$refs.mainmap.zoomMap(bounds);
+    },
+    getRectangle(bound) {
+      return [
+        [bound.minLat, bound.minLng],
+        [bound.maxLat, bound.maxLng],
+      ];
+    },
+    getStyle(color) {
+      return {
+        color,
+        weight: 2,
+      };
     },
   },
 };

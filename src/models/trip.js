@@ -82,8 +82,27 @@ export default class Trip {
   }
 
   positionInTripArea(pos) {
-    return this.minLat <= pos.lat && this.maxLat >= pos.lat &&
-           this.minLng <= pos.lng && this.maxLng >= pos.lng;
+    return this.minLat <= pos.lat &&
+           this.maxLat >= pos.lat &&
+           this.minLng <= pos.lng &&
+           this.maxLng >= pos.lng;
+  }
+
+  wholeTripInBound(bound) {
+    return this.boundsTotal.minLat >= bound.minLat &&
+           this.boundsTotal.minLng >= bound.minLng &&
+           this.boundsTotal.maxLat <= bound.maxLat &&
+           this.boundsTotal.maxLng <= bound.maxLng;
+  }
+
+  partOfTripInBound(bounds) {
+    const total = this.boundsTotal;
+    return !(
+      total.minLat > bounds.maxLat ||
+      total.maxLat < bounds.minLat ||
+      total.minLng > bounds.maxLng ||
+      total.maxLng < bounds.minLng
+    );
   }
 
   calculateBounds() {
