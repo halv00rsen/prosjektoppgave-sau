@@ -33,9 +33,18 @@ export default {
       header: undefined,
     },
     caseSet: false,
+    fitBounds: undefined,
   },
   getters: {
-
+    getBounds(state) {
+      if (state.minLat === undefined) {
+        return undefined;
+      }
+      return [
+        [state.minLat, state.minLng],
+        [state.maxLat, state.maxLng],
+      ];
+    },
   },
   actions: {
     setDefaultTrips({ commit, }, trips) {
@@ -101,6 +110,9 @@ export default {
     },
     setShowRectangle({ commit, }, showRectangle) {
       commit('setShowRectangle', showRectangle);
+    },
+    setFitBounds({ commit, }, fitBounds) {
+      commit('setFitBounds', fitBounds);
     },
   },
   mutations: {
@@ -217,6 +229,9 @@ export default {
     },
     setShowRectangle(state, showRectangle) {
       state.settings.showRectangle = showRectangle;
+    },
+    setFitBounds(state, fitBounds) {
+      state.fitBounds = fitBounds;
     },
   },
 };

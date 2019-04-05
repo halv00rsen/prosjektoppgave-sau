@@ -44,6 +44,15 @@
       >
         Gjør endringer på tur
       </md-button>
+      <br>
+      <md-button
+        :md-ripple="false"
+        class="md-raised"
+        style="background-color: #eaf1fc;"
+        @click="openSettings()"
+      >
+        Instillinger
+      </md-button>
     </center>
   </div>
 </template>
@@ -68,6 +77,9 @@ export default {
     },
     editTrip() {
       this.$router.push({ name: 'editTrip', });
+    },
+    openSettings() {
+      this.$router.push({ name: 'mainSettings', });
     },
   },
 };

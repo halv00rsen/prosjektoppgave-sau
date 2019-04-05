@@ -28,7 +28,7 @@
             <md-button
               class="md-icon-button"
               @click="$router.push('/');">
-              <md-icon>arrow_back</md-icon>
+              <md-icon>home</md-icon>
             </md-button>
           </div>
         </div>

@@ -50,6 +50,8 @@ import {
 } from 'vue2-leaflet';
 import L from 'leaflet';
 
+import { mapState, mapActions, mapGetters, } from 'vuex';
+
 export default {
   name: 'MainMap',
   components: {
@@ -87,47 +89,31 @@ export default {
     localBounds: undefined,
   }),
   computed: {
-    bounds() {
-      if (!this.$store.state.analysis.minLat) {
-        return undefined;
-      }
-      return [
-        [
-          this.$store.state.analysis.minLat,
-          this.$store.state.analysis.minLng,
-        ], [
-          this.$store.state.analysis.maxLat,
-          this.$store.state.analysis.maxLng,
-        ]
-      ];
-    },
-    settings() {
-      return this.$store.state.analysis.settings;
-    },
-    showPredators() {
-      return this.$store.state.analysis.settings.showPredators;
-    },
-    automaticZoom() {
-      return this.$store.state.analysis.settings.automaticZoom;
-    },
-    showDensity() {
-      return this.$store.state.analysis.settings.showDensity;
-    },
-    showRoute() {
-      return this.$store.state.analysis.settings.showRoute;
-    },
     useMaxSize() {
       return this.$store.state.analysis.selectedCase.fixedTrips;
     },
+    ...mapState('analysis', [
+      'settings',
+      'fitBounds',
+    ]),
+    ...mapGetters('analysis', {
+      bounds: 'getBounds',
+    }),
   },
   watch: {
     bounds() {
-      if (this.automaticZoom) {
+      if (this.settings.automaticZoom) {
         this.zoomMap();
       }
     },
     localBounds() {
       this.$emit('update:bounds', this.localBounds);
+    },
+    fitBounds() {
+      if (this.fitBounds !== undefined) {
+        this.zoomMap(this.fitBounds);
+        this.resetBounds(undefined);
+      }
     },
   },
   mounted() {
@@ -165,6 +151,9 @@ export default {
     _clickMap(event) {
       this.$emit('clickMap', event);
     },
+    ...mapActions('analysis', {
+      resetBounds: 'setFitBounds',
+    }),
   },
 };
 </script>

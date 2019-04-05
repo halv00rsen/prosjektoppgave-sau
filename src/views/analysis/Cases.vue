@@ -98,6 +98,7 @@ export default {
           showObservedPoints: true,
           showPredators: true,
           showRoute: true,
+          lockZoom: true,
           icon: 'last_page',
         },
         {

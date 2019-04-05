@@ -23,18 +23,18 @@
               :color="trip.color"
             />
           </div>
-          <l-rectangle
-            v-if="settings.showRectangle"
-            :fill="false"
-            :color="trip.color"
-            :bounds="getRectangle(trip.boundsTotal)"
-            dash-array="10,7"
-          />
         </div>
         <trip-point
           v-else
           :trip="trip"
           :zoom-map="zoomMap"
+        />
+        <l-rectangle
+          v-if="settings.showRectangle"
+          :fill="false"
+          :color="trip.color"
+          :bounds="getRectangle(trip.boundsTotal)"
+          dash-array="10,7"
         />
       </div>
     </div>

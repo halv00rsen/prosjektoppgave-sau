@@ -16,6 +16,7 @@ import Analysis from './views/Analysis.vue';
 import DataMock from './views/DataMock.vue';
 import Main from './views/Main.vue';
 import EditTrip from './views/EditTrip.vue';
+import Settings from './views/Settings.vue';
 
 Vue.use(Router);
 
@@ -108,10 +109,12 @@ const router = new Router({
           component: Overview,
           beforeEnter(to, from, next) {
             if (store.state.analysis.caseSet) {
-              next();
-            } else {
-              next({ name: 'cases', });
+              if (store.state.analysis.filteredTrips.length !== 0) {
+                return next();
+              }
+              store.dispatch('application/setMessage', 'Ingen turer funnet i tidsrom eller område');
             }
+            next({ name: 'cases', });
           },
         }
       ],
@@ -133,6 +136,11 @@ const router = new Router({
       path: '/editTrip',
       component: EditTrip,
       name: 'editTrip',
+    },
+    {
+      path: '/mainSettings',
+      component: Settings,
+      name: 'mainSettings',
     },
     {
       path: '*',

@@ -1,10 +1,13 @@
 
 <template>
   <md-content>
+    <!-- <md-switch v-model="toggleTrips">Veksle turer</md-switch> -->
     <md-list>
-      <md-list-item v-if="!fixedTrips">
+      <md-list-item @click="setZoomBounds(totalBounds)">
         <md-checkbox
-          v-model="setAll"/>
+          v-model="setAll"
+          :disabled="fixedTrips"
+        />
         <span class="md-list-item-text">
           Velg alle
         </span>
@@ -12,7 +15,8 @@
       <md-divider/>
       <md-list-item
         v-for="(item, index) of trips"
-        :key="index">
+        :key="index"
+        @click="setZoomBounds(item.getBounds())">
         <md-checkbox
           v-model="selectedTrips"
           :value="item"
@@ -21,7 +25,8 @@
         />
         <span
           :style="'color: ' + item.color"
-          class="md-list-item-text">
+          class="md-list-item-text"
+        >
           {{ Number(item.startTime) | moment("YYYY.MM.DD") }}
           -
           {{ item.name }}
@@ -32,11 +37,14 @@
 </template>
 
 <script>
+import { mapGetters, } from 'vuex';
+
 export default {
   name: 'Trips',
   data: () => ({
     selectedTrips: [],
     lastSize: 0,
+    toggleTrips: false,
   }),
   computed: {
     selectedCase() {
@@ -60,14 +68,13 @@ export default {
     fixedTrips() {
       return this.$store.state.analysis.selectedCase.fixedTrips;
     },
+    ...mapGetters('analysis', {
+      totalBounds: 'getBounds',
+    }),
   },
   created() {
     if (this.selectedCase.presetTrips) {
       this.selectedTrips = this.trips.slice();
-    }
-    if (this.trips.length === 0) {
-      this.$store.dispatch('application/setMessage', 'Fant ingen turer i område eller tidsrom');
-      // this.$router.push({ name: 'cases', });
     }
   },
   methods: {
@@ -77,6 +84,9 @@ export default {
       }
       this.lastSize = this.selectedTrips.length;
       this.$store.dispatch('analysis/selectTrips', this.selectedTrips);
+    },
+    setZoomBounds(bounds) {
+      this.$store.dispatch('analysis/setFitBounds', bounds);
     },
   },
 };

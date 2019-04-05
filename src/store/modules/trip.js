@@ -144,6 +144,18 @@ const actions = {
     trip.calculateBounds();
     commit('addTrip', trip);
   },
+  cleanEmptyTrips({ dispatch, state, }) {
+    const emptyTrips = [];
+    for (let trip of state.all) {
+      if (trip.positions.length === 0 && trip.observations.length === 0) {
+        emptyTrips.push(trip.id);
+      }
+    }
+    for (let id of emptyTrips) {
+      database.deleteTrip(id);
+    }
+    dispatch('setReloadTrips');
+  },
 };
 
 const mutations = {
