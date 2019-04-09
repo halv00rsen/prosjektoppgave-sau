@@ -17,6 +17,7 @@ import DataMock from './views/DataMock.vue';
 import Main from './views/Main.vue';
 import EditTrip from './views/EditTrip.vue';
 import Settings from './views/Settings.vue';
+import AnalysisSettings from './views/analysis/AnalysisSettings.vue';
 
 Vue.use(Router);
 
@@ -102,6 +103,11 @@ const router = new Router({
           path: 'cases',
           name: 'cases',
           component: Cases,
+        },
+        {
+          path: 'settings',
+          name: 'analysisSettings',
+          component: AnalysisSettings,
         },
         {
           path: 'overview',

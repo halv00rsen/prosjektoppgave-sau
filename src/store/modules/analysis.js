@@ -114,8 +114,14 @@ export default {
     setFitBounds({ commit, }, fitBounds) {
       commit('setFitBounds', fitBounds);
     },
+    editTripVisualInfo({ commit, }, data) {
+      commit('editTripVisualInfo', data);
+    },
   },
   mutations: {
+    editTripVisualInfo(state, data) {
+      state.all[data.index].color = data.color;
+    },
     setDefaultTrips(state, trips) {
       state.selectedTrips = [];
       state.all = trips.slice();
