@@ -5,40 +5,40 @@
       <list-switch
         dispatch="setShowObservations"
         variable="showObservations"
-        text="Vis saueobservasjoner"/>
+        text="Saueobservasjoner"/>
       <list-switch
         dispatch="setShowPredators"
         variable="showPredators"
-        text="Vis rovdyrobservasjoner"/>
+        text="Rovdyrobservasjoner"/>
       <md-divider/>
       <list-switch
         :disabled="showDensity"
         dispatch="setShowObservedPoints"
         variable="showObservedPoints"
-        text="Vis observasjonspunkter"/>
+        text="Observasjonspunkter"/>
       <list-switch
         dispatch="setShowNumInPoint"
         variable="showNumInPoint"
-        text="Vis antall dyr observert i punkt"/>
+        text="Antall dyr observert i punkt"/>
       <md-divider/>
       <list-switch
         dispatch="setShowRoute"
         variable="showRoute"
-        text="Vis turrute"/>
+        text="Turrute"/>
       <list-switch
         :disabled="showObservedPoints || settings.groupTrips"
         dispatch="setShowDensity"
         variable="showDensity"
-        text="Vis tetthet"/>
+        text="Tetthet"/>
       <list-switch
         :disabled="showDensity"
         dispatch="setGroupTrips"
         variable="groupTrips"
-        text="Vis tur som punkt ved lav zoom"/>
+        text="Tur som punkt ved lav zoom"/>
       <list-switch
         dispatch="setShowRectangle"
         variable="showRectangle"
-        text="Vis turgrenser"/>
+        text="Turgrenser"/>
     </md-list>
   </md-content>
 </template>

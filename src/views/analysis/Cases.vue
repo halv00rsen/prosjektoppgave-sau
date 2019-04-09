@@ -2,14 +2,7 @@
 <template>
   <div
     v-if="!showMap">
-    <h3>Brukerhistorier</h3>
-    <md-button
-      :to="{ name: 'analysisSettings' }"
-      class="md-raised"
-    >
-      <md-icon>settings</md-icon>
-      Instillinger
-    </md-button>
+    <h3>Analyse</h3>
     <md-list>
       <md-list-item
         v-for="(item, index) of cases"

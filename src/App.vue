@@ -15,6 +15,12 @@
           </div>
           <div
             class="md-toolbar-section-end">
+            <md-button
+              :to="{ name: 'analysisSettings' }"
+              class="md-icon-button"
+            >
+              <md-icon>settings</md-icon>
+            </md-button>
             <span>
               <md-button
                 :disabled="true"
@@ -80,6 +86,7 @@ export default {
         return 'Posisjon er av';
       }
     },
+
   },
   created() {
     this.$store.dispatch('application/loadSettings');

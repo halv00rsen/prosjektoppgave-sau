@@ -1,7 +1,8 @@
 <template>
   <div>
     <h3>Instillinger</h3>
-    <router-link :to="{ name: 'cases', }">Tilbake</router-link>
+    <!-- <router-link :to="{ name: 'cases', }">Tilbake</router-link> -->
+    <md-button @click="goBack()">Tilbake</md-button>
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-50">
         <h4>Alle turer</h4>
@@ -86,6 +87,9 @@ export default {
         index: this.index,
         color: color.hex,
       });
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
 };
