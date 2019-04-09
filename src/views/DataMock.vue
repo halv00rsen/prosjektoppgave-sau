@@ -154,7 +154,14 @@
                     v-model="currentClick"
                     :value="1"
                   />
-                  <span class="md-list-item-text">Turrute</span>
+                  <span class="md-list-item-text">Turrute (slutt)</span>
+                </md-list-item>
+                <md-list-item>
+                  <md-radio
+                    v-model="currentClick"
+                    :value="5"
+                  />
+                  <span class="md-list-item-text">Turrute (start)</span>
                 </md-list-item>
                 <md-list-item>
                   <md-radio

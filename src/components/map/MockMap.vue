@@ -22,8 +22,8 @@
     />
 
     <map-observation
-      v-for="(observation, index) of observations"
-      :key="'obs-' + index"
+      v-for="observation of observations"
+      :key="'obs-' + observation.observedPosition.lat + '.' + observation.observedPosition.lng"
       :observation="observation"
       :clickable="false"
       :mock="true"
@@ -80,7 +80,14 @@ export default {
       if (this.currentClick === 4) {
         return;
       } else if (this.currentClick === 1) {
-        this.$store.dispatch('mock/clickMap', event.latlng);
+        this.$store.dispatch('mock/clickMap', {
+          pos: event.latlng,
+        });
+      } else if (this.currentClick === 5) {
+        this.$store.dispatch('mock/clickMap', {
+          first: true,
+          pos: event.latlng,
+        });
       } else if (this.currentClick === 2 || this.currentClick === 3) {
         if (!this.observation.observedPosition) {
           this.observation.observedPosition = event.latlng;

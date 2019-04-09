@@ -31,8 +31,12 @@ export default {
     reset({ commit, }) {
       commit('reset');
     },
-    clickMap({ commit, }, latLng) {
-      commit('addPosition', latLng);
+    clickMap({ commit, }, data) {
+      if (data.first) {
+        commit('addPositionFirst', data.pos);
+      } else {
+        commit('addPosition', data.pos);
+      }
     },
     saveTrip({ commit, state, }, data) {
       const startTime = new Date(data.date.getTime());
@@ -74,6 +78,9 @@ export default {
     },
     addObservation(state, observation) {
       state.observations.push(observation);
+    },
+    addPositionFirst(state, pos) {
+      state.positions.unshift(pos);
     },
     removeObservation(state, index) {
       state.observations.splice(index, 1);
