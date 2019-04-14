@@ -25,6 +25,7 @@ export default {
       groupTrips: true,
       lockZoom: false,
       showRectangle: false,
+      showNibio: false,
     },
     selectedCase: {
       presetTrips: false,
@@ -34,6 +35,7 @@ export default {
     },
     caseSet: false,
     fitBounds: undefined,
+    nibioData: undefined,
   },
   getters: {
     getBounds(state) {
@@ -117,8 +119,20 @@ export default {
     editTripVisualInfo({ commit, }, data) {
       commit('editTripVisualInfo', data);
     },
+    setNibioData({ commit, }, data) {
+      commit('setNibioData', data);
+    },
+    setShowNibio({ commit, }, showNibio) {
+      commit('setShowNibio', showNibio);
+    },
   },
   mutations: {
+    setShowNibio(state, showNibio) {
+      state.settings.showNibio = showNibio;
+    },
+    setNibioData(state, data) {
+      state.nibioData = data;
+    },
     editTripVisualInfo(state, data) {
       state.all[data.index].color = data.color;
     },
@@ -187,7 +201,9 @@ export default {
         groupTrips: true,
         lockZoom: false,
         showRectangle: false,
+        showNibio: false,
       };
+      state.nibioData = undefined;
     },
     setSelectedCase(state, _case) {
       state.selectedCase = _case;

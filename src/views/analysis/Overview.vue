@@ -60,6 +60,9 @@
       </div>
       <div class="md-layout-item md-size-100">
         <analysis-map/>
+        <md-button @click="loadNibioData()">
+          Last data
+        </md-button>
       </div>
     </div>
     <div class="md-layout-item md-large-size-30 md-medium-size-40 md-small-size-50 md-xsmall-size-100 analysis-column">

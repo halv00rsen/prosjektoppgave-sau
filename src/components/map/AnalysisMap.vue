@@ -65,11 +65,19 @@
         </div>
       </div>
     </div>
+    <div v-if="nibioData !== undefined && settings.showNibio">
+      <nibio
+        v-for="(elem, index) of nibioData"
+        :key="'nibio-' + index"
+        :data="elem"
+      />
+    </div>
   </main-map>
 </template>
 
 <script>
 import { LRectangle, } from 'vue2-leaflet';
+import { mapState, } from 'vuex';
 
 import MainMap from '@/components/map/MainMap.vue';
 import MapObservation from '@/components/MapObservation.vue';
@@ -78,6 +86,7 @@ import Vue2LeafletMarkercluster from '@/components/map/Vue2LeafletMarkercluster.
 import MapTrail from '@/components/MapTrail.vue';
 import TrailRoute from '@/components/TrailRoute.vue';
 import TripPoint from '@/components/map/TripPoint.vue';
+import Nibio from '@/components/map/Nibio.vue';
 
 export default {
   name: 'AnalysisMap',
@@ -90,6 +99,7 @@ export default {
     TrailRoute,
     TripPoint,
     LRectangle,
+    Nibio,
   },
   data: () => ({
     clusterOptions: {
@@ -106,6 +116,9 @@ export default {
     localBounds() {
       return this.$refs.mainmap.localBounds;
     },
+    ...mapState('analysis', [
+      'nibioData',
+    ]),
   },
   methods: {
     showObservationOfTrip(tripBounds) {
