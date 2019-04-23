@@ -2,8 +2,56 @@
 <template>
   <div
     v-if="!showMap">
-    <h3>Analyse</h3>
-    <md-list>
+    <md-button
+      :style="getButtonClass(false)"
+      class="md-icon-button"
+      @click="showList = false"
+    >
+      <md-icon>view_quilt</md-icon>
+    </md-button>
+    <md-button
+      :style="getButtonClass(true)"
+      class="md-icon-button"
+      @click="showList = true"
+    >
+      <md-icon>view_list</md-icon>
+    </md-button>
+    <br>
+    <div
+      v-if="!showList"
+      class="md-layout md-gutter"
+    >
+      <case-list
+        :cases="timeCases"
+        :use-icons="true"
+        icon="timeline"
+        title="Tidsbasert"
+        tooltip="Vil hente turer basert på en tidsrestriksjon"
+        @clickedCase="openCase($event)"
+      />
+      <case-list
+        :cases="mapCases"
+        :use-icons="true"
+        icon="map"
+        title="Områdebasert"
+        tooltip="Man velger område for så at søk etter scenario blir gjort"
+        @clickedCase="openCase($event)"
+      />
+      <case-list
+        :cases="comparisonCases"
+        icon="compare_arrows"
+        title="Sammenligninger"
+        @clickedCase="openCase($event)"
+      />
+      <case-list
+        :cases="otherCases"
+        :use-icons="true"
+        icon="build"
+        title="Annet"
+        @clickedCase="openCase($event)"
+      />
+    </div>
+    <md-list v-else>
       <md-list-item
         v-for="(item, index) of cases"
         :key="index"
@@ -21,7 +69,7 @@
     </md-list>
   </div>
   <div v-else>
-    <h3>Velg område som skal søkes i</h3>
+    <h3>Zoom inn på ønsket område for å gjøre søk</h3>
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-70">
         <main-map
@@ -48,10 +96,11 @@
               md-direction="bottom"
               md-delay="300"
             >
-              Om ikke valgt, må hele turen utelukkende ha vært i området
+              Om ikke valgt, må hele turen utelukkende ha vært i området valgt
             </md-tooltip>
           </md-avatar>
         </md-switch>
+        <br>
         <br>
         <md-button
           :md-ripple="false"
@@ -70,11 +119,13 @@
 import moment from 'moment';
 
 import MainMap from '@/components/map/MainMap.vue';
+import CaseList from '@/components/CaseList.vue';
 
 export default {
   name: 'Cases',
   components: {
     MainMap,
+    CaseList,
   },
   data: () => ({
     showMap: false,
@@ -83,13 +134,78 @@ export default {
     includeTripsInArea: true,
     startDate: undefined,
     endDate: undefined,
+    showList: false,
+    timeCases: [
+      {
+        text: 'Turer fra den siste uken',
+        startDate: moment().subtract('7', 'days').startOf('day'),
+        endDate: moment().endOf('day'),
+        presetTrips: true,
+        showRoute: true,
+        icon: 'directions_walk',
+      },
+      {
+        text: 'Turer fra denne måneden',
+        startDate: moment().subtract(1, 'months').startOf('day'),
+        endDate: moment().endOf('day'),
+        presetTrips: true,
+        showRoute: false,
+        icon: 'directions_walk',
+      },
+      {
+        text: 'Turer fra ' + moment().get('year'),
+        startDate: moment().startOf('year'),
+        endDate: moment().endOf('day'),
+        presetTrips: true,
+        showDensity: true,
+        showRoute: false,
+        icon: 'directions_walk',
+      },
+    ],
+    mapCases: [
+      {
+        text: 'Turer i et område',
+        header: 'Turer i et definert område',
+        presetTrips: true,
+        startDate: moment().startOf('year'),
+        showRoute: true,
+        setBounds: true,
+        lockZoom: true,
+        icon: 'directions_walk',
+      },
+      {
+        text: 'Rovdyr fra et område',
+        header: 'Rovdyr observert i området',
+        icon: 'pets',
+      },
+      {
+        text: 'Alle kadaver i et område',
+        icon: 'pets',
+      },
+    ],
+    comparisonCases: [
+      {
+        text: 'Sammenlign årets data med fjorårets i et gitt område',
+        header: 'Sammenligning med fjorårets data',
+        icon: 'compare_arrows',
+      },
+      {
+        text: 'Sammenlign årets data med fjorårets i en tidsperiode',
+        header: 'Sammenligning med fjorårets data',
+        icon: 'compare_arrows',
+      },
+      {
+        text: 'Sammenlign to forskjellige scenarioer',
+        icon: 'compare_arrows',
+      },
+    ],
   }),
   computed: {
     trips() {
       return this.$store.state.analysis.all;
     },
-    cases() {
-      const cases = [
+    otherCases() {
+      return [
         {
           text: 'Se den siste turen gjennomført',
           presetTrips: true,
@@ -102,44 +218,19 @@ export default {
           icon: 'last_page',
         },
         {
-          text: 'Se alle turer som er gjort den siste uken',
-          startDate: moment().subtract('7', 'days').startOf('day'),
-          endDate: moment().endOf('day'),
-          presetTrips: true,
-          showRoute: true,
-          icon: 'timeline',
-        },
-        {
-          text: 'Se alle turer som er gjort den siste måneden',
-          startDate: moment().subtract(1, 'months').startOf('day'),
-          endDate: moment().endOf('day'),
-          presetTrips: true,
-          showRoute: false,
-          icon: 'timeline',
-        },
-        {
-          text: 'Se alle turer gjort i ' + moment().get('year'),
-          startDate: moment().startOf('year'),
-          endDate: moment().endOf('day'),
-          presetTrips: true,
-          showDensity: true,
-          showRoute: false,
-          icon: 'timeline',
-        },
-        {
-          text: 'Se alle turer i et gitt område',
-          header: 'Turer i et definert område',
-          presetTrips: true,
-          startDate: moment().startOf('year'),
-          showRoute: true,
-          setBounds: true,
-          lockZoom: true,
-          icon: 'map',
-        },
-        {
           text: 'Egendefinert oppsett',
           icon: 'build',
         },
+      ];
+    },
+    cases() {
+      const cases = [
+        ...this.timeCases,
+        ...this.mapCases,
+        ...this.comparisonCases,
+        ...this.otherCases,
+        // Add disabling of filters, which isn't interesting for the given case
+        // Når man velger fra et område, legg inn en graf fra highcharts som viser observasjoner gjort over en graf (?) - som tenkt fra teorien
       ];
       return cases;
     },
@@ -205,6 +296,12 @@ export default {
       };
       this._case.setBounds = false;
       this.openCase(this._case);
+    },
+    getButtonClass(isList) {
+      if (!isList && !this.showList || isList && this.showList) {
+        return 'background-color:#d1d1d1';
+      }
+      return '';
     },
   },
 };

@@ -13,7 +13,7 @@
           @change="loadData()"
         />
         <span class="md-list-item-text">
-          Vis data fra Nibio
+          Vis beiteområder
         </span>
       </md-list-item>
     </md-list>

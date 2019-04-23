@@ -25,7 +25,12 @@
               <md-button
                 :disabled="true"
                 class="md-icon-button">
-                <md-icon :style="positionColor">my_location</md-icon>
+                <md-icon
+                  v-if="positionRetrieved"
+                  :style="positionColor">gps_fixed</md-icon>
+                <md-icon
+                  v-else
+                  :style="positionColor">gps_off</md-icon>
               </md-button>
               <md-tooltip
                 md-direction="bottom"
@@ -51,6 +56,7 @@
 </template>
 
 <script>
+import { mapState, } from 'vuex';
 import NavigationLink from './components/NavigationLink.vue';
 import AlertBox from './components/AlertBox.vue';
 
@@ -66,6 +72,9 @@ export default {
     };
   },
   computed: {
+    ...mapState('application', [
+      'positionRetrieved',
+    ]),
     loading() {
       return this.$store.getters['trip/dataLoaded'];
     },
@@ -73,14 +82,14 @@ export default {
       return this.$store.getters['application/isTripView'];
     },
     positionColor() {
-      if (this.$store.getters['application/positionRetrieved']) {
+      if (this.positionRetrieved) {
         return 'color:green;';
       } else {
         return 'color:red;';
       }
     },
     posText() {
-      if (this.$store.getters['application/positionRetrieved']) {
+      if (this.positionRetrieved) {
         return 'Posisjon er på';
       } else {
         return 'Posisjon er av';
