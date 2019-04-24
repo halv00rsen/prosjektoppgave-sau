@@ -87,6 +87,7 @@ export default {
       maxBounds: undefined,
     },
     localBounds: undefined,
+    map: undefined,
   }),
   computed: {
     useMaxSize() {
@@ -119,6 +120,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       const map = this.$refs.map.mapObject;
+      this.map = map;
       L.Control.ZoomButton = L.Control.extend({
         onAdd() {
           return L.DomUtil.get('fitZoomButton');

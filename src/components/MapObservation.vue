@@ -6,6 +6,7 @@
     />
 
     <l-circle-marker
+      ref="marker"
       :lat-lng="observed"
       :radius="10"
       :color="observationColor"
@@ -139,6 +140,14 @@ export default {
       return this.$store.state.analysis.settings.showNumInPoint;
     },
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs.marker.mapObject.properties = {
+        isSheep: this.observation.isSheep,
+        numSheep: this.observation.numSheep,
+      };
+    });
+  },
   methods: {
     openObservation() {
       if (this.clickable) {
@@ -165,6 +174,11 @@ export default {
         this.close();
         this.$store.dispatch('application/setMessage', 'Observasjonen ble fjernet');
       });
+    },
+    getProperty() {
+      return {
+        observation: this.observation,
+      };
     },
   },
 };

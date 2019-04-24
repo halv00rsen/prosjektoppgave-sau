@@ -59,9 +59,9 @@
         </div>
       </div>
       <div class="md-layout-item md-size-100">
-        <analysis-map/>
-        <md-button @click="loadNibioData()">
-          Last data
+        <analysis-map ref="map"/>
+        <md-button @click="exportGeoJson()">
+          Eksporter GeoJson
         </md-button>
       </div>
     </div>
@@ -86,6 +86,7 @@ export default {
   data: () => ({
     startDate: undefined,
     endDate: undefined,
+    map: undefined,
   }),
   computed: {
     validDates() {
@@ -134,6 +135,15 @@ export default {
       this.startDate = undefined;
       this.endDate = undefined;
       this.setDates();
+    },
+    exportGeoJson() {
+      const json = this.$refs.map.getGeoJSON();
+      const url = window.URL.createObjectURL(new Blob([JSON.stringify(json)]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'geodata.json'); //or any other extension
+      document.body.appendChild(link);
+      link.click();
     },
   },
 };

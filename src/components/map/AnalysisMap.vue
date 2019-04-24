@@ -149,6 +149,22 @@ export default {
         weight: 2,
       };
     },
+    getGeoJSON() {
+      const collection = {
+        type: 'FeatureCollection',
+        features: [],
+      };
+      this.$refs.mainmap.map.eachLayer((layer) => {
+        if (layer.toGeoJSON) {
+          const json = layer.toGeoJSON();
+          collection.features.push(json);
+          if (layer.properties) {
+            json.properties = layer.properties;
+          }
+        }
+      });
+      return collection;
+    },
   },
 };
 </script>
