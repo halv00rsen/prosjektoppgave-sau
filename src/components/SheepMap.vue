@@ -80,12 +80,11 @@
 </template>
 
 <script>
-// import Vue from 'vue';
 import L from 'leaflet';
-import 'leaflet-offline';
 import {
   LMap, LTileLayer, LMarker, LTooltip, LGeoJson, LControlAttribution,
 } from 'vue2-leaflet';
+import 'leaflet-offline';
 
 import TileDatabase from '@/database/tiledatabase';
 import MapObservation from '@/components/MapObservation.vue';

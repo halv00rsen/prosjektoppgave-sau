@@ -44,11 +44,11 @@
 </template>
 
 <script>
+import L from 'leaflet';
 import {
   LMap, LTileLayer, LMarker, LTooltip, LGeoJson, LControlLayers,
   LControlScale,
 } from 'vue2-leaflet';
-import L from 'leaflet';
 
 import { mapState, mapActions, mapGetters, } from 'vuex';
 
@@ -135,7 +135,7 @@ export default {
         //   L.latLng(this.bounds[0][0], this.bounds[0][1]),
         //   L.latLng(this.bounds[1][0], this.bounds[1][1]),
         // );
-        this.mapOptions.minZoom = map.getBoundsZoom(this.bounds);
+        // this.mapOptions.minZoom = map.getBoundsZoom(this.bounds);
       }
     });
   },

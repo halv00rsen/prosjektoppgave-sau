@@ -141,12 +141,14 @@ export default {
     },
   },
   mounted() {
-    this.$nextTick(() => {
-      this.$refs.marker.mapObject.properties = {
-        isSheep: this.observation.isSheep,
-        numSheep: this.observation.numSheep,
-      };
-    });
+    if (this.showObservation) {
+      this.$nextTick(() => {
+        this.$refs.marker.mapObject.properties = {
+          isSheep: this.observation.isSheep,
+          numSheep: this.observation.numSheep,
+        };
+      });
+    }
   },
   methods: {
     openObservation() {

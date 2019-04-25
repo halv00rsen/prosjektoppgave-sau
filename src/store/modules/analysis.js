@@ -26,6 +26,7 @@ export default {
       lockZoom: false,
       showRectangle: false,
       showNibio: false,
+      showHeatmap: false,
     },
     selectedCase: {
       presetTrips: false,
@@ -49,6 +50,9 @@ export default {
     },
   },
   actions: {
+    setHeatmap({ commit, }, showHeatmap) {
+      commit('setHeatmap', showHeatmap);
+    },
     setDefaultTrips({ commit, }, trips) {
       commit('setDefaultTrips', trips);
       commit('setFilteredTrips', trips);
@@ -127,6 +131,9 @@ export default {
     },
   },
   mutations: {
+    setHeatmap(state, showHeatmap) {
+      state.settings.showHeatmap = showHeatmap;
+    },
     setShowNibio(state, showNibio) {
       state.settings.showNibio = showNibio;
     },
@@ -202,6 +209,7 @@ export default {
         lockZoom: false,
         showRectangle: false,
         showNibio: false,
+        showHeatmap: false,
       };
       state.nibioData = undefined;
     },

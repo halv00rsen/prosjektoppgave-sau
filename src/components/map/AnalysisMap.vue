@@ -1,3 +1,4 @@
+
 <template>
   <main-map
     ref="mainmap">
@@ -9,14 +10,16 @@
 
         <div
           v-if="!settings.groupTrips || showObservationOfTrip(trip.boundsTotal)">
-          <map-observation
-            v-for="(observation, index) of trip.observations"
-            :key="'observation-' + trip.id + index"
-            :observation="observation"
-            :observation-color="trip.color"
-            :clickable="false"
-            :analysis-view="true"
-          />
+          <div v-if="!settings.showHeatmap">
+            <map-observation
+              v-for="(observation, index) of trip.observations"
+              :key="'observation-' + trip.id + index"
+              :observation="observation"
+              :observation-color="trip.color"
+              :clickable="false"
+              :analysis-view="true"
+            />
+          </div>
           <div v-if="settings.showRoute">
             <trail-route
               :positions="trip.positions"
@@ -35,6 +38,12 @@
           :color="trip.color"
           :bounds="getRectangle(trip.boundsTotal)"
           dash-array="10,7"
+        />
+      </div>
+      <div v-if="settings.showHeatmap">
+        <heatmap
+          :lat-lngs="observations"
+          :max="maxSheep"
         />
       </div>
     </div>
@@ -87,6 +96,7 @@ import MapTrail from '@/components/MapTrail.vue';
 import TrailRoute from '@/components/TrailRoute.vue';
 import TripPoint from '@/components/map/TripPoint.vue';
 import Nibio from '@/components/map/Nibio.vue';
+import Heatmap from '@/components/map/Heatmap.vue';
 
 export default {
   name: 'AnalysisMap',
@@ -100,6 +110,7 @@ export default {
     TripPoint,
     LRectangle,
     Nibio,
+    Heatmap,
   },
   data: () => ({
     clusterOptions: {
@@ -119,6 +130,27 @@ export default {
     ...mapState('analysis', [
       'nibioData',
     ]),
+    maxSheep() {
+      let maxSheep = 0;
+      for (let trip of this.trips) {
+        for (let observation of trip.observations) {
+          maxSheep = Math.max(maxSheep, observation.numSheep);
+        }
+      }
+      return maxSheep;
+    },
+    observations() {
+      return this.trips.flatMap((trip) => {
+        return trip.observations.map((observation) => {
+          return {
+            lat: observation.observedPosition.lat,
+            lng: observation.observedPosition.lng,
+            count: observation.numSheep,
+            radius: 25,
+          };
+        });
+      });
+    },
   },
   methods: {
     showObservationOfTrip(tripBounds) {

@@ -53,6 +53,11 @@
       >
         Instillinger
       </md-button>
+      <md-button
+        @click="openTest()"
+      >
+        Testmap
+      </md-button>
     </center>
   </div>
 </template>
@@ -80,6 +85,9 @@ export default {
     },
     openSettings() {
       this.$router.push({ name: 'mainSettings', });
+    },
+    openTest() {
+      this.$router.push({ name: 'maptest', });
     },
   },
 };

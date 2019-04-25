@@ -26,10 +26,15 @@
         variable="showRoute"
         text="Turrute"/>
       <list-switch
-        :disabled="showObservedPoints || settings.groupTrips"
+        :disabled="showObservedPoints || settings.groupTrips || settings.showHeatmap"
         dispatch="setShowDensity"
         variable="showDensity"
         text="Tetthet"/>
+      <list-switch
+        :disabled="settings.showDensity"
+        dispatch="setHeatmap"
+        variable="showHeatmap"
+        text="Heatmap"/>
       <list-switch
         :disabled="showDensity"
         dispatch="setGroupTrips"
