@@ -8,7 +8,7 @@
     <l-circle-marker
       ref="marker"
       :lat-lng="observed"
-      :radius="10"
+      :radius="radius"
       :color="observationColor"
       :fill="true"
       :fill-opacity="1"
@@ -55,6 +55,8 @@
 import {
   LGeoJson, LCircleMarker, LPopup, LTooltip,
 } from 'vue2-leaflet';
+import { mapState, } from 'vuex';
+
 import Registration from '@/components/Registration.vue';
 
 export default {
@@ -123,6 +125,9 @@ export default {
     };
   },
   computed: {
+    ...mapState('analysis', [
+      'settings',
+    ]),
     showObservedPoints() {
       return !this.analysisView || this.$store.state.analysis.settings.showObservedPoints;
     },
@@ -130,14 +135,22 @@ export default {
       if (!this.analysisView) {
         return true;
       }
-      const settings = this.$store.state.analysis.settings;
       if (this.observation.isSheep) {
-        return settings.showObservations;
+        return this.settings.showObservations;
       }
-      return settings.showPredators;
+      return this.settings.showPredators;
     },
     showNumInPoint() {
       return this.$store.state.analysis.settings.showNumInPoint;
+    },
+    radius() {
+      if (this.settings.pointSizing) {
+        if (this.observation.isSheep) {
+          return 2 * this.observation.numSheep + 10;
+        }
+        return 2 * this.observation.numAnimals + 10;
+      }
+      return 10;
     },
   },
   mounted() {

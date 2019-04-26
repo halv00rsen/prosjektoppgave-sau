@@ -27,6 +27,7 @@ export default {
       showRectangle: false,
       showNibio: false,
       showHeatmap: false,
+      pointSizing: false,
     },
     selectedCase: {
       presetTrips: false,
@@ -50,6 +51,12 @@ export default {
     },
   },
   actions: {
+    setMainView({ commit, }, mainView) {
+      commit('setMainView', mainView);
+    },
+    setPointSizing({ commit, }, pointSizing) {
+      commit('setPointSizing', pointSizing);
+    },
     setHeatmap({ commit, }, showHeatmap) {
       commit('setHeatmap', showHeatmap);
     },
@@ -131,6 +138,28 @@ export default {
     },
   },
   mutations: {
+    setMainView(state, mainView) {
+      let heatmap = false;
+      let sizing = false;
+      let density = false;
+      switch(mainView) {
+        case 'showHeatmap':
+          heatmap = true;
+          break;
+        case 'pointSizing':
+          sizing = true;
+          break;
+        case 'showDensity':
+          density = true;
+          break;
+      }
+      state.settings.showHeatmap = heatmap;
+      state.settings.showDensity = density;
+      state.settings.pointSizing = sizing;
+    },
+    setPointSizing(state, pointSizing) {
+      state.settings.pointSizing = pointSizing;
+    },
     setHeatmap(state, showHeatmap) {
       state.settings.showHeatmap = showHeatmap;
     },
@@ -210,6 +239,7 @@ export default {
         showRectangle: false,
         showNibio: false,
         showHeatmap: false,
+        pointSizing: false,
       };
       state.nibioData = undefined;
     },

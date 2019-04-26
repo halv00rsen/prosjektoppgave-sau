@@ -12,7 +12,6 @@ import { findRealParent, propsBinder, } from 'vue2-leaflet';
 import 'heatmap.js';
 import HeatmapOverlay from '../../../node_modules/heatmap.js/plugins/leaflet-heatmap/leaflet-heatmap';
 
-
 export default {
   name: 'Heatmap',
   props: {
@@ -35,12 +34,22 @@ export default {
         // useLocalExtrema: true,
         maxOpacity: 0.5,
         minOpacity: 0,
-        gradient: {0.10: 'red', 0.25: 'orange', 0.55: 'lime', 0.85: 'green',},
+        // gradient: {0.10: 'red', 0.25: 'orange', 0.55: 'lime', 0.85: 'green',},
         latField: 'lat',
         lngField: 'lng',
         valueField: 'count',
       },
+      mapObject: undefined,
     };
+  },
+  watch: {
+    latLngs() {
+      this.mapObject.setData({
+        data: this.latLngs,
+        max: this.max,
+        min: 1,
+      });
+    },
   },
   mounted() {
     this.mapObject = new HeatmapOverlay(this.cfg);

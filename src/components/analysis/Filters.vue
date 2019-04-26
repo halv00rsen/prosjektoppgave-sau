@@ -1,6 +1,32 @@
 
 <template>
   <md-content>
+    <h4>Hovedvisning</h4>
+    <md-divider/>
+    <md-list>
+      <md-list-item>
+        <md-radio
+          v-model="mainView"
+          value="regular">Vanlig</md-radio>
+      </md-list-item>
+      <md-list-item>
+        <md-radio
+          v-model="mainView"
+          value="pointSizing">Størrelse</md-radio>
+      </md-list-item>
+      <md-list-item>
+        <md-radio
+          v-model="mainView"
+          value="showHeatmap">Heatmap</md-radio>
+      </md-list-item>
+      <md-list-item>
+        <md-radio
+          v-model="mainView"
+          value="showDensity">Grupper</md-radio>
+      </md-list-item>
+    </md-list>
+    <h4>Annet</h4>
+    <md-divider/>
     <md-list>
       <list-switch
         dispatch="setShowObservations"
@@ -12,7 +38,6 @@
         text="Rovdyrobservasjoner"/>
       <md-divider/>
       <list-switch
-        :disabled="showDensity"
         dispatch="setShowObservedPoints"
         variable="showObservedPoints"
         text="Observasjonspunkter"/>
@@ -26,17 +51,6 @@
         variable="showRoute"
         text="Turrute"/>
       <list-switch
-        :disabled="showObservedPoints || settings.groupTrips || settings.showHeatmap"
-        dispatch="setShowDensity"
-        variable="showDensity"
-        text="Tetthet"/>
-      <list-switch
-        :disabled="settings.showDensity"
-        dispatch="setHeatmap"
-        variable="showHeatmap"
-        text="Heatmap"/>
-      <list-switch
-        :disabled="showDensity"
         dispatch="setGroupTrips"
         variable="groupTrips"
         text="Tur som punkt ved lav zoom"/>
@@ -45,10 +59,13 @@
         variable="showRectangle"
         text="Turgrenser"/>
     </md-list>
+    <br>
   </md-content>
 </template>
 
 <script>
+import { mapState, } from 'vuex';
+
 import ListSwitch from '@/components/analysis/ListSwitch.vue';
 
 export default {
@@ -62,16 +79,30 @@ export default {
     };
   },
   computed: {
-    settings() {
-      return this.$store.state.analysis.settings;
-    },
+    ...mapState('analysis', [
+      'settings',
+    ]),
     showObservedPoints() {
       return this.$store.state.analysis.settings.showObservedPoints;
     },
     showDensity() {
       return this.$store.state.analysis.settings.showDensity;
     },
-
+    mainView: {
+      get() {
+        if (this.settings.showHeatmap) {
+          return 'showHeatmap';
+        } else if (this.settings.pointSizing) {
+          return 'pointSizing';
+        } else if (this.settings.showDensity) {
+          return 'showDensity';
+        }
+        return 'regular';
+      },
+      set(value) {
+        this.$store.dispatch('analysis/setMainView', value);
+      },
+    },
   },
 };
 </script>
