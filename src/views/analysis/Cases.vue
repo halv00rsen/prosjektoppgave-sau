@@ -120,6 +120,7 @@ import moment from 'moment';
 
 import MainMap from '@/components/map/MainMap.vue';
 import CaseList from '@/components/CaseList.vue';
+import { mapState, } from 'vuex';
 
 export default {
   name: 'Cases',
@@ -201,9 +202,9 @@ export default {
     ],
   }),
   computed: {
-    trips() {
-      return this.$store.state.analysis.all;
-    },
+    ...mapState('analysis', {
+      trips: 'all',
+    }),
     otherCases() {
       return [
         {

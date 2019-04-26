@@ -40,6 +40,7 @@ import MainMap from '@/components/map/MainMap.vue';
 import Registration from '@/components/Registration.vue';
 import MapObservation from '@/components/MapObservation.vue';
 import TrailRoute from '@/components/TrailRoute.vue';
+import { mapState, } from 'vuex';
 
 export default {
   name: 'MockMap',
@@ -60,15 +61,11 @@ export default {
     };
   },
   computed: {
-    positions() {
-      return this.$store.state.mock.positions;
-    },
-    observations() {
-      return this.$store.state.mock.observations;
-    },
-    currentClick() {
-      return this.$store.state.mock.currentClick;
-    },
+    ...mapState('mock', [
+      'positions',
+      'observations',
+      'currentClick',
+    ]),
   },
   watch: {
     currentClick() {

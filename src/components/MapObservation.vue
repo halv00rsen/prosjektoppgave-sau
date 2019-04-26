@@ -30,7 +30,7 @@
         </div>
       </l-popup>
       <l-tooltip
-        v-if="showNumInPoint"
+        v-if="settings.showNumInPoint"
         :options="tooltipOptions">
         <div v-if="observation.isSheep">
           {{ observation.numSheep }}
@@ -129,7 +129,7 @@ export default {
       'settings',
     ]),
     showObservedPoints() {
-      return !this.analysisView || this.$store.state.analysis.settings.showObservedPoints;
+      return !this.analysisView || this.settings.showObservedPoints;
     },
     showObservation() {
       if (!this.analysisView) {
@@ -139,9 +139,6 @@ export default {
         return this.settings.showObservations;
       }
       return this.settings.showPredators;
-    },
-    showNumInPoint() {
-      return this.$store.state.analysis.settings.showNumInPoint;
     },
     radius() {
       if (this.settings.pointSizing) {

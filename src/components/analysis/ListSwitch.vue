@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import { mapState, } from 'vuex';
+
 export default {
   name: 'ListSwitch',
   props: {
@@ -32,9 +34,12 @@ export default {
     },
   },
   computed: {
+    ...mapState('analysis', [
+      'settings',
+    ]),
     model: {
       get() {
-        return this.$store.state.analysis.settings[this.variable];
+        return this.settings[this.variable];
       },
       set(value) {
         this.$store.dispatch('analysis/' + this.dispatch, value);

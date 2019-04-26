@@ -48,6 +48,7 @@
 import L from 'leaflet';
 import SheepMap from '@/components/SheepMap.vue';
 import Registration from '@/components/Registration.vue';
+import { mapState, } from 'vuex';
 
 export default {
   name: 'Trip',
@@ -65,14 +66,9 @@ export default {
     };
   },
   computed: {
-    trip() {
-      return this.$store.state.trip.activeTrip;
-    },
-  },
-  created() {
-    // if (!this.$store.state.activeTrip) {
-    //   this.$store.dispatch('trip/setActiveTrip', this.$route.params.tripId);
-    // }
+    ...mapState('trip', {
+      trip: 'activeTrip',
+    }),
   },
   methods: {
     finishTrip() {

@@ -239,6 +239,7 @@ import {
 } from 'vuelidate/lib/validators';
 
 import MockMap from '@/components/map/MockMap.vue';
+import { mapState, } from 'vuex';
 
 export default {
   name: 'DataMock',
@@ -260,22 +261,21 @@ export default {
     };
   },
   computed: {
+    ...mapState('mock', [
+      'positions',
+      'observations',
+    ]),
+    ...mapState('mock', {
+      trip: 'initialTrip',
+      stateClick: 'currentClick',
+    }),
     currentClick: {
       get() {
-        return this.$store.state.mock.currentClick;
+        return this.stateClick;
       },
       set(value) {
         this.$store.dispatch('mock/setCurrentClick', value);
       },
-    },
-    positions() {
-      return this.$store.state.mock.positions;
-    },
-    observations() {
-      return this.$store.state.mock.observations;
-    },
-    trip() {
-      return this.$store.state.mock.initialTrip;
     },
   },
   created() {

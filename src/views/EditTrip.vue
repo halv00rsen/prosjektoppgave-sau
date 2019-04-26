@@ -14,12 +14,13 @@
 </template>
 
 <script>
+import { mapState, } from 'vuex';
 export default {
   name: 'EditTrip',
   computed: {
-    trips() {
-      return this.$store.state.trip.all;
-    },
+    ...mapState('trip', {
+      trips: 'all',
+    }),
   },
   methods: {
     openTrip(trip) {

@@ -58,9 +58,6 @@ export default {
     Statistics,
     Filters,
   },
-  data: () => ({
-
-  }),
 };
 </script>
 

@@ -30,9 +30,6 @@
       <md-card-header>
         <md-card-header-text>
           <div class="md-title">{{ trip.name }}</div>
-          <!-- <div
-            v-if="trip.name"
-            class="md-subhead"></div> -->
         </md-card-header-text>
       </md-card-header>
       <md-card-content>
@@ -81,12 +78,12 @@ export default {
     ...mapState('trip', {
       trips: state => state.all,
     }),
-    serverTrips() {
-      return this.$store.getters['trip/serverTrips'];
-    },
-    apiAuthToken() {
-      return this.$store.getters['application/getApiToken'];
-    },
+    ...mapState('trip', [
+      'serverTrips',
+    ]),
+    ...mapState('application', [
+      'apiAuthToken',
+    ]),
   },
   methods: {
     ...mapActions('trip', [

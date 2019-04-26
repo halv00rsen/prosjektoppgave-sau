@@ -9,17 +9,6 @@
       @mouseleave="leave()"
       @click="zoomMap(trip.getBounds())"
     />
-    <!-- <l-circle-marker
-      :lat-lng="trip.getCenter()"
-      :radius="10"
-      :color="trip.color"
-      :fill-opacity="0.8"
-      :fill-color="trip.color"
-      pane="markerPane"
-      @click="zoomMap(trip.getBounds())"
-      @mouseover="enter()"
-      @mouseleave="leave()"
-    /> -->
   </div>
 </template>
 

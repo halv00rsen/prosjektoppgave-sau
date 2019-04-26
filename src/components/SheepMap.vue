@@ -89,6 +89,7 @@ import 'leaflet-offline';
 import TileDatabase from '@/database/tiledatabase';
 import MapObservation from '@/components/MapObservation.vue';
 import TrailRoute from '@/components/TrailRoute.vue';
+import { mapState, mapGetters, } from 'vuex';
 
 export default {
   name: 'SheepMap',
@@ -137,36 +138,24 @@ export default {
     };
   },
   computed: {
-    currentTrip() {
-      return this.$store.state.trip.activeTrip;
-    },
-    marker() {
-      return this.$store.state.trip.currentPosition;
-    },
-    positionOn() {
-      return this.$store.state.application.positionRetrieved;
-    },
-    trips() {
-      return this.$store.state.analysis.selectedTrips;
-    },
-    bounds() {
-      return [
-        [
-          this.$store.state.analysis.minLat,
-          this.$store.state.analysis.minLng,
-        ], [
-          this.$store.state.analysis.maxLat,
-          this.$store.state.analysis.maxLng,
-        ]
-      ];
-    },
-    automaticZoom() {
-      return this.$store.state.analysis.settings.automaticZoom;
-    },
+    ...mapState('trip', {
+      currentTrip: 'activeTrip',
+      marker: 'currentPosition',
+    }),
+    ...mapState('application', {
+      positionOn: 'positionRetrieved',
+    }),
+    ...mapState('analysis', {
+      trips: 'selectedTrips',
+      settings: 'settings',
+    }),
+    ...mapGetters('analysis', {
+      bounds: 'getBounds',
+    }),
   },
   watch: {
     bounds() {
-      if (this.automaticZoom) {
+      if (this.settings.automaticZoom) {
         this.zoomMap();
       }
     },

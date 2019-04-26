@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapState, } from 'vuex';
 export default {
   name: 'AlertBox',
   props: {
@@ -26,12 +27,13 @@ export default {
     };
   },
   computed: {
-    message() {
-      return this.$store.state.application.message;
-    },
+    ...mapState('application', [
+      'message',
+      'messageOpen',
+    ]),
     open: {
       get() {
-        return this.$store.state.application.messageOpen;
+        return this.messageOpen;
       },
       set(val) {
         if (!val) {

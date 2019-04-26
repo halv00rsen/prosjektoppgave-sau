@@ -82,12 +82,6 @@ export default {
     ...mapState('analysis', [
       'settings',
     ]),
-    showObservedPoints() {
-      return this.$store.state.analysis.settings.showObservedPoints;
-    },
-    showDensity() {
-      return this.$store.state.analysis.settings.showDensity;
-    },
     mainView: {
       get() {
         if (this.settings.showHeatmap) {

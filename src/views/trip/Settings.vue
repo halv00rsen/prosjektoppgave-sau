@@ -20,11 +20,6 @@
 import {
   validationMixin,
 } from 'vuelidate';
-import {
-  // required,
-  // integer,
-  // minValue,
-} from 'vuelidate/lib/validators';
 
 export default {
   name: 'SettingsView',
@@ -39,11 +34,6 @@ export default {
     for (let key of Object.keys(loadedSettings)) {
       this.settings[key] = loadedSettings[key];
     }
-  },
-  validations() {
-    // const settings = {
-
-    // };
   },
   methods: {
     saveSettings() {

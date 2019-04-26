@@ -76,6 +76,7 @@ import moment from 'moment';
 
 import SideView from '@/components/analysis/SideView.vue';
 import AnalysisMap from '@/components/map/AnalysisMap.vue';
+import { mapState, } from 'vuex';
 
 export default {
   name: 'Overview',
@@ -89,26 +90,24 @@ export default {
     map: undefined,
   }),
   computed: {
+    ...mapState('analysis', [
+      'settings',
+      'selectedCase',
+      'dateFrom',
+      'dateTo',
+    ]),
     validDates() {
       return (!this.startDate || !this.endDate) || this.startDate <= this.endDate;
     },
-    useDensity() {
-      return this.$store.state.analysis.settings.showDensity;
-    },
-    selectedCase() {
-      return this.$store.state.analysis.selectedCase;
-    },
     storeStartDate() {
-      const date = this.$store.state.analysis.dateFrom;
-      if (date) {
-        return moment(date).format('LL');
+      if (this.dateFrom) {
+        return moment(this.dateFrom).format('LL');
       }
       return undefined;
     },
     storeEndDate() {
-      const date = this.$store.state.analysis.dateTo;
-      if (date) {
-        return moment(date).format('LL');
+      if (this.dateTo) {
+        return moment(this.dateTo).format('LL');
       }
       return undefined;
     },

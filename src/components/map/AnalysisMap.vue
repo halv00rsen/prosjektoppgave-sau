@@ -41,7 +41,6 @@
           />
         </div>
       </div>
-
     </div>
 
     <div v-if="nibioData !== undefined && settings.showNibio">
@@ -110,9 +109,6 @@ export default {
     },
   }),
   computed: {
-    trips() {
-      return this.$store.state.analysis.selectedTrips;
-    },
     localBounds() {
       return this.$refs.mainmap.localBounds;
     },
@@ -120,6 +116,9 @@ export default {
       'nibioData',
       'settings',
     ]),
+    ...mapState('analysis', {
+      trips: 'selectedTrips',
+    }),
     maxNumber() {
       let maxNumber = 0;
       for (let trip of this.trips) {
@@ -157,9 +156,6 @@ export default {
         });
       });
     },
-    // routes() {
-    //   return
-    // },
   },
   methods: {
     showObservationOfTrip(tripBounds) {

@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapGetters, } from 'vuex';
+import { mapGetters, mapState, } from 'vuex';
 
 export default {
   name: 'Trips',
@@ -47,12 +47,10 @@ export default {
     toggleTrips: false,
   }),
   computed: {
-    selectedCase() {
-      return this.$store.state.analysis.selectedCase;
-    },
-    trips() {
-      return this.$store.state.analysis.filteredTrips;
-    },
+    ...mapState('analysis', {
+      selectedCase: 'selectedCase',
+      trips: 'filteredTrips',
+    }),
     setAll: {
       get() {
         return this.trips.length == this.selectedTrips.length;
@@ -66,7 +64,7 @@ export default {
       },
     },
     fixedTrips() {
-      return this.$store.state.analysis.selectedCase.fixedTrips;
+      return this.selectedCase.fixedTrips;
     },
     ...mapGetters('analysis', {
       totalBounds: 'getBounds',

@@ -23,7 +23,7 @@
       </div>
     </l-popup>
     <l-tooltip
-      v-if="showNumInPoint"
+      v-if="settings.showNumInPoint"
       :options="tooltipOptions">
       <div v-if="observation.isSheep">
         {{ observation.numSheep }}
@@ -39,6 +39,7 @@
 import {
   LCircleMarker, LPopup, LTooltip,
 } from 'vue2-leaflet';
+import { mapState, } from 'vuex';
 
 export default {
   name: 'ClusterObservation',
@@ -68,15 +69,14 @@ export default {
     };
   },
   computed: {
+    ...mapState('analysis', [
+      'settings',
+    ]),
     showObservation() {
-      const settings = this.$store.state.analysis.settings;
       if (this.observation.isSheep) {
-        return settings.showObservations;
+        return this.settings.showObservations;
       }
-      return settings.showPredators;
-    },
-    showNumInPoint() {
-      return this.$store.state.analysis.settings.showNumInPoint;
+      return this.settings.showPredators;
     },
   },
 };
