@@ -16,6 +16,15 @@
           Vis beiteområder
         </span>
       </md-list-item>
+      <md-list-item>
+        <md-switch
+          v-model="useNina"
+          @change="loadDataPredator()"
+        />
+        <span class="md-list-item-text">
+          Vis rovdyrdata
+        </span>
+      </md-list-item>
     </md-list>
   </div>
 </template>
@@ -33,6 +42,8 @@ export default {
   data: () => ({
     useNibio: false,
     dataLoaded: false,
+    useNina: false,
+    dataLoadedNina: false,
     apiUrl: process.env.VUE_APP_API_ENDPOINT,
   }),
   computed: {
@@ -57,6 +68,25 @@ export default {
         }).then(response => {
           this.$store.dispatch('analysis/setNibioData', response.data);
           this.dataLoaded = true;
+        });
+      }
+    },
+    loadDataPredator() {
+      this.$store.dispatch('analysis/setShowNina', this.useNina);
+      if (!this.dataLoadedNina && this.useNina) {
+        this.$http.get(this.apiUrl + 'predator/', {
+          headers: {
+            'Authorization': '',
+          },
+          params: {
+            minX: this.bounds[0][0],
+            minY: this.bounds[0][1],
+            maxX: this.bounds[1][0],
+            maxY: this.bounds[1][1],
+          },
+        }).then(response => {
+          this.$store.dispatch('analysis/setNinaData', response.data);
+          this.dataLoadedNina = true;
         });
       }
     },

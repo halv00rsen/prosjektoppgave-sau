@@ -51,6 +51,14 @@
       />
     </div>
 
+    <div v-if="ninaData !== undefined && settings.showPredatorData">
+      <predator
+        v-for="(elem, index) of ninaData"
+        :key="'nina-' + index"
+        :data="elem"
+      />
+    </div>
+
     <heatmap
       v-if="settings.showHeatmap"
       :lat-lngs="observations"
@@ -88,6 +96,7 @@ import TrailRoute from '@/components/TrailRoute.vue';
 import TripPoint from '@/components/map/TripPoint.vue';
 import Nibio from '@/components/map/Nibio.vue';
 import Heatmap from '@/components/map/Heatmap.vue';
+import Predator from '@/components/map/Predator.vue';
 
 export default {
   name: 'AnalysisMap',
@@ -102,6 +111,7 @@ export default {
     LRectangle,
     Nibio,
     Heatmap,
+    Predator,
   },
   data: () => ({
     clusterOptions: {
@@ -115,6 +125,7 @@ export default {
     ...mapState('analysis', [
       'nibioData',
       'settings',
+      'ninaData',
     ]),
     ...mapState('analysis', {
       trips: 'selectedTrips',

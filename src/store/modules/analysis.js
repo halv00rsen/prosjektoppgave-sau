@@ -28,6 +28,7 @@ export default {
       showNibio: false,
       showHeatmap: false,
       pointSizing: false,
+      showPredatorData: false,
     },
     selectedCase: {
       presetTrips: false,
@@ -38,6 +39,7 @@ export default {
     caseSet: false,
     fitBounds: undefined,
     nibioData: undefined,
+    ninaData: undefined,
   },
   getters: {
     getBounds(state) {
@@ -51,6 +53,12 @@ export default {
     },
   },
   actions: {
+    setNinaData({ commit, }, data) {
+      commit('setNinaData', data);
+    },
+    setShowNina({ commit, }, showPredatorData) {
+      commit('setShowNina', showPredatorData);
+    },
     setMainView({ commit, }, mainView) {
       commit('setMainView', mainView);
     },
@@ -138,6 +146,12 @@ export default {
     },
   },
   mutations: {
+    setNinaData(state, data) {
+      state.ninaData = data;
+    },
+    setShowNina(state, showPredatorData) {
+      state.settings.showPredatorData = showPredatorData;
+    },
     setMainView(state, mainView) {
       let heatmap = false;
       let sizing = false;
@@ -240,6 +254,7 @@ export default {
         showNibio: false,
         showHeatmap: false,
         pointSizing: false,
+        showPredatorData: false,
       };
       state.nibioData = undefined;
     },
