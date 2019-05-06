@@ -1,7 +1,7 @@
 <template>
   <l-circle-marker
     :lat-lng="position"
-    :radius="10"
+    :radius="5"
     :fill="true"
     :fill-opacity="1"
     :fill-color="color"

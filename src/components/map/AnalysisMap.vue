@@ -10,7 +10,8 @@
         <div v-if="!settings.groupTrips || showObservationOfTrip(trip.boundsTotal)">
           <trail-route
             :positions="trip.positions"
-            :color="trip.color"
+            :color="settings.showTime ? 'red' : trip.color"
+            :show-gray-color="settings.showTime && settings.selectedTimeTrip !== trip"
           />
         </div>
         <trip-point
@@ -35,9 +36,10 @@
             v-for="(observation, index) of trip.observations"
             :key="'observation-' + trip.id + index"
             :observation="observation"
-            :observation-color="trip.color"
+            :observation-color="settings.showTime ? 'red' : trip.color"
             :clickable="false"
             :analysis-view="true"
+            :show-gray-color="settings.showTime && settings.selectedTimeTrip !== trip"
           />
         </div>
       </div>

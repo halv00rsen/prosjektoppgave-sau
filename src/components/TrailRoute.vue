@@ -5,7 +5,7 @@
       <l-circle-marker
         :lat-lng="startPosition"
         :radius="5"
-        :color="color"
+        :color="showColor()"
         :fill-opacity="0.4"
         :fill-color="color"
         pane="shadowPane"
@@ -17,8 +17,8 @@
       <l-circle-marker
         :lat-lng="endPosition"
         :radius="5"
-        :color="color"
-        :fill-color="color"
+        :color="showColor()"
+        :fill-color="showColor()"
         :fill-opacity="1"
         pane="shadowPane"
       >
@@ -35,7 +35,7 @@
       <map-trail
         :latitude="positions[0].lat"
         :longitude="positions[0].lng"
-        :color="color"/>
+        :color="showColor()"/>
     </div>
   </div>
 </template>
@@ -63,6 +63,10 @@ export default {
       type: String,
       default: 'black',
     },
+    showGrayColor: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     startPosition() {
@@ -85,6 +89,11 @@ export default {
         features: list,
       };
     },
+    styles() {
+      return {
+        color: this.showColor(),
+      };
+    },
   },
   methods: {
     getGeoJson(posPair) {
@@ -99,10 +108,8 @@ export default {
         },
       };
     },
-    styles() {
-      return {
-        color: this.color,
-      };
+    showColor() {
+      return this.showGrayColor ? 'gray' : this.color;
     },
   },
 };

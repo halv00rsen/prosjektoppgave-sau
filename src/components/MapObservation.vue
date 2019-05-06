@@ -9,7 +9,7 @@
       ref="marker"
       :lat-lng="observed"
       :radius="radius"
-      :color="observationColor"
+      :color="showGrayColor ? 'gray' : observationColor"
       :fill="true"
       :fill-opacity="1"
       :fill-color="observation.isSheep ? 'white' : 'gray'"
@@ -90,6 +90,10 @@ export default {
       default: 'yellow',
     },
     analysisView: {
+      type: Boolean,
+      default: false,
+    },
+    showGrayColor: {
       type: Boolean,
       default: false,
     },

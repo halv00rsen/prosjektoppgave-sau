@@ -29,6 +29,8 @@ export default {
       showHeatmap: false,
       pointSizing: false,
       showPredatorData: false,
+      showTime: false,
+      selectedTimeTrip: undefined,
     },
     selectedCase: {
       presetTrips: false,
@@ -53,6 +55,9 @@ export default {
     },
   },
   actions: {
+    setTimeTrip({ commit, state, }, index) {
+      commit('setTimeTrip', state.selectedTrips[index]);
+    },
     setNinaData({ commit, }, data) {
       commit('setNinaData', data);
     },
@@ -146,6 +151,9 @@ export default {
     },
   },
   mutations: {
+    setTimeTrip(state, timeTrip) {
+      state.settings.selectedTimeTrip = timeTrip;
+    },
     setNinaData(state, data) {
       state.ninaData = data;
     },
@@ -156,6 +164,7 @@ export default {
       let heatmap = false;
       let sizing = false;
       let density = false;
+      let time = false;
       switch(mainView) {
         case 'showHeatmap':
           heatmap = true;
@@ -166,10 +175,14 @@ export default {
         case 'showDensity':
           density = true;
           break;
+        case 'showTime':
+          time = true;
+          break;
       }
       state.settings.showHeatmap = heatmap;
       state.settings.showDensity = density;
       state.settings.pointSizing = sizing;
+      state.settings.showTime = time;
     },
     setPointSizing(state, pointSizing) {
       state.settings.pointSizing = pointSizing;
@@ -255,6 +268,8 @@ export default {
         showHeatmap: false,
         pointSizing: false,
         showPredatorData: false,
+        showTime: false,
+        selectedTimeTrip: undefined,
       };
       state.nibioData = undefined;
     },

@@ -3,7 +3,7 @@
   <div>
     <l-polygon
       :lat-lngs="trip.positions"
-      :color="trip.color"
+      :color="color"
       :fill-opacity="fillOpacityPolygon"
       @mouseover="enter()"
       @mouseleave="leave()"
@@ -17,6 +17,7 @@ import {
   LCircleMarker, LPolygon,
 } from 'vue2-leaflet';
 import Trip from '@/models/trip';
+import { mapState, } from 'vuex';
 
 export default {
   name: 'Trip',
@@ -40,6 +41,17 @@ export default {
       showPolygon: false,
       fillOpacityPolygon: 0.2,
     };
+  },
+  computed: {
+    ...mapState('analysis', [
+      'settings',
+    ]),
+    color() {
+      if (this.settings.showTime) {
+        return this.settings.selectedTimeTrip === this.trip ? 'red' : 'gray';
+      }
+      return this.trip.color;
+    },
   },
   methods: {
     leave() {

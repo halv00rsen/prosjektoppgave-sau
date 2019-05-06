@@ -8,8 +8,28 @@
       <router-link :to="{ name: 'cases', }">Tilbake</router-link>
     </div>
     <div class="md-layout-item md-layout md-large-size-70 md-medium-size-60 md-small-size-50 md-xsmall-size-100 analysis-column">
+      <div v-if="settings.showTime">
+        <md-button
+          class="md-icon-button"
+          @click="editTripIndex(-1)"
+        >
+          <md-icon>navigate_before</md-icon>
+        </md-button>
+        <input
+          v-if="settings.showTime"
+          v-model.number="tripIndex"
+          :max="numTrips"
+          min="0"
+          type="range">
+        <md-button
+          class="md-icon-button"
+          @click="editTripIndex(1)"
+        >
+          <md-icon>navigate_next</md-icon>
+        </md-button>
+      </div>
       <div
-        v-if="!selectedCase.fixedTrips"
+        v-else-if="!selectedCase.fixedTrips"
         class="md-layout-item md-layout md-large-size-100">
         <div class="md-layout-item md-large-size-40">
           <md-datepicker
@@ -60,9 +80,9 @@
       </div>
       <div class="md-layout-item md-size-100">
         <analysis-map ref="map"/>
-        <md-button @click="exportGeoJson()">
+        <!-- <md-button @click="exportGeoJson()">
           Eksporter GeoJson
-        </md-button>
+        </md-button> -->
       </div>
     </div>
     <div class="md-layout-item md-large-size-30 md-medium-size-40 md-small-size-50 md-xsmall-size-100 analysis-column">
@@ -88,6 +108,7 @@ export default {
     startDate: undefined,
     endDate: undefined,
     map: undefined,
+    tripIndex: 0,
   }),
   computed: {
     ...mapState('analysis', [
@@ -95,7 +116,11 @@ export default {
       'selectedCase',
       'dateFrom',
       'dateTo',
+      'selectedTrips',
     ]),
+    numTrips() {
+      return this.selectedTrips.length - 1;
+    },
     validDates() {
       return (!this.startDate || !this.endDate) || this.startDate <= this.endDate;
     },
@@ -110,6 +135,14 @@ export default {
         return moment(this.dateTo).format('LL');
       }
       return undefined;
+    },
+  },
+  watch: {
+    tripIndex(index) {
+      this.$store.dispatch('analysis/setTimeTrip', index);
+    },
+    numTrips() {
+      this.tripIndex = 0;
     },
   },
   beforeDestroy() {
@@ -143,6 +176,11 @@ export default {
       link.setAttribute('download', 'geodata.json'); //or any other extension
       document.body.appendChild(link);
       link.click();
+    },
+    editTripIndex(val) {
+      if (this.tripIndex + val >= 0 && this.tripIndex + val <= this.numTrips) {
+        this.tripIndex = this.tripIndex + val;
+      }
     },
   },
 };

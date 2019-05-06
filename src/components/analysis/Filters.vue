@@ -24,6 +24,11 @@
           v-model="mainView"
           value="showDensity">Grupper</md-radio>
       </md-list-item>
+      <md-list-item>
+        <md-radio
+          v-model="mainView"
+          value="showTime">Tid</md-radio>
+      </md-list-item>
     </md-list>
     <h4>Annet</h4>
     <md-divider/>
@@ -90,6 +95,8 @@ export default {
           return 'pointSizing';
         } else if (this.settings.showDensity) {
           return 'showDensity';
+        } else if (this.settings.showTime) {
+          return 'showTime';
         }
         return 'regular';
       },
