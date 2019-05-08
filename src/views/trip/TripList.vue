@@ -99,8 +99,8 @@ export default {
       });
     },
     upload(trip) {
-      let apiAuthToken = this.apiAuthToken();
-      if (!this.apiAuthToken()) {
+      let apiAuthToken = this.apiAuthToken;
+      if (!this.apiAuthToken) {
         apiAuthToken = 'Basic ' + btoa('bruker:' + prompt('Passord:'));
         this.$store.dispatch('application/setApiToken', apiAuthToken);
       }
@@ -123,8 +123,8 @@ export default {
       if (!this.serverView || this.serverDataLoaded) {
         return;
       }
-      let apiAuthToken = this.apiAuthToken();
-      if (!this.apiAuthToken()) {
+      let apiAuthToken = this.apiAuthToken;
+      if (!this.apiAuthToken) {
         apiAuthToken = 'Basic ' + btoa('bruker:' + prompt('Passord:'));
         console.log(apiAuthToken);
         this.$store.dispatch('application/setApiToken', apiAuthToken);

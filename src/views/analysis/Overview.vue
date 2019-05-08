@@ -139,7 +139,8 @@ export default {
   },
   watch: {
     tripIndex(index) {
-      this.$store.dispatch('analysis/setTimeTrip', index);
+      this.$store.dispatch('analysis/setTimeTrip', this.selectedTrips[index]);
+      this.$store.dispatch('analysis/setFitBounds', this.selectedTrips[index].getBounds());
     },
     numTrips() {
       this.tripIndex = 0;

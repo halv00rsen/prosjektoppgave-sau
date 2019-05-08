@@ -50,6 +50,7 @@ export default {
     ...mapState('analysis', {
       selectedCase: 'selectedCase',
       trips: 'filteredTrips',
+      settings: 'settings',
     }),
     setAll: {
       get() {
@@ -64,7 +65,7 @@ export default {
       },
     },
     fixedTrips() {
-      return this.selectedCase.fixedTrips;
+      return this.selectedCase.fixedTrips || this.settings.showTime;
     },
     ...mapGetters('analysis', {
       totalBounds: 'getBounds',

@@ -10,15 +10,15 @@
       Dyr: {{ data.name }}
       <br>
       Antall: {{ data.number }}
-      <br>
-      Datasett: {{ data.dataSet }}
+      <!-- <br>
+      Datasett: {{ data.dataSet }} -->
       <br>
       Dato: {{ data.findDate }}
       <!-- {{ data.findDate | moment("YYYY.MM.DD") }} -->
-      <br>
-      Kjønn: {{ data.sex }}
-      <br>
-      Presisjon: {{ data.precision }}
+      <!-- <br>
+      Kjønn: {{ data.sex }} -->
+      <!-- <br>
+      Presisjon: {{ data.precision }} -->
     </l-popup>
   </l-circle-marker>
 </template>

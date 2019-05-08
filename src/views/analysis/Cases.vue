@@ -143,6 +143,8 @@ export default {
         endDate: moment().endOf('day'),
         presetTrips: true,
         showRoute: true,
+        showPredators: true,
+        showObservedPoints: true,
         icon: 'directions_walk',
       },
       {
@@ -151,16 +153,19 @@ export default {
         endDate: moment().endOf('day'),
         presetTrips: true,
         showRoute: false,
+        showPredators: true,
         icon: 'directions_walk',
+        mainView: 'pointSizing',
       },
       {
-        text: 'Turer fra ' + moment().get('year'),
+        text: 'Tettheten av sauer i ' + moment().get('year'),
         startDate: moment().startOf('year'),
         endDate: moment().endOf('day'),
         presetTrips: true,
-        showDensity: true,
+        showPredators: false,
         showRoute: false,
         icon: 'directions_walk',
+        mainView: 'showHeatmap',
       },
     ],
     mapCases: [
@@ -178,6 +183,11 @@ export default {
         text: 'Rovdyr fra et område',
         header: 'Rovdyr observert i området',
         icon: 'pets',
+        presetTrips: true,
+        showPredators: true,
+        showObservations: false,
+        setBounds: true,
+        nina: true,
       },
       {
         text: 'Alle kadaver i et område',
@@ -256,16 +266,15 @@ export default {
         presetTrips: item.presetTrips,
         fixedTrips: item.initialTrips !== undefined,
         header: item.header !== undefined ? item.header : item.text,
+        bounds: item.bounds,
       });
-      if (item.showDensity) {
-        this.$store.dispatch('analysis/setShowDensity', item.showDensity);
-        this.$store.dispatch('analysis/setShowObservedPoints', false);
-        this.$store.dispatch('analysis/setGroupTrips', false);
-      } else {
-        this.$store.dispatch('analysis/setShowObservedPoints', item.showObservedPoints);
-        this.$store.dispatch('analysis/setGroupTrips', item.groupTrips);
-      }
+      this.$store.dispatch('analysis/setMainView', item.mainView);
+      this.$store.dispatch('analysis/setShowObservedPoints', item.showObservedPoints);
+      this.$store.dispatch('analysis/setGroupTrips', item.groupTrips);
       this.$store.dispatch('analysis/setShowRoute', item.showRoute);
+      if (!item.showObservations && item.showObservations !== undefined) {
+        this.$store.dispatch('analysis/setShowObservations', false);
+      }
       if (item.initialTrips) {
         this.$store.dispatch('analysis/setInitialTrips', item.initialTrips);
       }
@@ -282,6 +291,12 @@ export default {
           bounds: item.bounds,
           inclusive: this.includeTripsInArea,
         });
+      }
+      if (item.nibio) {
+        this.$store.dispatch('analysis/setShowNibio', true);
+      }
+      if (item.nina) {
+        this.$store.dispatch('analysis/setShowNina', true);
       }
       this.$router.push('overview');
     },

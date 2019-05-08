@@ -3,6 +3,7 @@
     <l-geo-json
       v-if="showObservedPoints"
       :geojson="geojson"
+      :options-style="styles"
     />
 
     <l-circle-marker
@@ -108,9 +109,9 @@ export default {
         features: [
           {
             type: 'Feature',
-            properties: {
-              color: '#00ff00',
-            },
+            // properties: {
+            //   color: this.color,
+            // },
             geometry: {
               type: 'LineString',
               coordinates: [
@@ -152,6 +153,20 @@ export default {
         return 2 * this.observation.numAnimals + 10;
       }
       return 10;
+    },
+    color() {
+      if (this.settings.showTime) {
+        if (this.showGrayColor) {
+          return 'gray';
+        }
+        return 'red';
+      }
+      return '#00ff00';
+    },
+    styles() {
+      return {
+        color: this.color,
+      };
     },
   },
   mounted() {

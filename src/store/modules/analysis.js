@@ -37,6 +37,7 @@ export default {
       fixedTrips: false,
       text: undefined,
       header: undefined,
+      bounds: undefined,
     },
     caseSet: false,
     fitBounds: undefined,
@@ -53,10 +54,19 @@ export default {
         [state.maxLat, state.maxLng],
       ];
     },
+    getCaseBounds(state, getters) {
+      if (!state.selectedCase || !state.selectedCase.bounds) {
+        return getters.getBounds;
+      }
+      return [
+        [state.selectedCase.bounds.minLat, state.selectedCase.bounds.minLng],
+        [state.selectedCase.bounds.maxLat, state.selectedCase.bounds.maxLng],
+      ];
+    },
   },
   actions: {
-    setTimeTrip({ commit, state, }, index) {
-      commit('setTimeTrip', state.selectedTrips[index]);
+    setTimeTrip({ commit, }, trip) {
+      commit('setTimeTrip', trip);
     },
     setNinaData({ commit, }, data) {
       commit('setNinaData', data);
@@ -156,6 +166,7 @@ export default {
     },
     setNinaData(state, data) {
       state.ninaData = data;
+      state.settings.showPredatorData = true;
     },
     setShowNina(state, showPredatorData) {
       state.settings.showPredatorData = showPredatorData;
@@ -195,6 +206,7 @@ export default {
     },
     setNibioData(state, data) {
       state.nibioData = data;
+      state.settings.showNibio = true;
     },
     editTripVisualInfo(state, data) {
       state.all[data.index].color = data.color;
@@ -272,6 +284,7 @@ export default {
         selectedTimeTrip: undefined,
       };
       state.nibioData = undefined;
+      state.ninaData = undefined;
     },
     setSelectedCase(state, _case) {
       state.selectedCase = _case;
@@ -316,6 +329,9 @@ export default {
           return elem.wholeTripInBound(data.bounds);
         }
       });
+      if (state.filteredTrips) {
+        state.settings.selectedTimeTrip = state.filteredTrips[0];
+      }
     },
     setShowRectangle(state, showRectangle) {
       state.settings.showRectangle = showRectangle;
