@@ -31,6 +31,7 @@ export default {
       showPredatorData: false,
       showTime: false,
       selectedTimeTrip: undefined,
+      comparison: false,
     },
     selectedCase: {
       presetTrips: false,
@@ -65,6 +66,9 @@ export default {
     },
   },
   actions: {
+    setComparison({ commit, }, comparison) {
+      commit('setComparison', comparison);
+    },
     setTimeTrip({ commit, }, trip) {
       commit('setTimeTrip', trip);
     },
@@ -161,6 +165,9 @@ export default {
     },
   },
   mutations: {
+    setComparison(state, comparison) {
+      state.settings.comparison = comparison;
+    },
     setTimeTrip(state, timeTrip) {
       state.settings.selectedTimeTrip = timeTrip;
     },
@@ -282,6 +289,7 @@ export default {
         showPredatorData: false,
         showTime: false,
         selectedTimeTrip: undefined,
+        comparison: false,
       };
       state.nibioData = undefined;
       state.ninaData = undefined;

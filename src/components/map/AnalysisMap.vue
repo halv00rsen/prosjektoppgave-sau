@@ -12,6 +12,7 @@
             :positions="trip.positions"
             :color="settings.showTime ? 'red' : trip.color"
             :show-gray-color="settings.showTime && settings.selectedTimeTrip !== trip"
+            :date-conducted="trip.startTime"
           />
         </div>
         <trip-point
@@ -40,6 +41,7 @@
             :clickable="false"
             :analysis-view="true"
             :show-gray-color="settings.showTime && settings.selectedTimeTrip !== trip"
+            :date-conducted="trip.startTime"
           />
         </div>
       </div>

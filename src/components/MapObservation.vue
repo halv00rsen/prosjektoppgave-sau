@@ -10,7 +10,7 @@
       ref="marker"
       :lat-lng="observed"
       :radius="radius"
-      :color="showGrayColor ? 'gray' : observationColor"
+      :color="color"
       :fill="true"
       :fill-opacity="1"
       :fill-color="observation.isSheep ? 'white' : 'gray'"
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import {
   LGeoJson, LCircleMarker, LPopup, LTooltip,
 } from 'vue2-leaflet';
@@ -97,6 +98,10 @@ export default {
     showGrayColor: {
       type: Boolean,
       default: false,
+    },
+    dateConducted: {
+      type: Number,
+      default: undefined,
     },
   },
   data() {
@@ -161,7 +166,14 @@ export default {
         }
         return 'red';
       }
-      return '#00ff00';
+      if (this.settings.comparison) {
+        const date = moment(this.dateConducted);
+        if (date.isBefore(moment().startOf('year'))) {
+          return 'blue';
+        }
+        return 'green';
+      }
+      return this.observationColor;
     },
     styles() {
       return {

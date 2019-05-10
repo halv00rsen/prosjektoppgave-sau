@@ -170,8 +170,8 @@ export default {
     ],
     mapCases: [
       {
-        text: 'Turer i et område',
-        header: 'Turer i et definert område',
+        text: 'Observasjoner i et område',
+        header: 'Observasjoner i et definert område',
         presetTrips: true,
         startDate: moment().startOf('year'),
         showRoute: true,
@@ -180,7 +180,7 @@ export default {
         icon: 'directions_walk',
       },
       {
-        text: 'Rovdyr fra et område',
+        text: 'Rovdyr i et område',
         header: 'Rovdyr observert i området',
         icon: 'pets',
         presetTrips: true,
@@ -189,25 +189,21 @@ export default {
         setBounds: true,
         nina: true,
       },
-      {
-        text: 'Alle kadaver i et område',
-        icon: 'pets',
-      },
     ],
     comparisonCases: [
       {
         text: 'Sammenlign årets data med fjorårets i et gitt område',
         header: 'Sammenligning med fjorårets data',
         icon: 'compare_arrows',
+        setBounds: true,
+        comparison: true,
+        presetTrips: true,
       },
       {
         text: 'Sammenlign årets data med fjorårets i en tidsperiode',
         header: 'Sammenligning med fjorårets data',
         icon: 'compare_arrows',
-      },
-      {
-        text: 'Sammenlign to forskjellige scenarioer',
-        icon: 'compare_arrows',
+        comparison: true,
       },
     ],
   }),
@@ -268,6 +264,9 @@ export default {
         header: item.header !== undefined ? item.header : item.text,
         bounds: item.bounds,
       });
+      if (item.comparison) {
+        this.$store.dispatch('analysis/setComparison', true);
+      }
       this.$store.dispatch('analysis/setMainView', item.mainView);
       this.$store.dispatch('analysis/setShowObservedPoints', item.showObservedPoints);
       this.$store.dispatch('analysis/setGroupTrips', item.groupTrips);

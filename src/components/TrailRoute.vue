@@ -41,10 +41,12 @@
 </template>
 
 <script>
+import moment from 'moment';
 import {
   LGeoJson, LCircleMarker, LPopup,
 } from 'vue2-leaflet';
 import MapTrail from '@/components/MapTrail.vue';
+import { mapState, } from 'vuex';
 
 export default {
   name: 'TrailRoute',
@@ -67,8 +69,15 @@ export default {
       type: Boolean,
       default: false,
     },
+    dateConducted: {
+      type: Number,
+      default: undefined,
+    },
   },
   computed: {
+    ...mapState('analysis', [
+      'settings',
+    ]),
     startPosition() {
       return this.positions[0];
     },
@@ -109,7 +118,18 @@ export default {
       };
     },
     showColor() {
-      return this.showGrayColor ? 'gray' : this.color;
+      if (this.settings.showTime) {
+        return this.showGrayColor ? 'gray' : this.color;
+      }
+      if (this.settings.comparison) {
+        const date = moment(this.dateConducted);
+        if (date.isBefore(moment().startOf('year'))) {
+          return 'blue';
+        } else {
+          return 'green';
+        }
+      }
+      return this.color;
     },
   },
 };

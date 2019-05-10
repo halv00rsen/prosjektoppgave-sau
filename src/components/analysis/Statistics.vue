@@ -1,7 +1,7 @@
 
 <template>
   <md-content>
-    <md-list>
+    <md-list v-if="!settings.comparison">
       <md-list-item>
         Antall sau i valgt område: {{ data.numSheep }}
       </md-list-item>
@@ -25,13 +25,67 @@
         </span>
       </md-list-item>
     </md-list>
+    <md-list v-else>
+      <md-list-item>
+        <span class="md-list-item-text">{{ new Date() | moment("YYYY") }}</span>
+      </md-list-item>
+      <md-list-item>
+        <span class="md-list-item-text">Antall observasjoner: {{ comparisonData.now.numObservations }}</span>
+      </md-list-item>
+      <md-list-item>
+        <span class="md-list-item-text">Antall sau: {{ comparisonData.now.numSheep }}</span>
+      </md-list-item>
+      <md-divider/>
+      <md-list-item>
+        <span class="md-list-item-text">{{ lastYear }}</span>
+      </md-list-item>
+      <md-list-item>
+        <span class="md-list-item-text">Antall observasjoner: {{ comparisonData.last.numObservations }}</span>
+      </md-list-item>
+      <md-list-item>
+        <span class="md-list-item-text">Antall sau: {{ comparisonData.last.numSheep }}</span>
+      </md-list-item>
+    </md-list>
   </md-content>
 </template>
 
 <script>
+import moment from 'moment';
+import { mapState, } from 'vuex';
 export default {
   name: 'Statistics',
+  data() {
+    return {
+      lastYear: moment().get('year') - 1,
+    };
+  },
   computed: {
+    ...mapState('analysis', [
+      'settings',
+      'selectedTrips',
+    ]),
+    comparisonData() {
+      const data = {
+        now: {
+          numSheep: 0,
+          numObservations: 0,
+        },
+        last: {
+          numSheep: 0,
+          numObservations: 0,
+        },
+      };
+      this.selectedTrips.forEach(trip => {
+        const d = moment(trip.startTime).isBefore(moment().startOf('year')) ? data.last : data.now;
+        trip.observations.forEach(observation => {
+          d.numObservations += 1;
+          if (observation.isSheep) {
+            d.numSheep += observation.numSheep;
+          }
+        });
+      });
+      return data;
+    },
     data() {
       let numSheep = 0;
       let numLambs = 0;
@@ -58,6 +112,7 @@ export default {
         predators,
       };
     },
+
   },
 };
 </script>
