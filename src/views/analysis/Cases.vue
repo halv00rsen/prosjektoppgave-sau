@@ -166,6 +166,7 @@ export default {
         showRoute: false,
         icon: 'directions_walk',
         mainView: 'showHeatmap',
+        timeline: false,
       },
     ],
     mapCases: [
@@ -188,6 +189,7 @@ export default {
         showObservations: false,
         setBounds: true,
         nina: true,
+        timeline: false,
       },
     ],
     comparisonCases: [
@@ -195,15 +197,20 @@ export default {
         text: 'Sammenlign årets data med fjorårets i et gitt område',
         header: 'Sammenligning med fjorårets data',
         icon: 'compare_arrows',
+        startDate: moment().subtract(1, 'year').startOf('year'),
         setBounds: true,
         comparison: true,
         presetTrips: true,
+        timeline: false,
       },
       {
-        text: 'Sammenlign årets data med fjorårets i en tidsperiode',
+        text: 'Sammenlign all data med fjorårets',
         header: 'Sammenligning med fjorårets data',
         icon: 'compare_arrows',
+        startDate: moment().subtract(1, 'year').startOf('year'),
         comparison: true,
+        timeline: false,
+        presetTrips: true,
       },
     ],
   }),
@@ -263,6 +270,7 @@ export default {
         fixedTrips: item.initialTrips !== undefined,
         header: item.header !== undefined ? item.header : item.text,
         bounds: item.bounds,
+        detailedTimeline: item.timeline === undefined ? true : item.timeline,
       });
       if (item.comparison) {
         this.$store.dispatch('analysis/setComparison', true);

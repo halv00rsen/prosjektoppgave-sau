@@ -39,6 +39,7 @@ export default {
       text: undefined,
       header: undefined,
       bounds: undefined,
+      detailedTimeline: true,
     },
     caseSet: false,
     fitBounds: undefined,

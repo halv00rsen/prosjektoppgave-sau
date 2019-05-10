@@ -31,55 +31,14 @@
       <div
         v-else-if="!selectedCase.fixedTrips"
         class="md-layout-item md-layout md-large-size-100">
-        <div class="md-layout-item md-large-size-40">
-          <md-datepicker
-            v-if="!storeStartDate"
-            v-model="startDate"
-            :md-disabled-dates="disabledFrom"
-            md-immediately>
-            <label>Dato fra</label>
-          </md-datepicker>
-          <md-field v-else>
-            <label>Dato fra</label>
-            <md-input
-              v-model="storeStartDate"
-              disabled
-            />
-          </md-field>
-        </div>
-        <div class="md-layout-item md-large-size-40">
-          <md-datepicker
-            v-if="!storeEndDate"
-            v-model="endDate"
-            :md-disabled-dates="disabledTo"
-            md-immediately>
-            <label>Dato til</label>
-          </md-datepicker>
-          <md-field v-else>
-            <label>Dato til</label>
-            <md-input
-              v-model="storeEndDate"
-              disabled
-            />
-          </md-field>
-        </div>
-        <div
-          v-if="!storeEndDate && !storeStartDate"
-          class="md-layout-item">
-          <md-button
-            class="md-dense md-icon-button"
-            @click="setDates()">
-            <md-icon>date_range</md-icon>
-          </md-button>
-          <md-button
-            class="md-dense md-icon-button"
-            @click="clearDates()">
-            <md-icon>delete</md-icon>
-          </md-button>
-        </div>
+        <highcharts
+          :options="chartOptions"
+          style="width: 100%;"
+        />
       </div>
       <div class="md-layout-item md-size-100">
         <analysis-map ref="map"/>
+
         <!-- <md-button @click="exportGeoJson()">
           Eksporter GeoJson
         </md-button> -->
@@ -94,15 +53,22 @@
 <script>
 import moment from 'moment';
 
+import Highcharts from 'highcharts';
+import timeline from 'highcharts/modules/timeline';
+import { Chart, } from 'highcharts-vue';
+import { mapState, } from 'vuex';
+
 import SideView from '@/components/analysis/SideView.vue';
 import AnalysisMap from '@/components/map/AnalysisMap.vue';
-import { mapState, } from 'vuex';
+
+timeline(Highcharts);
 
 export default {
   name: 'Overview',
   components: {
     SideView,
     AnalysisMap,
+    highcharts: Chart,
   },
   data: () => ({
     startDate: undefined,
@@ -135,6 +101,55 @@ export default {
         return moment(this.dateTo).format('LL');
       }
       return undefined;
+    },
+    chartOptions() {
+      const config = {
+        chart: {
+          zoomType: 'x',
+          type: 'timeline',
+          margin: 0,
+        },
+        xAxis: {
+          visible: false,
+        },
+        yAxis: {
+          visible: false,
+        },
+        title: {
+          text: '',
+          floating: true,
+        },
+        series: [
+          {
+            dataLabels: {
+              enabled: false,
+            },
+            events: {
+              click: this.clickTimeline,
+            },
+            data: [],
+          },
+        ],
+      };
+      if (this.selectedCase.detailedTimeline) {
+        config.xAxis.type = 'datetime';
+        config.series[0].marker = {
+          symbol: 'circle',
+        };
+      }
+      for (let trip of this.selectedTrips) {
+        const elem = {
+          name: trip.name,
+          description: 'Sau: ' + trip.numSheep,
+          color: trip.color,
+          bounds: trip.getBounds(),
+        };
+        if (this.selectedCase.detailedTimeline) {
+          elem.x = new Date(trip.startTime);
+        }
+        config.series[0].data.push(elem);
+      }
+      return config;
     },
   },
   watch: {
@@ -182,6 +197,9 @@ export default {
       if (this.tripIndex + val >= 0 && this.tripIndex + val <= this.numTrips) {
         this.tripIndex = this.tripIndex + val;
       }
+    },
+    clickTimeline(event) {
+      this.$store.dispatch('analysis/setFitBounds', event.point.options.bounds);
     },
   },
 };

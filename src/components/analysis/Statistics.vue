@@ -1,59 +1,29 @@
 
 <template>
   <md-content>
-    <md-list v-if="!settings.comparison">
-      <md-list-item>
-        Antall sau i valgt område: {{ data.numSheep }}
-      </md-list-item>
-      <md-list-item>
-        Antall lam observert i området: {{ data.numLambs }}
-      </md-list-item>
-      <md-list-item>
-        Antall rovdyr observert i området: {{ data.numPredators }}
-      </md-list-item>
-      <md-list-item>
-        Antall observasjoner i området: {{ data.numObservations }}
-      </md-list-item>
-      <md-list-item v-if="data.numPredators !== 0">
-        <span class="md-list-item-text">
-          Rovdyr observert:
-          <span
-            v-for="predator of data.predators"
-            :key="'animal-' + predator">
-            {{ predator }}
-          </span>
-        </span>
-      </md-list-item>
-    </md-list>
-    <md-list v-else>
-      <md-list-item>
-        <span class="md-list-item-text">{{ new Date() | moment("YYYY") }}</span>
-      </md-list-item>
-      <md-list-item>
-        <span class="md-list-item-text">Antall observasjoner: {{ comparisonData.now.numObservations }}</span>
-      </md-list-item>
-      <md-list-item>
-        <span class="md-list-item-text">Antall sau: {{ comparisonData.now.numSheep }}</span>
-      </md-list-item>
-      <md-divider/>
-      <md-list-item>
-        <span class="md-list-item-text">{{ lastYear }}</span>
-      </md-list-item>
-      <md-list-item>
-        <span class="md-list-item-text">Antall observasjoner: {{ comparisonData.last.numObservations }}</span>
-      </md-list-item>
-      <md-list-item>
-        <span class="md-list-item-text">Antall sau: {{ comparisonData.last.numSheep }}</span>
-      </md-list-item>
-    </md-list>
+    <highcharts
+      v-if="settings.comparison"
+      :options="comparisonChart"
+    />
+    <highcharts
+      v-else
+      :options="mainChart"
+    />
+    <br>
+    <br>
   </md-content>
 </template>
 
 <script>
 import moment from 'moment';
 import { mapState, } from 'vuex';
+import { Chart, } from 'highcharts-vue';
+
 export default {
   name: 'Statistics',
+  components: {
+    highcharts: Chart,
+  },
   data() {
     return {
       lastYear: moment().get('year') - 1,
@@ -69,10 +39,14 @@ export default {
         now: {
           numSheep: 0,
           numObservations: 0,
+          observations: [],
+          numPredators: 0,
         },
         last: {
           numSheep: 0,
           numObservations: 0,
+          observations: [],
+          numPredators: 0,
         },
       };
       this.selectedTrips.forEach(trip => {
@@ -80,7 +54,10 @@ export default {
         trip.observations.forEach(observation => {
           d.numObservations += 1;
           if (observation.isSheep) {
+            d.observations.push(observation.numSheep);
             d.numSheep += observation.numSheep;
+          } else if (observation.predator) {
+            d.numPredators += observation.numAnimals;
           }
         });
       });
@@ -92,11 +69,13 @@ export default {
       let numObservations = 0;
       let numPredators = 0;
       let predators = new Set();
+      const observations = [];
       this.$store.state.analysis.selectedTrips.forEach(trip => {
         trip.observations.forEach(observation => {
           if (observation.isSheep) {
             numSheep += observation.numSheep;
             numLambs += observation.numLambs;
+            observations.push(observation.numSheep);
           } else if (observation.predator) {
             numPredators += observation.numAnimals;
             predators.add(observation.animal);
@@ -110,9 +89,119 @@ export default {
         numObservations,
         numPredators,
         predators,
+        observations,
       };
     },
-
+    comparisonChart() {
+      const config = {
+        chart: {
+          type: 'column',
+        },
+        xAxis: {
+          categories: [
+            moment().get('year') - 1,
+            moment().get('year'),
+          ],
+          title: {
+            text: 'År',
+          },
+        },
+        yAxis: {
+          title: {
+            text: 'Antall',
+          },
+        },
+        title: {
+          text: 'Observasjoner',
+        },
+      };
+      config.series = [
+        {
+          name: 'Sau',
+          data: [
+            {
+              y: this.comparisonData.last.numSheep,
+            },
+            {
+              y: this.comparisonData.now.numSheep,
+            },
+          ],
+        },
+        {
+          name: 'Observasjoner',
+          data: [
+            {
+              y: this.comparisonData.last.numObservations,
+            },
+            {
+              y: this.comparisonData.now.numObservations,
+            },
+          ],
+        },
+        {
+          name: 'Rovdyr',
+          data: [
+            {
+              y: this.comparisonData.last.numPredators,
+            },
+            {
+              y: this.comparisonData.now.numPredators,
+            },
+          ],
+        },
+      ];
+      return config;
+    },
+    mainChart() {
+      const config = {
+        chart: {
+          type: 'column',
+        },
+        title: {
+          text: 'Statistikk',
+        },
+        xAxis: {
+          categories: this.selectedTrips.map(elem => {
+            return elem.name;
+          }),
+          visible: false,
+          title: {
+            text: 'Tur',
+          },
+        },
+        yAxis: {
+          title: {
+            text: 'Antall',
+          },
+        },
+        series: [],
+      };
+      const sheep = {
+        name: 'Sau',
+        data: [],
+      };
+      const predators = {
+        name: 'Rovdyr',
+        data: [],
+      };
+      const observations = {
+        name: 'Observasjoner',
+        data: [],
+      };
+      for (let trip of this.selectedTrips) {
+        sheep.data.push({
+          y: trip.numSheep,
+        });
+        observations.data.push({
+          y: trip.observations.length,
+        });
+        predators.data.push({
+          y: trip.numPredators,
+        });
+      }
+      config.series.push(sheep, observations, predators);
+      return config;
+    },
   },
 };
 </script>

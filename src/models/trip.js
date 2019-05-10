@@ -23,10 +23,17 @@ export default class Trip {
     this.boundsPositions = getInitialPositions();
     this.boundsTotal = getInitialPositions();
     this.color = undefined;
+    this.numSheep = 0;
+    this.numPredators = 0;
   }
 
   addObservation(observation) {
     this.observations.push(observation);
+    if (observation.isSheep) {
+      this.numSheep += observation.numSheep;
+    } else if (observation.predator) {
+      this.numPredators += observation.numAnimals;
+    }
     this.setCoordinates(observation.observedPosition, this.boundsObservations);
     this.setCoordinates(observation.position, this.boundsObservations);
   }

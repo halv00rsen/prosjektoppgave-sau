@@ -31,6 +31,11 @@
           -
           {{ item.name }}
         </span>
+        <md-tooltip md-delay="300">
+          Observasjoner: {{ item.observations.length }}
+          <br>
+          Antall sau : {{ item.numSheep }}
+        </md-tooltip>
       </md-list-item>
     </md-list>
   </md-content>
