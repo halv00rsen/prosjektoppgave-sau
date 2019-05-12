@@ -38,7 +38,9 @@
       </div>
       <div class="md-layout-item md-size-100">
         <analysis-map ref="map"/>
-
+        <div v-if="loadingData">
+          <md-progress-bar md-mode="indeterminate"/>
+        </div>
         <!-- <md-button @click="exportGeoJson()">
           Eksporter GeoJson
         </md-button> -->
@@ -83,6 +85,7 @@ export default {
       'dateFrom',
       'dateTo',
       'selectedTrips',
+      'loadingData',
     ]),
     numTrips() {
       return this.selectedTrips.length - 1;
@@ -139,7 +142,7 @@ export default {
       }
       for (let trip of this.selectedTrips) {
         const elem = {
-          name: trip.name,
+          name: moment(trip.startTime).format('YYYY.MM.DD') + ' - ' + trip.name,
           description: 'Sau: ' + trip.numSheep,
           color: trip.color,
           bounds: trip.getBounds(),
@@ -160,6 +163,12 @@ export default {
     numTrips() {
       this.tripIndex = 0;
     },
+  },
+  mounted() {
+    if (this.settings.showTime) {
+      this.$store.dispatch('analysis/setTimeTrip', this.selectedTrips[0]);
+      this.$store.dispatch('analysis/setFitBounds', this.selectedTrips[0].getBounds());
+    }
   },
   beforeDestroy() {
     this.$store.dispatch('analysis/reset');
@@ -216,6 +225,6 @@ export default {
 }
 
 .analysis-column {
-  height: 80vh;
+  height: 82vh;
 }
 </style>

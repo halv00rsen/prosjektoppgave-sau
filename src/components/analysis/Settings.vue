@@ -26,9 +26,6 @@
         </span>
       </md-list-item>
     </md-list>
-    <div v-if="showSpinner">
-      <md-progress-bar md-mode="indeterminate"/>
-    </div>
   </div>
 </template>
 
@@ -78,6 +75,11 @@ export default {
           this.$store.dispatch('analysis/setShowNina', val);
         }
       },
+    },
+  },
+  watch: {
+    showSpinner(loading) {
+      this.$store.dispatch('analysis/setLoadingData', loading);
     },
   },
   mounted() {

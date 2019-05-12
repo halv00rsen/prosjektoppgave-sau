@@ -45,6 +45,8 @@ export default {
     fitBounds: undefined,
     nibioData: undefined,
     ninaData: undefined,
+    loadingData: false,
+    mapBounds: undefined,
   },
   getters: {
     getBounds(state) {
@@ -58,6 +60,9 @@ export default {
     },
     getCaseBounds(state, getters) {
       if (!state.selectedCase || !state.selectedCase.bounds) {
+        if (state.mapBounds) {
+          return state.mapBounds;
+        }
         return getters.getBounds;
       }
       return [
@@ -67,6 +72,12 @@ export default {
     },
   },
   actions: {
+    setMapBounds({ commit, }, bounds) {
+      commit('setMapBounds', bounds);
+    },
+    setLoadingData({ commit, }, loading) {
+      commit('setLoadingData', loading);
+    },
     setComparison({ commit, }, comparison) {
       commit('setComparison', comparison);
     },
@@ -166,6 +177,12 @@ export default {
     },
   },
   mutations: {
+    setMapBounds(state, bounds) {
+      state.mapBounds = bounds;
+    },
+    setLoadingData(state, loading) {
+      state.loadingData = loading;
+    },
     setComparison(state, comparison) {
       state.settings.comparison = comparison;
     },

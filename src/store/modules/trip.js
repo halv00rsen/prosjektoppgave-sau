@@ -2,6 +2,7 @@
 import ApplicationDatabase from '@/database/application';
 import Trip from '@/models/trip';
 import { Promise, } from 'q';
+import moment from 'moment';
 
 const database = new ApplicationDatabase();
 
@@ -156,9 +157,30 @@ const actions = {
     }
     dispatch('setReloadTrips');
   },
+  moveTrips({ commit, }, data) {
+    commit('moveTrips', data);
+  },
 };
 
 const mutations = {
+  moveTrips(state, data) {
+    const num = data.num;
+    for (let trip of state.all) {
+      let start = moment(trip.startTime);
+      let end = moment(trip.endTime);
+
+      if (data.back) {
+        start = start.subtract(num, 'day');
+        end = end.subtract(num, 'day');
+      } else {
+        start = start.add(num, 'day');
+        end = end.add(num, 'day');
+      }
+      trip.startTime = start.valueOf();
+      trip.endTime = end.valueOf();
+      database.addTrip(trip);
+    }
+  },
   setDownloaded(state, val) {
     state.dataLoaded = val;
   },

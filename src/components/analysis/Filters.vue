@@ -64,6 +64,7 @@
         variable="showRectangle"
         text="Turgrenser"/>
     </md-list>
+    <Settings/>
     <br>
   </md-content>
 </template>
@@ -72,11 +73,13 @@
 import { mapState, } from 'vuex';
 
 import ListSwitch from '@/components/analysis/ListSwitch.vue';
+import Settings from '@/components/analysis/Settings.vue';
 
 export default {
   name: 'Filters',
   components: {
     ListSwitch,
+    Settings,
   },
   data() {
     return {

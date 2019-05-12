@@ -26,8 +26,7 @@
           </div>
         </div>
         <div v-else>
-          <div>Dyr: {{ observation.animal }}</div>
-          <div>Antall: {{ observation.numAnimals }}</div>
+          <div>Antall {{ observation.animal }}: {{ observation.numAnimals }}</div>
         </div>
       </l-popup>
       <l-tooltip

@@ -1,7 +1,8 @@
 
 <template>
   <main-map
-    ref="mainmap">
+    ref="mainmap"
+    @update:bounds="setBounds($event)">
     <div
       v-for="trip of trips"
       :key="'trip-' + trip.id">
@@ -216,6 +217,12 @@ export default {
         }
       });
       return collection;
+    },
+    setBounds(bounds) {
+      this.$store.dispatch('analysis/setMapBounds', [
+        [bounds._southWest.lat, bounds._southWest.lng],
+        [bounds._northEast.lat, bounds._northEast.lng],
+      ]);
     },
   },
 };

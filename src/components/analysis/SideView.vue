@@ -2,6 +2,7 @@
 <template>
   <div class="stats-view md-scrollbar">
     <md-tabs
+      md-alignment="centered"
       style="height: 79vh;"
     >
       <md-tab
@@ -31,7 +32,7 @@
           <Filters/>
         </div>
       </md-tab>
-      <md-tab
+      <!-- <md-tab
         id="tab-settings-view"
         md-label="Innstillinger"
         md-icon="settings"
@@ -39,21 +40,21 @@
         <div class="side-view-content md-scrollbar">
           <Settings/>
         </div>
-      </md-tab>
+      </md-tab> -->
     </md-tabs>
   </div>
 </template>
 
 <script>
 import Statistics from '@/components/analysis/Statistics.vue';
-import Settings from '@/components/analysis/Settings.vue';
+// import Settings from '@/components/analysis/Settings.vue';
 import Trips from '@/components/analysis/Trips.vue';
 import Filters from '@/components/analysis/Filters.vue';
 
 export default {
   name: 'TabView',
   components: {
-    Settings,
+    // Settings,
     Trips,
     Statistics,
     Filters,

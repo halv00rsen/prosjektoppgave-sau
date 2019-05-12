@@ -53,11 +53,6 @@
       >
         Instillinger
       </md-button>
-      <md-button
-        @click="openTest()"
-      >
-        Testmap
-      </md-button>
     </center>
   </div>
 </template>

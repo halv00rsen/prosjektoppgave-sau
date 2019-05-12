@@ -39,6 +39,7 @@
       />
       <case-list
         :cases="comparisonCases"
+        :use-icons="true"
         icon="compare_arrows"
         title="Sammenligninger"
         @clickedCase="openCase($event)"
@@ -171,7 +172,7 @@ export default {
     ],
     mapCases: [
       {
-        text: 'Observasjoner i et område',
+        text: 'Observasjoner',
         header: 'Observasjoner i et definert område',
         presetTrips: true,
         startDate: moment().startOf('year'),
@@ -181,7 +182,7 @@ export default {
         icon: 'directions_walk',
       },
       {
-        text: 'Rovdyr i et område',
+        text: 'Rovdyr',
         header: 'Rovdyr observert i området',
         icon: 'pets',
         presetTrips: true,
@@ -194,9 +195,9 @@ export default {
     ],
     comparisonCases: [
       {
-        text: 'Sammenlign årets data med fjorårets i et gitt område',
+        text: 'Fjorårets turer mot årets i et område',
         header: 'Sammenligning med fjorårets data',
-        icon: 'compare_arrows',
+        icon: 'map',
         startDate: moment().subtract(1, 'year').startOf('year'),
         setBounds: true,
         comparison: true,
@@ -204,14 +205,24 @@ export default {
         timeline: false,
       },
       {
-        text: 'Sammenlign all data med fjorårets',
-        header: 'Sammenligning med fjorårets data',
+        text: 'Fjorårets turer mot årets',
+        header: 'Sammenligning med fjorårets turer',
         icon: 'compare_arrows',
         startDate: moment().subtract(1, 'year').startOf('year'),
         comparison: true,
         timeline: false,
         presetTrips: true,
       },
+      {
+        text: 'Årets turer',
+        header: 'Årets turer',
+        icon: 'timeline',
+        startDate: moment().startOf('year'),
+        presetTrips: true,
+        mainView: 'showTime',
+        showPredators: true,
+        showRoute: true,
+      }
     ],
   }),
   computed: {
@@ -221,7 +232,7 @@ export default {
     otherCases() {
       return [
         {
-          text: 'Se den siste turen gjennomført',
+          text: 'Siste tur gjennomført',
           presetTrips: true,
           initialTrips: [this.trips[this.trips.length - 1]],
           header: 'Siste tur gjennomført',

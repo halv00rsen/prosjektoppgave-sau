@@ -7,7 +7,7 @@
         :key="'trip-' + trip.id"
         @click="openTrip(trip)">
 
-        {{ trip.name }}
+        {{ new Date(trip.startTime) | moment('YYYY.MM.DD') }} - {{ trip.name }}
       </md-list-item>
     </md-list>
   </div>
