@@ -4,8 +4,8 @@
     :radius="5"
     :fill="true"
     :fill-opacity="1"
-    :fill-color="color"
-    :color="'brown'">
+    :fill-color="fillColor"
+    :color="color">
     <l-popup>
       Dyr: {{ data.name }}
       <br>
@@ -50,12 +50,26 @@ export default {
     };
   },
   computed: {
-    color() {
+    fillColor() {
       const date = moment(this.data.findDate, 'DD.MM.YYYY');
       if (date.isBefore(moment().startOf('year'))) {
-        return 'gray';
+        return 'lightgray';
       }
-      return 'brown';
+      return this.color;
+    },
+    color() {
+      switch(this.data.name) {
+        case 'jerv':
+          return 'black';
+        case 'bjørn':
+          return 'brown';
+        case 'ulv':
+          return 'gray';
+        case 'gaupe':
+          return 'yellow';
+        default:
+          return 'white';
+      }
     },
   },
 };
