@@ -30,7 +30,7 @@
           value="showTime">Tid</md-radio>
       </md-list-item>
     </md-list>
-    <h4>Annet</h4>
+    <h4>Filtre</h4>
     <md-divider/>
     <md-list>
       <list-switch

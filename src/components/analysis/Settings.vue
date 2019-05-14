@@ -1,32 +1,30 @@
 
 <template>
-  <div>
-    <md-list>
-      <list-switch
-        dispatch="setAutomaticZoom"
-        variable="automaticZoom"
-        text="Automatisk zoom"/>
-      <md-divider/>
-      <md-list-item>
-        <md-switch
-          v-model="nibio"
-          :disabled="showSpinner"
-        />
-        <span class="md-list-item-text">
-          Vis beiteområder
-        </span>
-      </md-list-item>
-      <md-list-item>
-        <md-switch
-          v-model="nina"
-          :disabled="showSpinner"
-        />
-        <span class="md-list-item-text">
-          Vis rovdyrdata
-        </span>
-      </md-list-item>
-    </md-list>
-  </div>
+  <md-list>
+    <!-- <list-switch
+      dispatch="setAutomaticZoom"
+      variable="automaticZoom"
+      text="Automatisk zoom"/>
+    <md-divider/> -->
+    <md-list-item>
+      <md-switch
+        v-model="nibio"
+        :disabled="showSpinner"
+      />
+      <span class="md-list-item-text">
+        Vis beiteområder
+      </span>
+    </md-list-item>
+    <md-list-item>
+      <md-switch
+        v-model="nina"
+        :disabled="showSpinner"
+      />
+      <span class="md-list-item-text">
+        Vis rovdyrdata
+      </span>
+    </md-list-item>
+  </md-list>
 </template>
 
 <script>

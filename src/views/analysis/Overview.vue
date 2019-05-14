@@ -147,6 +147,13 @@ export default {
           color: trip.color,
           bounds: trip.getBounds(),
         };
+        if (this.settings.comparison) {
+          let color = 'green';
+          if (moment(trip.startTime).isBefore(moment().startOf('year'))) {
+            color = 'blue';
+          }
+          elem.color = color;
+        }
         if (this.selectedCase.detailedTimeline) {
           elem.x = new Date(trip.startTime);
         }

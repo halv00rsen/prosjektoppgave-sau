@@ -24,7 +24,7 @@
           :disabled="fixedTrips"
         />
         <span
-          :style="'color: ' + item.color"
+          :style="'color: ' + getColor(item)"
           class="md-list-item-text"
         >
           {{ Number(item.startTime) | moment("YYYY.MM.DD") }}
@@ -43,6 +43,7 @@
 
 <script>
 import { mapGetters, mapState, } from 'vuex';
+import moment from 'moment';
 
 export default {
   name: 'Trips',
@@ -91,6 +92,20 @@ export default {
     },
     setZoomBounds(bounds) {
       this.$store.dispatch('analysis/setFitBounds', bounds);
+    },
+    getColor(trip) {
+      if (this.settings.showTime) {
+        if (this.settings.selectedTimeTrip === trip) {
+          return 'red';
+        }
+        return 'gray';
+      } else if (this.settings.comparison) {
+        if (moment(trip.startTime).isBefore(moment().startOf('year'))) {
+          return 'blue';
+        }
+        return 'green';
+      }
+      return trip.color;
     },
   },
 };
