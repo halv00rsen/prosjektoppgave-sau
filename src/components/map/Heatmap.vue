@@ -47,7 +47,7 @@ export default {
       this.mapObject.setData({
         data: this.latLngs,
         max: this.max,
-        min: 1,
+        min: 0,
       });
     },
   },
@@ -61,7 +61,7 @@ export default {
     this.mapObject.setData({
       data: this.latLngs,
       max: this.max,
-      min: 1,
+      min: 0,
     });
   },
   beforeDestroy() {

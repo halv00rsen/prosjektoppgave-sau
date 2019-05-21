@@ -146,6 +146,9 @@ export default {
     setShowRoute({ commit, }, showRoute) {
       commit('resetCoords');
       commit('setShowRoute', showRoute);
+      if (!showRoute) {
+        commit('setGroupTrips', false);
+      }
       commit('calculateBounds');
     },
     setShowPredators({ commit, }, showPredators) {

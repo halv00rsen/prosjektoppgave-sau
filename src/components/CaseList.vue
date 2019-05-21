@@ -29,6 +29,9 @@
         v-for="(item, index) of cases"
         :key="title + '.case.' + index"
         @click="_clickItem(item)">
+        <font-awesome-icon
+          v-if="item.fontAwesome && useIcons"
+          :icon="item.icon"/>
         <md-icon v-if="useIcons && item.icon">
           {{ item.icon }}
         </md-icon>

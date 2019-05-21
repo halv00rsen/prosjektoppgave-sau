@@ -2,6 +2,7 @@
 <template>
   <div
     v-if="!showMap">
+    <h3>Forhåndsdefinerte visninger</h3>
     <md-button
       :style="getButtonClass(false)"
       class="md-icon-button"
@@ -26,7 +27,6 @@
         :use-icons="true"
         icon="timeline"
         title="Tidsbasert"
-        tooltip="Vil hente turer basert på en tidsrestriksjon"
         @clickedCase="openCase($event)"
       />
       <case-list
@@ -34,7 +34,7 @@
         :use-icons="true"
         icon="map"
         title="Områdebasert"
-        tooltip="Man velger område for så at søk etter scenario blir gjort"
+        tooltip="Man velger område for så at søk etter turer blir gjort"
         @clickedCase="openCase($event)"
       />
       <case-list
@@ -57,6 +57,9 @@
         v-for="(item, index) of cases"
         :key="index"
         @click="openCase(item)">
+        <font-awesome-icon
+          v-if="item.fontAwesome"
+          :icon="item.icon"/>
         <md-icon v-if="item.icon">
           {{ item.icon }}
         </md-icon>
@@ -149,7 +152,7 @@ export default {
         icon: 'directions_walk',
       },
       {
-        text: 'Turer fra denne måneden',
+        text: 'Turer fra den siste måneden',
         startDate: moment().subtract(1, 'months').startOf('day'),
         endDate: moment().endOf('day'),
         presetTrips: true,
@@ -170,29 +173,7 @@ export default {
         timeline: false,
       },
     ],
-    mapCases: [
-      {
-        text: 'Observasjoner',
-        header: 'Observasjoner i et definert område',
-        presetTrips: true,
-        startDate: moment().startOf('year'),
-        showRoute: true,
-        setBounds: true,
-        lockZoom: true,
-        icon: 'directions_walk',
-      },
-      {
-        text: 'Rovdyr',
-        header: 'Rovdyr observert i området',
-        icon: 'pets',
-        presetTrips: true,
-        showPredators: true,
-        showObservations: false,
-        setBounds: true,
-        nina: true,
-        timeline: false,
-      },
-    ],
+
     comparisonCases: [
       {
         text: 'Fjorårets turer mot årets i et område',
@@ -247,6 +228,46 @@ export default {
           icon: 'build',
           mainView: 'regular',
           presetTrips: true,
+          groupTrips: false,
+        },
+      ];
+    },
+    mapCases() {
+      return [
+        {
+          text: 'Turer',
+          header: 'Turer i et definert område',
+          presetTrips: true,
+          startDate: moment().startOf('year'),
+          showRoute: true,
+          setBounds: true,
+          icon: 'directions_walk',
+        },
+        {
+          text: 'Observasjoner',
+          header: 'Observasjoner i et definert område',
+          presetTrips: true,
+          startDate: moment().startOf('year'),
+          showRoute: false,
+          setBounds: true,
+          lockZoom: true,
+          icon: 'binoculars',
+          fontAwesome: true,
+          mainView: 'pointSizing',
+        },
+        {
+          text: 'Rovdyr',
+          header: 'Rovdyr observert i området',
+          icon: 'pets',
+          presetTrips: true,
+          showPredators: true,
+          showObservations: false,
+          setBounds: true,
+          nina: true,
+          timeline: false,
+          initialTrips: this.trips.filter((trip) => {
+            return trip.numPredators > 0;
+          }),
         },
       ];
     },

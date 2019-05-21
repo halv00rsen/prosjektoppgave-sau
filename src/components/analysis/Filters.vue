@@ -1,37 +1,7 @@
 
 <template>
   <md-content>
-    <h4>Hovedvisning</h4>
-    <md-divider/>
-    <md-list>
-      <md-list-item>
-        <md-radio
-          v-model="mainView"
-          value="regular">Vanlig</md-radio>
-      </md-list-item>
-      <md-list-item>
-        <md-radio
-          v-model="mainView"
-          value="pointSizing">Størrelse</md-radio>
-      </md-list-item>
-      <md-list-item>
-        <md-radio
-          v-model="mainView"
-          value="showHeatmap">Varmekart</md-radio>
-      </md-list-item>
-      <md-list-item>
-        <md-radio
-          v-model="mainView"
-          value="showDensity">Grupper</md-radio>
-      </md-list-item>
-      <md-list-item>
-        <md-radio
-          v-model="mainView"
-          value="showTime">Tid</md-radio>
-      </md-list-item>
-    </md-list>
-    <h4>Filtre</h4>
-    <md-divider/>
+    Filtre
     <md-list>
       <list-switch
         dispatch="setShowObservations"
@@ -56,24 +26,25 @@
         variable="showRoute"
         text="Turrute"/>
       <list-switch
+        :disabled="!settings.showRoute"
         dispatch="setGroupTrips"
         variable="groupTrips"
-        text="Tur som punkt ved lav zoom"/>
+        text="Tur som punkt ved lav zoom"
+      />
       <list-switch
         dispatch="setShowRectangle"
         variable="showRectangle"
         text="Turgrenser"/>
     </md-list>
+    Ekstern statistikk
     <Settings/>
-    <br>
   </md-content>
 </template>
 
 <script>
-import { mapState, } from 'vuex';
-
 import ListSwitch from '@/components/analysis/ListSwitch.vue';
 import Settings from '@/components/analysis/Settings.vue';
+import { mapState, } from 'vuex';
 
 export default {
   name: 'Filters',
@@ -81,32 +52,10 @@ export default {
     ListSwitch,
     Settings,
   },
-  data() {
-    return {
-      debug: process.env.VUE_APP_DEBUG,
-    };
-  },
   computed: {
     ...mapState('analysis', [
       'settings',
     ]),
-    mainView: {
-      get() {
-        if (this.settings.showHeatmap) {
-          return 'showHeatmap';
-        } else if (this.settings.pointSizing) {
-          return 'pointSizing';
-        } else if (this.settings.showDensity) {
-          return 'showDensity';
-        } else if (this.settings.showTime) {
-          return 'showTime';
-        }
-        return 'regular';
-      },
-      set(value) {
-        this.$store.dispatch('analysis/setMainView', value);
-      },
-    },
   },
 };
 </script>

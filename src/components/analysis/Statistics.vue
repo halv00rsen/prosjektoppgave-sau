@@ -41,16 +41,19 @@ export default {
           numObservations: 0,
           observations: [],
           numPredators: 0,
+          numTrips: 0,
         },
         last: {
           numSheep: 0,
           numObservations: 0,
           observations: [],
           numPredators: 0,
+          numTrips: 0,
         },
       };
       this.selectedTrips.forEach(trip => {
         const d = moment(trip.startTime).isBefore(moment().startOf('year')) ? data.last : data.now;
+        d.numTrips++;
         trip.observations.forEach(observation => {
           d.numObservations += 1;
           if (observation.isSheep) {
@@ -93,6 +96,15 @@ export default {
       };
     },
     comparisonChart() {
+      let snittLast = this.comparisonData.last.numSheep / this.comparisonData.last.numTrips;
+      let snittNow = this.comparisonData.now.numSheep / this.comparisonData.now.numTrips;
+      if (isNaN(snittLast)) {
+        snittLast = 0;
+        snittNow = 0;
+      } else {
+        snittLast = Number(snittLast.toFixed(2));
+        snittNow = Number(snittNow.toFixed(2));
+      }
       const config = {
         chart: {
           type: 'column',
@@ -149,6 +161,17 @@ export default {
             },
           ],
         },
+        {
+          name: 'Sau per tur',
+          data: [
+            {
+              y: snittLast,
+            },
+            {
+              y: snittNow,
+            },
+          ],
+        },
       ];
       return config;
     },
@@ -158,7 +181,7 @@ export default {
           type: 'column',
         },
         title: {
-          text: 'Statistikk',
+          text: 'Oppsynsturer',
         },
         xAxis: {
           categories: this.selectedTrips.map(elem => {

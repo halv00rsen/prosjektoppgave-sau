@@ -9,7 +9,7 @@
         <div class="md-layout-item">
           <md-table>
             <md-table-toolbar>
-              <h4>Hovedvisninger</h4>
+              <h4>Visninger</h4>
             </md-table-toolbar>
             <md-table-row>
               <md-table-cell>Vanling</md-table-cell>
@@ -38,6 +38,19 @@
               <md-table-cell>
                 Viser turene med enten grå eller rød farge i kronologisk rekkefølge basert på når de er gjennomført.
               </md-table-cell>
+            </md-table-row>
+          </md-table>
+          <md-table>
+            <md-table-toolbar>
+              <h4>Statistikk</h4>
+            </md-table-toolbar>
+            <md-table-row>
+              <md-table-cell>Beiteområder</md-table-cell>
+              <md-table-cell>Beiteområdedata er hentet fra NIBIO sine nettsider og viser beiteområdene med antall sau og hvor stort tap av sau det er i området.</md-table-cell>
+            </md-table-row>
+            <md-table-row>
+              <md-table-cell>Rovdyr</md-table-cell>
+              <md-table-cell>Rovdyrdataene er hentet fra Rovdata og inneholder observasjoner fra 2013 til nå for rovdyrene som tar livet av sau. Dette inkluderer observasjoner av kongeørn, ulv, bjørn, jerv og gaupe.</md-table-cell>
             </md-table-row>
           </md-table>
         </div>
@@ -155,9 +168,10 @@ export default {
 </script>
 
 <style>
-/* .legend-content {
-  padding: 2em;
-} */
+.legend-content {
+  /* padding: 2em; */
+  width: 70em;
+}
 
 .dot {
   height: 26px;

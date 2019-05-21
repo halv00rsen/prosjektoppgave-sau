@@ -24,9 +24,18 @@
         </div>
       </md-tab>
       <md-tab
-        id="tab-type-view"
+        id="tab-main-view"
         md-label="Visning"
         md-icon="view_comfy"
+      >
+        <div class="side-view-content md-scrollbar">
+          <main-views/>
+        </div>
+      </md-tab>
+      <md-tab
+        id="tab-type-view"
+        md-label="Filtre"
+        md-icon="filter_list"
       >
         <div class="side-view-content md-scrollbar">
           <Filters/>
@@ -50,14 +59,15 @@ import Statistics from '@/components/analysis/Statistics.vue';
 // import Settings from '@/components/analysis/Settings.vue';
 import Trips from '@/components/analysis/Trips.vue';
 import Filters from '@/components/analysis/Filters.vue';
+import MainViews from '@/components/analysis/MainViews.vue';
 
 export default {
   name: 'TabView',
   components: {
-    // Settings,
     Trips,
     Statistics,
     Filters,
+    MainViews,
   },
 };
 </script>

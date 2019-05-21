@@ -1,15 +1,16 @@
 <template>
-  <div>
-    <h3>Instillinger</h3>
+  <div style="min-width: 40em;">
+    <!-- <h3>Instillinger</h3> -->
     <!-- <router-link :to="{ name: 'cases', }">Tilbake</router-link> -->
-    <md-button @click="goBack()">Tilbake</md-button>
+    <!-- <md-button @click="goBack()">Tilbake</md-button> -->
     <div class="md-layout md-gutter">
       <div class="md-layout-item md-size-50">
-        <h4>Alle turer</h4>
+        <h4>Turer</h4>
         <md-list>
           <md-list-item
             v-for="(trip, index) of trips"
             :key="index"
+            :class="getClass(trip)"
             @click="openTrip(trip, index)"
           >
             <span
@@ -85,10 +86,15 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
+    getClass(trip) {
+      return this.trip === trip ? 'selected-trip' : '';
+    },
   },
 };
 </script>
 
 <style>
-
+.selected-trip {
+  background-color: #F4F4F4;
+}
 </style>

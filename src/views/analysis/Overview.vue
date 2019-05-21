@@ -11,10 +11,15 @@
         @click="showLegend = true">
         Hjelp
       </a>
-      <router-link
+      <a
+        class="top-link"
+        @click="showColor = true">
+        Endre farger
+      </a>
+      <!-- <router-link
         :to="{ name: 'analysisSettings' }"
         class="top-link"
-      >Endre farger</router-link>
+      >Endre farger</router-link> -->
     </div>
     <div class="md-layout-item md-layout md-large-size-70 md-medium-size-60 md-small-size-50 md-xsmall-size-100 analysis-column">
       <div v-if="settings.showTime">
@@ -61,6 +66,18 @@
     <legend-component
       v-if="showLegend"
       @close="showLegend = false"/>
+    <md-dialog
+      :md-active.sync="showColor">
+      <md-dialog-title>Fargevalg</md-dialog-title>
+      <md-dialog-content>
+        <analysis-settings/>
+      </md-dialog-content>
+      <md-dialog-actions>
+        <md-button
+          class="md-primary"
+          @click="showColor = false">OK</md-button>
+      </md-dialog-actions>
+    </md-dialog>
   </div>
 </template>
 
@@ -75,6 +92,7 @@ import { mapState, } from 'vuex';
 import SideView from '@/components/analysis/SideView.vue';
 import AnalysisMap from '@/components/map/AnalysisMap.vue';
 import Legend from '@/components/map/Legend.vue';
+import AnalysisSettings from '@/views/analysis/AnalysisSettings.vue';
 
 timeline(Highcharts);
 
@@ -85,6 +103,7 @@ export default {
     AnalysisMap,
     highcharts: Chart,
     legendComponent: Legend,
+    AnalysisSettings,
   },
   data: () => ({
     startDate: undefined,
@@ -92,6 +111,7 @@ export default {
     map: undefined,
     tripIndex: 0,
     showLegend: false,
+    showColor: false,
   }),
   computed: {
     ...mapState('analysis', [
