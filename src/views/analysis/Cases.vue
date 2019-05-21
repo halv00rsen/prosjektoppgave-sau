@@ -245,6 +245,8 @@ export default {
         {
           text: 'Egendefinert oppsett',
           icon: 'build',
+          mainView: 'regular',
+          presetTrips: true,
         },
       ];
     },

@@ -33,12 +33,6 @@
         <chrome-picker
           v-model="color"
           @input="updateValue"/>
-        <md-button
-          class="md-raised"
-          @click="saveChanges()"
-        >
-          Lagre endringer
-        </md-button>
       </div>
       <div
         v-else

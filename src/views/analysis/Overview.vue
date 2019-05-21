@@ -6,6 +6,15 @@
     </div>
     <div class="md-layout-item md-layout md-size-30">
       <router-link :to="{ name: 'cases', }">Tilbake</router-link>
+      <a
+        class="top-link"
+        @click="showLegend = true">
+        Hjelp
+      </a>
+      <router-link
+        :to="{ name: 'analysisSettings' }"
+        class="top-link"
+      >Endre farger</router-link>
     </div>
     <div class="md-layout-item md-layout md-large-size-70 md-medium-size-60 md-small-size-50 md-xsmall-size-100 analysis-column">
       <div v-if="settings.showTime">
@@ -49,6 +58,9 @@
     <div class="md-layout-item md-large-size-30 md-medium-size-40 md-small-size-50 md-xsmall-size-100 analysis-column">
       <SideView/>
     </div>
+    <legend-component
+      v-if="showLegend"
+      @close="showLegend = false"/>
   </div>
 </template>
 
@@ -62,6 +74,7 @@ import { mapState, } from 'vuex';
 
 import SideView from '@/components/analysis/SideView.vue';
 import AnalysisMap from '@/components/map/AnalysisMap.vue';
+import Legend from '@/components/map/Legend.vue';
 
 timeline(Highcharts);
 
@@ -71,12 +84,14 @@ export default {
     SideView,
     AnalysisMap,
     highcharts: Chart,
+    legendComponent: Legend,
   },
   data: () => ({
     startDate: undefined,
     endDate: undefined,
     map: undefined,
     tripIndex: 0,
+    showLegend: false,
   }),
   computed: {
     ...mapState('analysis', [
@@ -226,6 +241,11 @@ export default {
 </style>
 
 <style>
+.top-link {
+  cursor: pointer;
+  margin-left: 2em;
+}
+
 .md-datepicker-dialog {
   min-height: 286px;
   max-height: 286px;

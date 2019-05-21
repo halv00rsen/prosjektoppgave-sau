@@ -5,7 +5,7 @@ import {
   MdButton, MdContent, MdTabs, MdList, MdIcon, MdSubheader, MdDivider,
   MdApp, MdToolbar, MdDrawer, MdField, MdCard, MdDialog, MdDialogConfirm,
   MdProgress, MdSwitch, MdAutocomplete, MdMenu, MdCheckbox, MdSnackbar, MdDialogPrompt,
-  MdBottomBar, MdTooltip, MdDatepicker, MdRadio, MdAvatar,
+  MdBottomBar, MdTooltip, MdDatepicker, MdRadio, MdAvatar, MdTable,
 } from 'vue-material/dist/components';
 import 'vue-material/dist/vue-material.min.css';
 import 'vue-material/dist/theme/default.css';
@@ -36,3 +36,4 @@ Vue.use(MdTooltip);
 Vue.use(MdDatepicker);
 Vue.use(MdRadio);
 Vue.use(MdAvatar);
+Vue.use(MdTable);

@@ -17,7 +17,7 @@
       <md-list-item>
         <md-radio
           v-model="mainView"
-          value="showHeatmap">Heatmap</md-radio>
+          value="showHeatmap">Varmekart</md-radio>
       </md-list-item>
       <md-list-item>
         <md-radio
